@@ -16,14 +16,19 @@ public class Vector3D {
 		return new Vector3D(-xCoord, -yCoord, -zCoord);
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
+	//Subtracts v's coordinates from coordinates in this, produces new object
+	public Vector3D subtract(Vector3D v){
+		return new Vector3D((xCoord - v.xCoord), (yCoord - v.yCoord), (zCoord - v.zCoord));
+	}
+
+
+
+
+
+
+
+
+
 	@Override
 	public boolean equals(Object o) {
 		if (o instanceof Vector3D) {

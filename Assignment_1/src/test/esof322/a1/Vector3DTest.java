@@ -16,4 +16,11 @@ public class Vector3DTest {
 		assertTrue(neg.equals(v.negate()));
 	}
 
+	@Test
+	public void testSubtract() {
+		Vector3D v = new Vector3D(1, 2, 3);
+		Vector3D diff = new Vector3D(-1, -1, -1);
+		assertTrue(diff.equals(v.subtract(new Vector3D(2, 3, 4))));
+	}
+
 }
