@@ -21,14 +21,6 @@ public class Vector3D {
 		return new Vector3D((xCoord - v.xCoord), (yCoord - v.yCoord), (zCoord - v.zCoord));
 	}
 
-
-
-
-
-
-
-
-
 	@Override
 	public boolean equals(Object o) {
 		if (o instanceof Vector3D) {
@@ -38,6 +30,5 @@ public class Vector3D {
 			}
 		}
 		return false;
-
 	}
 }
