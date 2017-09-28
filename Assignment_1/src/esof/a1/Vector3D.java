@@ -1,4 +1,4 @@
-package esof322.a1;
+package esof.a1;
 
 public class Vector3D {
 	private final double xCoord;
