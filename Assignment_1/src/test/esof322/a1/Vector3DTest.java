@@ -41,5 +41,17 @@ public class Vector3DTest {
 		double dot = 14;
 		assertTrue(dot == v.dot(new Vector3D(1, 2, 3)));
 	}
+	
+	@Test
+	public void testMgnitude() {
+		Vector3D v = new Vector3D(1, 2, 3);
+		double mag = 3.74;
+		//System.out.print(Math.round(v.magnitude()));
+		double diff = Math.abs(3.74 - v.magnitude());
+		System.out.print(Double.compare(3.74, v.magnitude()));
+		assertTrue(diff <= 1);
+		
+		
+	}
 
 }
