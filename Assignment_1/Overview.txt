@@ -26,7 +26,7 @@ for the equals() method. We all helped with the test for the constructor, though
 extraneous. Spencer essentially functioned as "Scrum Master" due to his previous experience
 with GitHub team coding, guiding the structure of development that we all should follow.
 We all have a better idea of the process now and will be able to use the process for future
-assignments.
+assignments. Nate typed this document, but we all conferred on what to put into it.
 
 We all contributed roughly 2 hours and 30 minutes each to this project between coding, meeting, and
 discussing Git processes.  
