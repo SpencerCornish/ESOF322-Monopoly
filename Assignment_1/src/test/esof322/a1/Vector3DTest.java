@@ -47,8 +47,13 @@ public class Vector3DTest {
 		Vector3D v = new Vector3D(1, 2, 3);
 		double mag = 3.74;
 		double diff = Math.abs(3.74 - v.magnitude());
-		assertTrue(diff <= 1);	
-		
+		assertTrue(diff <= 1);		
+	}
+	
+	@Test
+	public void testToString() {
+		Vector3D v = new Vector3D(1, 2, 3);
+		assertTrue(v.toString().equals("The X coordinate is: 1.0 The Y coordinate is: 2.0 The Z coordinate is: 3.0"));
 	}
 
 }

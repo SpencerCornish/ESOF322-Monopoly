@@ -41,6 +41,12 @@ public class Vector3D {
 		return (Math.sqrt(xCoord*xCoord + yCoord*yCoord + zCoord*zCoord));
 	}
 	
+	@Override
+	public String toString() {	
+		return ("The X coordinate is: " + xCoord + " The Y coordinate is: " + yCoord 
+				+ " The Z coordinate is: " + zCoord);
+	}
+	
 	
 	
 	
