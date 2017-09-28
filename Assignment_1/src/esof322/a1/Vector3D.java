@@ -11,12 +11,12 @@ public class Vector3D {
 		this.zCoord = zCoord;
 	}
 
-	//Adds vector by returning a new vector with the coordinates of the parameter plus the this instance
+	//Adds vector by returning a new vector with the coordinates of the parameter plus the this instance, produces new object
 	public Vector3D add(Vector3D v) {
 		return new Vector3D((xCoord + v.xCoord), (yCoord + v.yCoord), (zCoord + v.zCoord));
 	}
 	
-	/// Negates the vector by returning a new vector with coordinates negated
+	/// Negates the vector by returning a new vector with coordinates negated, produces new object
 	public Vector3D negate() {
 		return new Vector3D(-xCoord, -yCoord, -zCoord);
 	}
@@ -26,10 +26,12 @@ public class Vector3D {
 		return new Vector3D((xCoord - v.xCoord), (yCoord - v.yCoord), (zCoord - v.zCoord));
 	}
 
+	//Multiply each coordinate by value f, produce new object
 	public Vector3D scale(double f) {
 		return new Vector3D((f * xCoord), (f * yCoord), (f * zCoord));
 	}
 	
+	//Produces dot product of this and argument v, returns a double
 	public double dot(Vector3D v){
 		return this.xCoord*v.xCoord + this.yCoord*v.yCoord + this.zCoord*v.zCoord;
 	}
