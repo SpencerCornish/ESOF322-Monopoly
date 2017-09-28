@@ -39,8 +39,11 @@ public class Vector3D {
 	@Override
 	public boolean equals(Object o) {
 		if (o instanceof Vector3D) {
-			if (((Vector3D) o).xCoord == this.xCoord && ((Vector3D) o).yCoord == this.yCoord
-					&& ((Vector3D) o).zCoord == this.zCoord) {
+			double precision = 0.001;
+			double differenceX = Math.abs(((Vector3D) o).xCoord - this.xCoord);
+			double differenceY = Math.abs(((Vector3D) o).yCoord - this.yCoord);
+			double differenceZ = Math.abs(((Vector3D) o).zCoord - this.zCoord);
+			if (differenceX < precision && differenceY < precision && differenceZ < precision ) {
 				return true;
 			}
 		}
