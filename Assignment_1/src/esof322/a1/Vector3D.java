@@ -1,11 +1,11 @@
 package esof322.a1;
 
 public class Vector3D {
-	int xCoord;
-	int yCoord;
-	int zCoord;
+	private final double xCoord;
+	private final double yCoord;
+	private final double zCoord;
 
-	public Vector3D(int xCoord, int yCoord, int zCoord) {
+	public Vector3D(double xCoord, double yCoord, double zCoord) {
 		this.xCoord = xCoord;
 		this.yCoord = yCoord;
 		this.zCoord = zCoord;
@@ -16,6 +16,9 @@ public class Vector3D {
 		return new Vector3D(-xCoord, -yCoord, -zCoord);
 	}
 
+	public Vector3D scale(double f) {
+		return new Vector3D((f * xCoord), (f * yCoord), (f * zCoord));
+	}
 	
 	
 	

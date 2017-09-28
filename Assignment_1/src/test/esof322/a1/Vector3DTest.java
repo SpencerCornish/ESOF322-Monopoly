@@ -15,5 +15,11 @@ public class Vector3DTest {
 		Vector3D neg = new Vector3D(-1, -2, -3);
 		assertTrue(neg.equals(v.negate()));
 	}
+	@Test
+	public void testScale() {
+		Vector3D v = new Vector3D(1, 2, 3);
+		Vector3D scale = new Vector3D(10, 20, 30);
+		assertTrue(scale.equals(v.scale(10)));
+	}
 
 }
