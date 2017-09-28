@@ -1,10 +1,10 @@
-package test.esof322.a1;
+package esof.a1;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import esof322.a1.Vector3D;
+import esof.a1.Vector3D;
 
 public class Vector3DTest {
 
