@@ -35,5 +35,11 @@ public class Vector3DTest {
 		Vector3D diff = new Vector3D(-1, -1, -1);
 		assertTrue(diff.equals(v.subtract(new Vector3D(2, 3, 4))));
 	}
+	@Test
+	public void testDot() {
+		Vector3D v = new Vector3D(1, 2, 3);
+		double dot = 14;
+		assertTrue(dot == v.dot(new Vector3D(1, 2, 3)));
+	}
 
 }
