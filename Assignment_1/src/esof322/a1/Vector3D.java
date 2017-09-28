@@ -30,12 +30,6 @@ public class Vector3D {
 		return new Vector3D((f * xCoord), (f * yCoord), (f * zCoord));
 	}
 	
-	
-	
-	
-	
-	
-
 	@Override
 	public boolean equals(Object o) {
 		if (o instanceof Vector3D) {

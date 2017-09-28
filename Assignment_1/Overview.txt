@@ -1,1 +1,31 @@
-todo!
+Overview.txt
+
+Our team consisted of Spencer Cornish, Bryan Plant, Nate Tranel, Keely Weisbeck.
+
+Initially, we had trouble getting the tests to run. We expected the tests to run
+and fail, but they did not run period. We learned that we had to add it to the build
+path, which allowed the tests to run. Our design approach consisted of breaking the 
+project up into chunks specified by the project assignment and then creating branches
+based on those chunks. This helped us have very organized project management, and 
+helped our code to not conflict with the master branch. We all reviewed the pull
+requests so that we each knew that the master branch was maintained and working at all
+times. Due to this assignment being rather simple, we did not have a whole lot of troubles
+or interesting class relationships. The individual methods did not require a whole lot of 
+planning other than the tests, as they were outlined well in the assignment description.
+
+Each of us contributed a roughly equal amount of work. Since there were 10 project issues
+corresponding to tasks, with 8 issues being coding issues, we each took 2 methods and tests
+and were in charge of writing and commenting those portions of code. We did these on branches
+off of the master. We then pushed the branch upstream and started a pull request with each, 
+which was up for approval from our other group members. Spencer handled the initial setup, which
+included setting up the Eclipse project and creating the necessary classes and file structure. He
+then wrote the tests and methods for equals() and negate(). Bryan handled the tests and methods for
+subtract() and dot(). Nate handled the tests and methods for add() and scale(). Finally, Keely handled
+the tests and methods for magnitude() and toString(). We all conferred to decide on a tolerance
+for the equals() method. Spencer essentially functioned as "Scrum Master" due to his previous
+experience with GitHub team coding, guiding the structure of development that we all should follow.
+We all have a better idea of the process now and will be able to use the process for future
+assignments.
+
+We all contributed roughly an hour and 55 minutes each to this project between coding, meeting, and
+discussing Git processes.  
