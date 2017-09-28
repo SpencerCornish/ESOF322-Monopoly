@@ -15,7 +15,7 @@ public class Vector3DTest {
 		Vector3D sum = new Vector3D(3, 6, 9);
 		assertTrue(sum.equals(v.add(new Vector3D(2, 4, 6))));
 	}
-	
+
 	@Test
 	public void testNegate() {
 		Vector3D v = new Vector3D(1, 2, 3);
@@ -41,24 +41,30 @@ public class Vector3DTest {
 		double dot = 14;
 		assertTrue(dot == v.dot(new Vector3D(1, 2, 3)));
 	}
-	
+
 	@Test
-	public void testMgnitude() {
+	public void testMagnitude() {
 		Vector3D v = new Vector3D(1, 2, 3);
 		double diff = Math.abs(3.74 - v.magnitude());
-		assertTrue(diff <= 1);	
+		assertTrue(diff <= 1);
 	}
-	
+
 	@Test
 	public void testEquals() {
 		Vector3D vector1 = new Vector3D(1, 2, 3);
 		Vector3D vector2 = new Vector3D(1, 2, 3.1);
 		assertFalse(vector1.equals(vector2));
-		
+
 		//  Check precision
 		Vector3D vectorP1 = new Vector3D(1, 2, 3);
 		Vector3D vectorP2= new Vector3D(1, 2, 3.000000001);
 		assertTrue(vectorP1.equals(vectorP2));
+	}
+
+	@Test
+	public void testToString() {
+		Vector3D v = new Vector3D(1, 2, 3);
+		assertTrue(v.toString().equals("The X coordinate is: 1.0 The Y coordinate is: 2.0 The Z coordinate is: 3.0"));
 	}
 
 }

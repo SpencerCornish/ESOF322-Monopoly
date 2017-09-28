@@ -22,10 +22,11 @@ included setting up the Eclipse project and creating the necessary classes and f
 then wrote the tests and methods for equals() and negate(). Bryan handled the tests and methods for
 subtract() and dot(). Nate handled the tests and methods for add() and scale(). Finally, Keely handled
 the tests and methods for magnitude() and toString(). We all conferred to decide on a tolerance
-for the equals() method. Spencer essentially functioned as "Scrum Master" due to his previous
-experience with GitHub team coding, guiding the structure of development that we all should follow.
+for the equals() method. We all helped with the test for the constructor, though it may have been 
+extraneous. Spencer essentially functioned as "Scrum Master" due to his previous experience
+with GitHub team coding, guiding the structure of development that we all should follow.
 We all have a better idea of the process now and will be able to use the process for future
-assignments.
+assignments. Nate typed this document, but we all conferred on what to put into it.
 
-We all contributed roughly an hour and 55 minutes each to this project between coding, meeting, and
+We all contributed roughly 2 hours and 30 minutes each to this project between coding, meeting, and
 discussing Git processes.  
