@@ -8,6 +8,11 @@ import esof322.a1.Vector3D;
 
 public class Vector3DTest {
 
+	@Test
+	public void testConstructor() {
+		Vector3D v = new Vector3D(1, 2, 3);
+		assertTrue(v != null);
+	}
 
 	@Test
 	public void testAdd() {
@@ -22,6 +27,7 @@ public class Vector3DTest {
 		Vector3D neg = new Vector3D(-1, -2, -3);
 		assertTrue(neg.equals(v.negate()));
 	}
+
 	@Test
 	public void testScale() {
 		Vector3D v = new Vector3D(1, 2, 3);
@@ -35,6 +41,7 @@ public class Vector3DTest {
 		Vector3D diff = new Vector3D(-1, -1, -1);
 		assertTrue(diff.equals(v.subtract(new Vector3D(2, 3, 4))));
 	}
+
 	@Test
 	public void testDot() {
 		Vector3D v = new Vector3D(1, 2, 3);
@@ -55,9 +62,9 @@ public class Vector3DTest {
 		Vector3D vector2 = new Vector3D(1, 2, 3.1);
 		assertFalse(vector1.equals(vector2));
 
-		//  Check precision
+		// Check precision
 		Vector3D vectorP1 = new Vector3D(1, 2, 3);
-		Vector3D vectorP2= new Vector3D(1, 2, 3.000000001);
+		Vector3D vectorP2 = new Vector3D(1, 2, 3.000000001);
 		assertTrue(vectorP1.equals(vectorP2));
 	}
 
