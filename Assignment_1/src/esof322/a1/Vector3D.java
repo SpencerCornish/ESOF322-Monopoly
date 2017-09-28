@@ -30,7 +30,9 @@ public class Vector3D {
 		return new Vector3D((f * xCoord), (f * yCoord), (f * zCoord));
 	}
 	
-	
+	public double dot(Vector3D v){
+		return this.xCoord*v.xCoord + this.yCoord*v.yCoord + this.zCoord*v.zCoord;
+	}
 	
 	
 	
