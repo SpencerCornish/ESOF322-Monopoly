@@ -45,10 +45,20 @@ public class Vector3DTest {
 	@Test
 	public void testMgnitude() {
 		Vector3D v = new Vector3D(1, 2, 3);
-		double mag = 3.74;
 		double diff = Math.abs(3.74 - v.magnitude());
 		assertTrue(diff <= 1);	
+	}
+	
+	@Test
+	public void testEquals() {
+		Vector3D vector1 = new Vector3D(1, 2, 3);
+		Vector3D vector2 = new Vector3D(1, 2, 3.1);
+		assertFalse(vector1.equals(vector2));
 		
+		//  Check precision
+		Vector3D vectorP1 = new Vector3D(1, 2, 3);
+		Vector3D vectorP2= new Vector3D(1, 2, 3.000000001);
+		assertTrue(vectorP1.equals(vectorP2));
 	}
 
 }
