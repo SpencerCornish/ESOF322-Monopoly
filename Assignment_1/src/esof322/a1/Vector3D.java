@@ -30,9 +30,7 @@ public class Vector3D {
 	public Vector3D scale(double f) {
 		return new Vector3D((f * xCoord), (f * yCoord), (f * zCoord));
 	}
-	
-<<<<<<< HEAD
-=======
+
 	//Produces dot product of this and argument v, returns a double
 	public double dot(Vector3D v){
 		return this.xCoord*v.xCoord + this.yCoord*v.yCoord + this.zCoord*v.zCoord;
@@ -41,8 +39,6 @@ public class Vector3D {
 	
 	
 	
-
->>>>>>> 1c48eb208e9dc8aa20d737efccc202b428d5e095
 	@Override
 	public boolean equals(Object o) {
 		if (o instanceof Vector3D) {
