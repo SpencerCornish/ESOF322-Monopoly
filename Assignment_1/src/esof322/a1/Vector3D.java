@@ -36,6 +36,11 @@ public class Vector3D {
 		return this.xCoord*v.xCoord + this.yCoord*v.yCoord + this.zCoord*v.zCoord;
 	}
 	
+	public double Magnitude() {
+		return (Math.sqrt(xCoord*xCoord + yCoord*yCoord + zCoord*zCoord));
+	}
+	
+	
 	
 	
 	
