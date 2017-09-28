@@ -11,6 +11,11 @@ public class Vector3D {
 		this.zCoord = zCoord;
 	}
 
+	//Adds vector by returning a new vector with the coordinates of the parameter plus the this instance
+	public Vector3D add(Vector3D v) {
+		return new Vector3D((xCoord + v.xCoord), (yCoord + v.yCoord), (zCoord + v.zCoord));
+	}
+	
 	/// Negates the vector by returning a new vector with coordinates negated
 	public Vector3D negate() {
 		return new Vector3D(-xCoord, -yCoord, -zCoord);
