@@ -1,6 +1,6 @@
 package esof322.pa1;
 
-public class Vector3D {
+public final class Vector3D {			//class is final and variables private for strong immutability
 	private final double xCoord;
 	private final double yCoord;
 	private final double zCoord;
