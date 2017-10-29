@@ -83,7 +83,7 @@ void tradeDeed(Player p) {      //trading will be a difficult thing
 }
 
 void payBank(int amt) {
-  
+  //bank.collect(amt);           //instance of bank? or should bank be static?
   this._money -= amt;
 }
 
