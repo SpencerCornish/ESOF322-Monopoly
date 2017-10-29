@@ -37,17 +37,54 @@ List<Tile> get properties => _ownedTiles;
 int get money => _money;
 String get name => _name;
 //get token
+int get position => _currentLocation;
+
 
 void set name(String n) {
   this._name = n;
 }
 
-void set
+void setToken(var token) {    //token stuff
 
+}
 
+void setPosition(int spot) {
+  this._currentLocation = spot;
+}
 
+void goToJail() {
+  this._currentLocation = 10;
+  this._playerInJail = true;
+}
 
+void getOutOfJail() {
+  this._playerInJail = false;
+}
 
+void goBankrupt() {
+  //display end game message
+}
 
+void payRent(Player to, int rent) {
+  to.getPaid(rent);
+}
+
+void getPaid(int amt) {
+  this._money += amt;
+}
+
+void sellDeed(Property p) {   //should this be a repeated method based on utility, railroad, or property?
+  this._ownedTiles.remove(p);
+  //update money
+}
+
+void tradeDeed(Player p) {      //trading will be a difficult thing
+
+}
+
+void payBank(int amt) {
+  
+  this._money -= amt;
+}
 
 }
