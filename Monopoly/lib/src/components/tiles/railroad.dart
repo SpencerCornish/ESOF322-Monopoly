@@ -1,42 +1,55 @@
 import 'tile.dart';
 import 'player.dart';
 
-class Railroad extends Tile{
+class Railroad extends Tile {
   final int _price;
-  final int _baseRent;
+  static final int _baseRent = 25;
   final int _mortageCost;
-  //how many RR owned
 
   bool _isMortaged = false;
   bool _isInMonopoly = false;
-  int _numberOwned = ;
-  int _rent;
 
-  Railroad(String name, int location, this._price, this._baseRent, this._mortageCost, this._numberOwned)
+  //static int _numberOwned = ;
+  //static int _rent;
+
+  Railroad(String name, int location, this._price, this._baseRent,
+      this._mortageCost, this._numberOwned)
       : super(name, location);
 
   // Getters
   int get price => _price;
+
   int get mortgageCost => _mortageCost;
+
   bool get isMortgaged => _isMortaged;
+
   bool get isInMonopoly => _isInMonopoly;
 
 // TODO: make this calculate the total rent, how many owned by player
-/*
-  if (numberOwned = 1) {
-    int get rent => _baseRent;
+
+  int rent = 0;
+  ClaculateRent(int numOwned, int baseRent) {
+    if (numOwned == 1) {
+      rent = _baseRent;
+    }
+
+    else if (numOwned == 2) {
+      rent = 50;
+    }
+
+    else if (numOwned == 3) {
+      rent = 100;
+    }
+
+    else if (numOwned == 3) {
+      rent = 200;
+    }
+
+    else {
+      String error = 'error';
+      print(error);
+    }
+    return rent;
   }
-  else if (numberOwned = 2) {
-    int get rent => _baseRent * 2;
-  }
-  else if (numberOwned = 3) {
-  int get rent => (_baseRent * 2) * 2;
-  }
-  else if (numberOwned = 3) {
-  int get rent => ((_baseRent * 2) * 2) * 2;
-  }
-  else {
-    throw exception???
-  }
-*/
+  int get totalRent => rent;
 }

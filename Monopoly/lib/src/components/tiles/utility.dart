@@ -24,13 +24,17 @@ class Utility extends Tile {
 // TODO: make this calculate the total rent, with how many owned by player, and roll of dice
 //int get rent => _baseRent * ;
 
-/*
-  if (_numberOwned = 1) {
-    int get rent => 4 * _diceAmount;
-  }
-  else if (_numerOwned = 2) {
-    int get rent => 10 * _diceAmount;
-  }
-*/
+  int rent = 0;
+  calcRent(int numOwned, int rollVal) {
+    if (numOwned == 1) {
+      rent = rollVal * 4;
+    }
 
+    else if (numOwned == 2) {
+      rent = rollVal * 10;
+    }
+
+    return rent;
+  }
+  int get totalRent => rent;
 }
