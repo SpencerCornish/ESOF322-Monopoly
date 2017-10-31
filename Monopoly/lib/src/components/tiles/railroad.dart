@@ -1,7 +1,7 @@
 import 'tile.dart';
 import '../player/player.dart';
 
-class Railroad extends Tile {
+/*class Railroad extends Tile {
   // Price to purchase the railroad
   final int _price;
   // Cost to the player
@@ -16,10 +16,9 @@ class Railroad extends Tile {
   Railroad(
       String name, int location, this._price, this._mortageCost,
       [this.owner])
-      : super(name, location);
 
   // Getters
-  int get price => _price;
+  //int get price => _price;
 
   int get mortgageCost => _mortageCost;
 
@@ -27,9 +26,9 @@ class Railroad extends Tile {
 
   bool get isInMonopoly => _isInMonopoly;
 
-  int get rent => _calculateRent();
+  //int get rent => _calculateRent();
 
-  _calculateRent() {
+  /*_calculateRent() {
     // Call player owner (if !null) to determine how many of tile type are owned
     if (_numberOwned == 1) {
       return _baseRent;
@@ -44,5 +43,5 @@ class Railroad extends Tile {
       print(error);
       return null;
     }
-  }
-}
+  }*/
+}*/

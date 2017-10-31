@@ -3,13 +3,14 @@ import 'dart:async';
 
 import '../player/player.dart';
 import '../board/board.dart';
-import '../tiles/tile.dart';
 
 CanvasElement _canvasBackground = querySelector("#canvas-background");
 CanvasRenderingContext2D _ctxBackground = _canvasBackground.getContext('2d');
 
 CanvasElement _canvasForeground = querySelector("#canvas-foreground");
 CanvasRenderingContext2D _ctxForeground = _canvasForeground.getContext('2d');
+
+Board board = new Board();
 
 void main() {
   App app = new App();
@@ -40,12 +41,8 @@ class App {
 
   _beginDraw() {
     querySelector('#output').text = 'Your Dart app is running.';
-    _ctxBackground.fillStyle = 'red';
-    _ctxBackground.fillRect(100, 100, 250, 250);
-    _ctxForeground.fillStyle = 'green';
-    _ctxForeground.fillRect(100, 100, 200, 200);
-    Tile tile = new Tile("Bro", 2);
-    tile.draw(_ctxForeground);
+    //_ctxBackground.fillRect(0, 0, 100, 100);
+    board.draw(_ctxBackground);
   }
 
   _drawForeground() {}

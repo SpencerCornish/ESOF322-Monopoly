@@ -1,7 +1,7 @@
 import 'tile.dart';
 import '../player/player.dart';
 
-class Utility extends Tile {
+/*class Utility extends Tile {
   Player _owner;
   final int _price;
   final int _mortageCost;
@@ -21,7 +21,7 @@ class Utility extends Tile {
 // TODO: make this calculate the total rent, with how many owned by player, and roll of dice
 //int get rent => _baseRent * ;
 
-  calulateRent() {
+  /*calulateRent() {
     //TODO: Call Owner Player to determine how many are owned.
     if (numOwned == 1) {
       rent = rollVal * 4;
@@ -31,5 +31,5 @@ class Utility extends Tile {
     return rent;
   }
 
-  int get totalRent => rent;
-}
+  int get totalRent => rent;*/
+}*/
