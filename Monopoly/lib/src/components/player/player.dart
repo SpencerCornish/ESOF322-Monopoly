@@ -1,5 +1,4 @@
 import '../tiles/tile.dart';
-<<<<<<< HEAD
 import '../tiles/property.dart';
 import '../tiles/railroad.dart';
 import '../tiles/utility.dart';
@@ -7,29 +6,22 @@ import '../tiles/utility.dart';
 class Player {
   String _name;
   // Token Type: Enum here?
-  int _money = 1500;
-  int _currentLocation = 0;
-=======
-
-class Player {
-  String _name;
   int _money;
-  int _currentLocation;
->>>>>>> e4619e58ca62ab6a5906505929bab2c71cec665b
+  int _currentLocation = 0;
   List<Tile> _ownedTiles;
   bool _playerInJail = false;
 
 Player(this._name) {}
 
 void buyProperty(Property p) {
-  this._money -= p.price;
-  this._ownedTiles.add(p);
+  _money -= p.price;
+  _ownedTiles.add(p);
 }
 
 void buyHouse(Property p, int numHouse) {   //we should be able to work buy hotel into this
   for (var i = 0; i < numHouse; i++) {
     //p.buyHouse() - TODO where p.buyHouse will add the multiplier of a house
-    this._money -= p.housePrice;
+    _money -= p.housePrice;
   }
 }
 
@@ -49,24 +41,24 @@ int get position => _currentLocation;
 
 
 void set name(String n) {
-  this._name = n;
+  _name = n;
 }
 
-void setToken(var token) {    //token stuff
+void setToken(var token) {    //TODO
 
 }
 
 void setPosition(int spot) {
-  this._currentLocation = spot;
+  _currentLocation = spot;
 }
 
 void goToJail() {
-  this._currentLocation = 10;
-  this._playerInJail = true;
+  _currentLocation = 10;
+  _playerInJail = true;
 }
 
 void getOutOfJail() {
-  this._playerInJail = false;
+  _playerInJail = false;
 }
 
 void goBankrupt() {
