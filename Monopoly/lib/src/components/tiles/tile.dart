@@ -1,9 +1,9 @@
+import 'dart:html';
 import '../player/player.dart';
 
 class Tile {
   final String _name;
 
-  //TODO: Can this be inferred from the board/who needs to know this?
   final int _location;
 
   Player _owner;
@@ -19,4 +19,11 @@ class Tile {
 
   // Setter for setting owner
   setOwner(Player newOwner) => _owner = newOwner;
+
+  draw() {
+    CanvasElement canvas = new CanvasElement(100, 100);
+    CanvasRenderingContext2D ctx = canvas.getContext('2d');
+    ctx.rect(0, 0, 100, 100);
+    return canvas;
+  }
 }
