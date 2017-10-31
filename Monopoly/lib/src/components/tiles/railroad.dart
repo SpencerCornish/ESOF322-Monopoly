@@ -1,7 +1,7 @@
 import 'tile.dart';
 import '../player/player.dart';
 
-/*class Railroad extends Tile {
+class Railroad extends Tile {
   // Price to purchase the railroad
   final int _price;
   // Cost to the player
@@ -44,4 +44,4 @@ import '../player/player.dart';
       return null;
     }
   }*/
-}*/
+}

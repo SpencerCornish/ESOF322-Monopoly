@@ -1,6 +1,6 @@
 import 'tile.dart';
 
-/*class Property extends Tile {
+class Property extends Tile {
   final String _color;
 
   final int _price;
@@ -29,4 +29,4 @@ import 'tile.dart';
 
   // TODO: make this calculate the total rent, even with houses, etc.
   //int get rent => _baseRent * ;
-}*/
+}
