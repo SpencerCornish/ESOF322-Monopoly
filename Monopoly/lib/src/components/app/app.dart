@@ -4,15 +4,18 @@ import 'dart:async';
 CanvasElement canvas = querySelector("#canvas");
 CanvasRenderingContext2D ctx = canvas.getContext('2d');
 
-void main() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+class App {
+  App() {
+    canvas.width = window.innerWidth ?? 1024;
+    canvas.height = window.innerHeight ?? 768;
 
-  Timer tempLoadingTimeout = new Timer(new Duration(seconds: 4), _changeStuff);
-}
+    Timer tempLoadingTimeout =
+        new Timer(new Duration(seconds: 4), _changeStuff);
+  }
 
-void _changeStuff() {
-  querySelector('#output').text = 'Your Dart app is running.';
-  ctx.fillStyle = 'red';
-  ctx.fillRect(100, 100, 250, 250);
+  _changeStuff() {
+    querySelector('#output').text = 'Your Dart app is running.';
+    ctx.fillStyle = 'red';
+    ctx.fillRect(100, 100, 250, 250);
+  }
 }

@@ -1,18 +1,15 @@
 import 'tile.dart';
+import '../player/player.dart';
 
 class Utility extends Tile {
+  Player _owner;
   final int _price;
-  final int _baseRent;
   final int _mortageCost;
-
-  int _rent;
-  int _numberOwned;
-  int _diceAmount;
 
   bool _isMortaged = false;
   bool _isInMonopoly = false;
 
-  Utility(String name, int location, this._price, this._baseRent, this._mortageCost)
+  Utility(String name, int location, this._price, this._mortageCost)
       : super(name, location);
 
   // Getters
@@ -24,17 +21,15 @@ class Utility extends Tile {
 // TODO: make this calculate the total rent, with how many owned by player, and roll of dice
 //int get rent => _baseRent * ;
 
-  int rent = 0;
-  calcRent(int numOwned, int rollVal) {
+  calulateRent() {
+    //TODO: Call Owner Player to determine how many are owned.
     if (numOwned == 1) {
       rent = rollVal * 4;
-    }
-
-    else if (numOwned == 2) {
+    } else if (numOwned == 2) {
       rent = rollVal * 10;
     }
-
     return rent;
   }
+
   int get totalRent => rent;
 }

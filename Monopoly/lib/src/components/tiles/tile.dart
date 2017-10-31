@@ -1,4 +1,4 @@
-import '../player.dart';
+import '../player/player.dart';
 
 class Tile {
   final String _name;

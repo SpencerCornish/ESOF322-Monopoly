@@ -1,19 +1,21 @@
 import 'tile.dart';
-import 'player.dart';
+import '../player/player.dart';
 
 class Railroad extends Tile {
+  // Price to purchase the railroad
   final int _price;
-  static final int _baseRent = 25;
+  // Cost to the player
   final int _mortageCost;
+
+  Player owner;
 
   bool _isMortaged = false;
   bool _isInMonopoly = false;
 
-  //static int _numberOwned = ;
-  //static int _rent;
-
-  Railroad(String name, int location, this._price, this._baseRent,
-      this._mortageCost, this._numberOwned)
+  // Owner is an optional parameter
+  Railroad(
+      String name, int location, this._price, this._mortageCost,
+      [this.owner])
       : super(name, location);
 
   // Getters
@@ -25,31 +27,22 @@ class Railroad extends Tile {
 
   bool get isInMonopoly => _isInMonopoly;
 
-// TODO: make this calculate the total rent, how many owned by player
+  int get rent => _calculateRent();
 
-  int rent = 0;
-  ClaculateRent(int numOwned, int baseRent) {
-    if (numOwned == 1) {
-      rent = _baseRent;
-    }
-
-    else if (numOwned == 2) {
-      rent = 50;
-    }
-
-    else if (numOwned == 3) {
-      rent = 100;
-    }
-
-    else if (numOwned == 3) {
-      rent = 200;
-    }
-
-    else {
+  _calculateRent() {
+    // Call player owner (if !null) to determine how many of tile type are owned
+    if (_numberOwned == 1) {
+      return _baseRent;
+    } else if (_numberOwned == 2) {
+      return 50;
+    } else if (_numberOwned == 3) {
+      return 100;
+    } else if (_numberOwned == 3) {
+      return 200;
+    } else {
       String error = 'error';
       print(error);
+      return null;
     }
-    return rent;
   }
-  int get totalRent => rent;
 }
