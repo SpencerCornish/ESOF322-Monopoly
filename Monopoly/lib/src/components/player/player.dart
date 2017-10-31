@@ -1,4 +1,5 @@
 import '../tiles/tile.dart';
+<<<<<<< HEAD
 import '../tiles/property.dart';
 import '../tiles/railroad.dart';
 import '../tiles/utility.dart';
@@ -8,6 +9,13 @@ class Player {
   // Token Type: Enum here?
   int _money = 1500;
   int _currentLocation = 0;
+=======
+
+class Player {
+  String _name;
+  int _money;
+  int _currentLocation;
+>>>>>>> e4619e58ca62ab6a5906505929bab2c71cec665b
   List<Tile> _ownedTiles;
   bool _playerInJail = false;
 
