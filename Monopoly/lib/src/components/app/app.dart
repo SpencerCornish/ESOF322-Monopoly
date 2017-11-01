@@ -54,7 +54,6 @@ class App {
     _ctxForeground.clearRect(0, 0, window.innerWidth, window.innerHeight);
     querySelector('#output').text = 'Your Dart app is running.';
     _board.draw(_ctxBackground);
-    print("called");
   }
 
   _drawForeground() {}
