@@ -8,19 +8,7 @@ class Board {
   List<Tile> tiles;
 
   Board() {
-    tiles = new List<Tile>();
-    if(window.innerWidth > window.innerHeight)
-      tileSize = ((window.innerHeight-50)/11).toInt();
-    else
-      tileSize = ((window.innerWidth-50)/11).toInt();
-    x = (window.innerWidth / 2 - tileSize * 5.5).toInt();
-    y = (window.innerHeight / 2 - tileSize * 5.5).toInt();
-    for (int i = 0; i < 10; i++) {
-      tiles.add(new Tile("name", x + i * tileSize, y, tileSize));
-      tiles.add(new Tile("name", x, y + (i+1) * tileSize, tileSize));
-      tiles.add(new Tile("name", x + (i+1) * tileSize, 10 * tileSize + y, tileSize));
-      tiles.add(new Tile("name", 10 * tileSize + x, y + i * tileSize, tileSize));
-    }
+    resize();
   }
 
   void draw(CanvasRenderingContext2D ctx) {
