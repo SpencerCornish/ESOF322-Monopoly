@@ -1,9 +1,8 @@
 import "package:test/test.dart";
-import "package:monopoly/src/components/player/player.dart";
 
 void main() {
   setUp(() async {
-    Player player = new Player('input correct thing');
+    // Bank bank = new Bank();
   });
   group("some group", () {
     test("some asyncronous test", () async {

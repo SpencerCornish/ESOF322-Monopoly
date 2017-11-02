@@ -45,10 +45,11 @@ class Tile {
 
   // Setter for setting owner
   setOwner(Player newOwner) => _owner = newOwner;
-  setLocation(int x, int y){
+  setLocation(int x, int y) {
     _x = x;
     _y = y;
   }
+
   setSize(int size) => _size = size;
 
   draw(CanvasRenderingContext2D ctx) {

@@ -9,18 +9,31 @@ main(List<String> args) async {
   // Perform task configuration here as necessary.
 
   // Available task configurations:
-  // config.analyze
+  config.analyze
+    ..strong = true
+    ..hints = true
+    ..entryPoints = ['lib/', 'lib/src/', 'test/'];
+
   // config.copyLicense
-  // config.coverage
+  config.coverage
+    ..html = true
+    ..pubServe = true;
+
   // config.docs
   // config.examples
-  // config.format
+  config.format..paths = ['lib/src/', 'test/'];
   config.test
     ..pubServe = true
-    ..platforms = ['content-shell'];
+    ..platforms = ['content-shell']
+    ..unitTests = ["test/unit/generated_runner_test.dart"];
 
   config.genTestRunner.configs = [
-    new TestRunnerConfig(genHtml: true, env: Environment.browser)
+    new TestRunnerConfig(
+      genHtml: true,
+      env: Environment.browser,
+      directory: 'test/unit/',
+      filename: 'generated_runner_test',
+    )
   ];
 
   await dev(args);

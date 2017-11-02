@@ -1,5 +1,5 @@
 import "package:test/test.dart";
-import "package:monopoly/src/components/app/app.dart";
+//import "package:monopoly/src/components/app/app.dart";
 
 void main() {
   setUp(() async {
