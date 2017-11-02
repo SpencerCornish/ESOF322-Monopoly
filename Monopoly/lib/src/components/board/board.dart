@@ -9,6 +9,7 @@ class Board {
   int y;
   List<Tile> tiles;
   int tileSize;
+  List<String> spaces;
 
   Board() {
     String color;
@@ -18,8 +19,14 @@ class Board {
     int buildingPrice;
     tiles = new List<Tile>();
 
-    Future<List<String>> spaces = readInfo();
-    spaces.then()
+    for (int i = 0; i < spaces.length; i++) {
+      List<String> pass;
+      for (int j = 0; j < 13; j++) {
+        pass.add(spaces.elementAt(j));
+      }
+      //new Tile.fromRead(pass);
+    }
+
 
 
     if(window.innerWidth > window.innerHeight)
@@ -41,10 +48,10 @@ class Board {
     }
   }
 
-  Future<List<String>> readInfo() async {
-    var file = await new fileStuff.File('../data/board.csv').readAsString();
+  readInfo() async {
+    String file = await new fileStuff.File('../data/board.csv').readAsString();
     List<String> t = file.split(",");
-    return t;
+    spaces = t;
   }
 
 
