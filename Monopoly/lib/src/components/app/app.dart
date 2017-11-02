@@ -61,7 +61,7 @@ class App {
   _addPlayers() {
     // Create 4 mock players
     for (int i = 0; i < 4; i++) {
-      Player newPlayer = new Player();
+      Player newPlayer = new Player('player');
       _playerList.add(newPlayer);
     }
   }
