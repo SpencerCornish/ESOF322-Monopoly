@@ -10,7 +10,7 @@ CanvasRenderingContext2D _ctxBackground = _canvasBackground.getContext('2d');
 CanvasElement _canvasForeground = querySelector("#canvas-foreground");
 CanvasRenderingContext2D _ctxForeground = _canvasForeground.getContext('2d');
 
-Board board = new Board();
+Board _board = new Board();
 
 void main() {
   App app = new App();
@@ -35,14 +35,25 @@ class App {
     // Instantiate players
     // Player should instantiate game_pieces/banks
 
+    window.onResize.listen((e) {
+      _canvasBackground.width = window.innerWidth;
+      _canvasBackground.height = window.innerHeight;
+      _canvasForeground.width = window.innerWidth;
+      _canvasForeground.height = window.innerHeight;
+
+      _board.resize();
+      _beginDraw();
+    });
+
     Timer loadingSplashScreenTimeout =
         new Timer(new Duration(seconds: 1), _beginDraw);
   }
 
   _beginDraw() {
+    _ctxBackground.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    _ctxForeground.clearRect(0, 0, window.innerWidth, window.innerHeight);
     querySelector('#output').text = 'Your Dart app is running.';
-    //_ctxBackground.fillRect(0, 0, 100, 100);
-    board.draw(_ctxBackground);
+    _board.draw(_ctxBackground);
   }
 
   _drawForeground() {}
