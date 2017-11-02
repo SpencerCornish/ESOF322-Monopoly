@@ -12,7 +12,7 @@ main(List<String> args) async {
   config.analyze
     ..strong = true
     ..hints = true
-    ..entryPoints = ['lib/', 'lib/src/'];
+    ..entryPoints = ['lib/', 'lib/src/', 'test/'];
 
   // config.copyLicense
   config.coverage
@@ -21,7 +21,7 @@ main(List<String> args) async {
 
   // config.docs
   // config.examples
-  // config.format
+  config.format..paths = ['lib/src/', 'test/'];
   config.test
     ..pubServe = true
     ..platforms = ['content-shell']
