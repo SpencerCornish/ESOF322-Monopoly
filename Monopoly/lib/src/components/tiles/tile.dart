@@ -22,16 +22,15 @@ class Tile {
   int _numBuildings;
   bool _isInMonopoly = false;
 
-
   // Tile constructor
   Tile(this._name, this._x, this._y, this._size, this._color, this._price,
-      this._baseRent, this._mortgageCost, /* this._owner , */this._buildingPrice);
+      this._baseRent, this._mortgageCost, this._buildingPrice);
 
   // Getters
   //general
   String get name => _name;
   String get color => _color;
-    //board.csv does not have the mortgage values
+  //board.csv does not have the mortgage values
   int get mortgageCost => _mortgageCost;
   bool get isMortgaged => _isMortgaged;
   int get price => _price;
@@ -40,7 +39,7 @@ class Tile {
   Player get owner => _owner;
 
   //property specific
-  int get housePrice => _buildingPrice;
+  int get buildingPrice => _buildingPrice;
 
   bool get isInMonopoly => _isInMonopoly;
 
@@ -101,4 +100,3 @@ class Tile {
     }
   }
 }
-
