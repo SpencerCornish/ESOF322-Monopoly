@@ -1,7 +1,5 @@
 import '../tiles/tile.dart';
-import '../tiles/property.dart';
-import '../tiles/railroad.dart';
-import '../tiles/utility.dart';
+
 
 class Player {
   String _name;
@@ -13,16 +11,15 @@ class Player {
 
 Player(this._name) {}
 
+void buyTile(Tile t) {
+
+}
+
+
+/*
 void buyProperty(Property p) {
   _money -= p.price;
   _ownedTiles.add(p);
-}
-
-void buyHouse(Property p, int numHouse) {   //we should be able to work buy hotel into this
-  for (var i = 0; i < numHouse; i++) {
-    //p.buyHouse() - TODO where p.buyHouse will add the multiplier of a house
-    _money -= p.housePrice;
-  }
 }
 
 void buyRailroad(Railroad r) {
@@ -32,6 +29,14 @@ void buyRailroad(Railroad r) {
 void buyUtility(Utility u) {
 
 }
+*/
+
+  void buyHouse(Tile p, int numHouse) {   //we should be able to work buy hotel into this
+    for (var i = 0; i < numHouse; i++) {
+      //p.buyHouse() - TODO where p.buyHouse will add the multiplier of a house
+      _money -= p.housePrice;
+    }
+  }
 
 List<Tile> get properties => _ownedTiles;
 int get money => _money;
@@ -73,8 +78,8 @@ void getPaid(int amt) {
   this._money += amt;
 }
 
-void sellDeed(Property p) {   //should this be a repeated method based on utility, railroad, or property?
-  this._ownedTiles.remove(p);
+void sellDeed(Tile t) {   //should this be a repeated method based on utility, railroad, or property?
+  this._ownedTiles.remove(t);
   //update money
 }
 
