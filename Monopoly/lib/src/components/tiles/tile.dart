@@ -8,9 +8,9 @@ class Tile {
   final int _price;
   final int _baseRent;
   final int _mortgageCost;
-  final int _x;
-  final int _y;
-  final int _size;
+  int _x;
+  int _y;
+  int _size;
   bool _isMortgaged = false;
   Player _owner;
   int _numberOwned;
@@ -45,6 +45,11 @@ class Tile {
 
   // Setter for setting owner
   setOwner(Player newOwner) => _owner = newOwner;
+  setLocation(int x, int y){
+    _x = x;
+    _y = y;
+  }
+  setSize(int size) => _size = size;
 
   draw(CanvasRenderingContext2D ctx) {
     ctx.strokeStyle = 'red';
