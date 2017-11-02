@@ -3,28 +3,35 @@ import '../player/player.dart';
 
 class Tile {
   //general
-  final String _name;
-  final String _color;
-  final int _price;
-  final int _baseRent;
-  final int _mortgageCost;
-  int _x;
-  int _y;
-  int _size;
-  bool _isMortgaged = false;
+  String _name, _type, _color;
+  int _position, _price, _buildPrice, _baseRent, _rent1, _rent2, _rent3, _rent4, _rent5, _totalNum, _mortgageCost, _x, _y, _size, _numberOwned, _rollVal;
+  bool _isMortgaged, _isInMonopoly;
   Player _owner;
-  int _numberOwned;
-  String _type;
-  int _rollVal;
 
-  //property specific
-  final int _buildingPrice;
-  int _numBuildings;
-  bool _isInMonopoly = false;
-
-  // Tile constructor
-  Tile(this._name, this._x, this._y, this._size, this._color, this._price,
-      this._baseRent, this._mortgageCost, this._buildingPrice);
+  // Tile constructor - adds a tile with name, type of tile, color, position on
+  // board, price to buy, price to build, base rent (without buildings), the
+  // rent amount for each building configuration, the number of the color of
+  // tile, the mortgage cost of the tile, the number of the monopoly owned, and
+  // flags for if it is mortgaged or in a monopoly
+  Tile(List<String> attr, this._x, this._y, this._size) {
+    this._name = attr.elementAt(0);
+    this._type = attr.elementAt(1);
+    this._color = attr.elementAt(2);
+    this._position = int.parse(attr.elementAt(3));
+    this._price = int.parse(attr.elementAt(4));
+    this._buildPrice = int.parse(attr.elementAt(5));
+    this._baseRent = int.parse(attr.elementAt(6));
+    this._rent1 = int.parse(attr.elementAt(7));
+    this._rent2 = int.parse(attr.elementAt(8));
+    this._rent3 = int.parse(attr.elementAt(9));
+    this._rent4 = int.parse(attr.elementAt(10));
+    this._rent5 = int.parse(attr.elementAt(11));
+    this._totalNum = int.parse(attr.elementAt(12));
+    this._mortgageCost = (this._price / 2).round();
+    this._numberOwned = 0;
+    this._isMortgaged = false;
+    this._isInMonopoly = false;
+  }
 
   // Getters
   //general
@@ -39,8 +46,7 @@ class Tile {
   Player get owner => _owner;
 
   //property specific
-  int get buildingPrice => _buildingPrice;
-
+  int get buildPrice => _buildPrice;
   bool get isInMonopoly => _isInMonopoly;
 
   // Setter for setting owner

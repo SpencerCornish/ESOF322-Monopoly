@@ -1,7 +1,5 @@
 import 'dart:html';
 import 'dart:io' as fileStuff;
-import 'dart:convert';
-import 'dart:async';
 import '../tiles/tile.dart';
 
 class Board {
@@ -12,22 +10,7 @@ class Board {
   List<String> spaces;
 
   Board() {
-    String color;
-    int price;
-    int baseRent;
-    int mortgage;
-    int buildingPrice;
     tiles = new List<Tile>();
-
-    for (int i = 0; i < spaces.length; i++) {
-      List<String> pass;
-      for (int j = 0; j < 13; j++) {
-        pass.add(spaces.elementAt(j));
-      }
-      //new Tile.fromRead(pass);
-    }
-
-
 
     if(window.innerWidth > window.innerHeight)
       tileSize = ((window.innerHeight-50)/11).toInt();
@@ -36,15 +19,37 @@ class Board {
     x = (window.innerWidth / 2 - tileSize * 5.5).toInt();
     y = (window.innerHeight / 2 - tileSize * 5.5).toInt();
 
-    for (int i = 0; i < 10; i++) {
-      tiles.add(new Tile("name", x + i * tileSize, y, tileSize, color, price, baseRent,
-          mortgage, buildingPrice));
-      tiles.add(new Tile("name", x, y + (i + 1) * tileSize, tileSize, color, price,
-          baseRent, mortgage, buildingPrice));
-      tiles.add(new Tile("name", x + (i + 1) * tileSize, 10 * tileSize + y, tileSize, color,
-          price, baseRent, mortgage, buildingPrice));
-      tiles.add(new Tile("name", 10 * tileSize + x, y + i * tileSize, tileSize, color,
-          price, baseRent, mortgage, buildingPrice));
+    int k = 0;                                                  //defines index of entire read-in string
+    for (int i = 0; i < 10; i++) {                              //loop through each row
+      List<String> temp;                                        //temporary strings indicating a single tile attribute list
+      for (int j = k; j < k + 13; j++) {                        //loop through the size of a tile and initialize the tile attributes
+        temp.add(spaces.elementAt(j));
+      }
+      k += 117;                                                 //iterate the counter for the overall string by a side of the board (bottom to left)
+      tiles.add(new Tile(temp, x + i * tileSize, y, tileSize));                 //create a new tile on bottom
+      temp.clear();                                             //reset the tile attribute list for a new tile
+
+      for (int j = k; j < k + 13; j++) {
+        temp.add(spaces.elementAt(j));
+      }
+      k += 117;                                                 //iterate the counter for the overall string by a side of the board (left to top)
+      tiles.add(new Tile(temp, x, y + (i + 1) * tileSize, tileSize));           //create a new tile on left
+      temp.clear();
+
+      for (int j = k; j < k + 13; j++) {
+        temp.add(spaces.elementAt(j));
+        k++;
+      }
+      k += 117;                                                 //iterate the counter for the overall string by a side of the board (top to right)
+      tiles.add(new Tile(temp, x + (i + 1) * tileSize, 10 * tileSize + y, tileSize));           //create a new tile on top
+      temp.clear();
+
+      for (int j = k; j < k + 13; j++) {
+        temp.add(spaces.elementAt(j));
+        k++;
+      }
+      k -= 390;                                                 //reset the counter for overall string by subtracting off the sides and going back to bottom
+      tiles.add(new Tile(temp, 10 * tileSize + x, y + i * tileSize, tileSize));                 //create a new tile on right
     }
   }
 
