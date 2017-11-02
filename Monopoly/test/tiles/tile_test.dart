@@ -1,10 +1,10 @@
 import "package:test/test.dart";
-import "package:monopoly/src/components/tiles/property.dart";
+import "package:monopoly/src/components/tiles/tile.dart";
 
 void main() {
   setUp(() async {
-    Property testProperty =
-        new Property("testName", 11, "Green", 2000, 20, 10, 100);
+    Tile testTile =
+    new Tile("testName", 11, 11, 3, "Green", 100, 70, 50,/* player, */ 30);
   });
   group("some group", () {
     test("some asyncronous test", () async {

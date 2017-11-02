@@ -3,7 +3,7 @@ import "package:monopoly/src/components/player/player.dart";
 
 void main() {
   setUp(() async {
-    Player player = new Player();
+    Player player = new Player('input correct thing');
   });
   group("some group", () {
     test("some asyncronous test", () async {
