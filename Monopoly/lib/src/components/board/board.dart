@@ -1,4 +1,7 @@
 import 'dart:html';
+import 'dart:io' as fileStuff;
+import 'dart:convert';
+import 'dart:async';
 import '../tiles/tile.dart';
 
 class Board {
@@ -14,6 +17,11 @@ class Board {
     int mortgage;
     int buildingPrice;
     tiles = new List<Tile>();
+
+    Future<List<String>> spaces = readInfo();
+    Completer c = new Completer();
+    c.complete(spaces);
+    
 
     if(window.innerWidth > window.innerHeight)
       tileSize = ((window.innerHeight-50)/11).toInt();
@@ -33,6 +41,13 @@ class Board {
           price, baseRent, mortgage, buildingPrice));
     }
   }
+
+  Future<List<String>> readInfo() async {
+    var file = await new fileStuff.File('../data/board.csv').readAsString();
+    List<String> t = file.split(",");
+    return t;
+  }
+
 
   void draw(CanvasRenderingContext2D ctx) {
     for (Tile tile in tiles) tile.draw(ctx);
