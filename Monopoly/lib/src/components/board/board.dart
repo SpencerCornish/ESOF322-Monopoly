@@ -19,9 +19,8 @@ class Board {
     tiles = new List<Tile>();
 
     Future<List<String>> spaces = readInfo();
-    Completer c = new Completer();
-    c.complete(spaces);
-    
+    spaces.then()
+
 
     if(window.innerWidth > window.innerHeight)
       tileSize = ((window.innerHeight-50)/11).toInt();
