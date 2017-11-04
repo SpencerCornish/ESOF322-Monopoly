@@ -11,6 +11,7 @@ class Board {
 
   Board() {
     tiles = new List<Tile>();
+    readInfo();
 
     if(window.innerWidth > window.innerHeight)
       tileSize = ((window.innerHeight-50)/11).toInt();
@@ -21,7 +22,7 @@ class Board {
 
     int k = 0;                                                  //defines index of entire read-in string
     for (int i = 0; i < 10; i++) {                              //loop through each row
-      List<String> temp;                                        //temporary strings indicating a single tile attribute list
+      List<String> temp = new List<String>();                   //temporary strings indicating a single tile attribute list
       for (int j = k; j < k + 13; j++) {                        //loop through the size of a tile and initialize the tile attributes
         temp.add(spaces.elementAt(j));
       }
