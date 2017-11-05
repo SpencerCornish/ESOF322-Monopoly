@@ -4,8 +4,19 @@ import '../player/player.dart';
 class Tile {
   //general
   String _name, _type, _color;
-  int _position, _price, _buildPrice, _baseRent, _rent1, _rent2, _rent3, _rent4, _rent5, _totalNum, _mortgageCost, _x, _y, _width, _height, _numberOwned, _rollVal;
-  bool _isMortgaged, _isInMonopoly;
+  int _position,    //position of tile on board
+      _price,       //price to buy tile
+      _buildPrice,  //price to build on this tile
+      _baseRent,    //rent of tile without monopoly or building
+      _rent1, _rent2, _rent3, _rent4, _rent5, //rents of upgraded tile
+      _totalNum,        //number of tiles of this type
+      _mortgageCost,    //money gained from mortgaging this tile
+      _x, _y,           //x and y location of tile on canvas
+      _width, _height,  //width and height of tile in pixels
+      _numberOwned;     //number of this type of tile the owner owns
+
+  bool _isMortgaged,    //if this tile is mortgaged
+      _isInMonopoly;    //if the owner owns all tiles of this type
   Player _owner;
 
   // Tile constructor - adds a tile with name, type of tile, color, position on
@@ -37,7 +48,7 @@ class Tile {
   //general
   String get name => _name;
   String get color => _color;
-  //board.csv does not have the mortgage values
+
   int get mortgageCost => _mortgageCost;
   bool get isMortgaged => _isMortgaged;
   int get price => _price;
@@ -64,10 +75,7 @@ class Tile {
   }
 
   draw(CanvasRenderingContext2D ctx) {
-    if(_color == 'None')
-      ctx.fillStyle = 'white';
-    else
-      ctx.fillStyle = _color;
+    ctx.fillStyle = _color == 'None' ? 'white' : _color;
     ctx.strokeStyle = 'black';
     ctx.textAlign = 'center';
 
@@ -77,7 +85,7 @@ class Tile {
   }
 
   //calulates the rent for each type of tile
-  calcRent() {
+  calcRent(int rollVal) {
     switch (_type) {
       case 'Street':
         /* need info from board.csv to get rentBuild1, rentBUild2,...
@@ -115,9 +123,9 @@ class Tile {
         break;
       case 'Utility':
         if (_numberOwned == 1) {
-          return _rollVal * 4;
+          return rollVal * 4;
         } else if (_numberOwned == 2) {
-          return _rollVal * 10;
+          return rollVal * 10;
         }
         break;
       case 'Special':
