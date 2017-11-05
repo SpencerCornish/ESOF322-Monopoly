@@ -59,8 +59,16 @@ class Tile {
   setSize(int size) => _size = size;
 
   draw(CanvasRenderingContext2D ctx) {
-    ctx.strokeStyle = 'red';
-    ctx.strokeRect(_x, _y, _size, _size);
+    if(_color == 'None')
+      ctx.fillStyle = 'white';
+    else
+      ctx.fillStyle = _color;
+    ctx.strokeStyle = 'black';
+    ctx.textAlign = 'center';
+
+    ctx.strokeRect(_x, _y, _size, _size); //draw tile boarder
+    ctx.fillRect(_x, _y, _size, _size);   //draw tile color
+    ctx.strokeText(name, _x+_size/2, _y+(9*_size)/10); //write name 9/10 of the way down the tile
   }
 
   //calulates the rent for each type of tile
