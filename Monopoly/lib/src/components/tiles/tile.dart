@@ -44,7 +44,7 @@ class Tile {
   bool get isInMonopoly => _isInMonopoly;
 
   // Setter for setting owner
-  setOwner(Player newOwner) => _owner = newOwner;
+  set owner(Player newOwner) => _owner = newOwner;
   setLocation(int x, int y) {
     _x = x;
     _y = y;

@@ -1,31 +1,63 @@
 import '../tiles/tile.dart';
+import 'dart:math';
 
 class Player {
+  Random rand = new Random();
+
   String _name;
   // Token Type: Enum here?
   int _money;
+  int _numDoubles = 0;
   int _currentLocation = 0;
   List<Tile> _ownedTiles;
-  bool _playerInJail = false;
+  bool _inJail = false;
 
-  Player(this._name) {}
+  Player(this._name);
 
-  void buyTile(Tile t) {}
+  //player rolls dice and moves position
+  void move(){
+    if(_inJail)
+      jailMove();
+    else
+      normalMove();
+  }
 
-/*
-void buyProperty(Property p) {
-  _money -= p.price;
-  _ownedTiles.add(p);
-}
+  void jailMove(){
+    
+  }
 
-void buyRailroad(Railroad r) {
+  void normalMove(){
+    int die1 = rand.nextInt(6)+1;
+    int die2 = rand.nextInt(6)+1;
 
-}
+    if(die1 == die2)
+      _numDoubles++;
+    else
+      _numDoubles = 0;
 
-void buyUtility(Utility u) {
+    //if the player rolls doubles 3 times in the same turn, go to jail
+    if(_numDoubles == 3)
+      goToJail();
 
-}
-*/
+    if(!_inJail){
+      int nextLocation = _currentLocation + die1 + die2;
+
+      if (nextLocation > 39) { //if the player has landed on or passed go
+        _currentLocation = nextLocation - 40;
+        _money += 200;
+      }
+
+      _currentLocation = nextLocation;
+
+      if (_numDoubles > 0) //if the player rolled doubles move again
+        move();
+    }
+  }
+
+  void buyTile(Tile t) {
+    t.owner = this;
+    _money -= t.price;
+  }
 
   void buyHouse(Tile p, int numHouse) {
     //we should be able to work buy hotel into this
@@ -55,11 +87,11 @@ void buyUtility(Utility u) {
 
   void goToJail() {
     _currentLocation = 10;
-    _playerInJail = true;
+    _inJail = true;
   }
 
   void getOutOfJail() {
-    _playerInJail = false;
+    _inJail = false;
   }
 
   void goBankrupt() {
