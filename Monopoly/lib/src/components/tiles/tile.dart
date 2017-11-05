@@ -4,7 +4,7 @@ import '../player/player.dart';
 class Tile {
   //general
   String _name, _type, _color;
-  int _position, _price, _buildPrice, _baseRent, _rent1, _rent2, _rent3, _rent4, _rent5, _totalNum, _mortgageCost, _x, _y, _size, _numberOwned, _rollVal;
+  int _position, _price, _buildPrice, _baseRent, _rent1, _rent2, _rent3, _rent4, _rent5, _totalNum, _mortgageCost, _x, _y, _width, _height, _numberOwned, _rollVal;
   bool _isMortgaged, _isInMonopoly;
   Player _owner;
 
@@ -13,7 +13,7 @@ class Tile {
   // rent amount for each building configuration, the number of the color of
   // tile, the mortgage cost of the tile, the number of the monopoly owned, and
   // flags for if it is mortgaged or in a monopoly
-  Tile(List<String> attr, this._x, this._y, this._size) {
+  Tile(List<String> attr, this._x, this._y, this._width, this._height) {
     this._name = attr.elementAt(0);
     this._type = attr.elementAt(1);
     this._color = attr.elementAt(2);
@@ -42,7 +42,9 @@ class Tile {
   bool get isMortgaged => _isMortgaged;
   int get price => _price;
   int get x => _x;
-  int get y => y;
+  int get y => _y;
+  int get width => _width;
+  int get height => _height;
   Player get owner => _owner;
 
   //property specific
@@ -56,7 +58,10 @@ class Tile {
     _y = y;
   }
 
-  setSize(int size) => _size = size;
+  setSize(int width, int height){
+    _width = width;
+    _height = height;
+  }
 
   draw(CanvasRenderingContext2D ctx) {
     if(_color == 'None')
@@ -66,9 +71,9 @@ class Tile {
     ctx.strokeStyle = 'black';
     ctx.textAlign = 'center';
 
-    ctx.strokeRect(_x, _y, _size, _size); //draw tile boarder
-    ctx.fillRect(_x, _y, _size, _size);   //draw tile color
-    ctx.strokeText(name, _x+_size/2, _y+(9*_size)/10); //write name 9/10 of the way down the tile
+    ctx.strokeRect(_x, _y, _width, _height); //draw tile boarder
+    ctx.fillRect(_x, _y, _width, _height);   //draw tile color
+    ctx.strokeText(name, _x+_width/2, _y+(9*_height)/10); //write name 9/10 of the way down the tile
   }
 
   //calulates the rent for each type of tile
