@@ -1,25 +1,24 @@
 import 'dart:html';
-import 'dart:io' as fileStuff;
 import '../tiles/tile.dart';
+import '../../data/constants.dart';
 
 class Board {
   int x;
   int y;
   List<Tile> tiles;
   int tileSize;
-  List<String> spaces;
 
   Board() {
     tiles = new List<Tile>();
-    readInfo();
 
     if(window.innerWidth > window.innerHeight)
-      tileSize = ((window.innerHeight-50)/11).toInt();
+      tileSize = ((window.innerHeight-50)~/11);
     else
-      tileSize = ((window.innerWidth-50)/11).toInt();
+      tileSize = ((window.innerWidth-50)~/11);
     x = (window.innerWidth / 2 - tileSize * 5.5).toInt();
     y = (window.innerHeight / 2 - tileSize * 5.5).toInt();
 
+    List<String> spaces = readInfo();
     int k = 0;                                                  //defines index of entire read-in string
     for (int i = 0; i < 10; i++) {                              //loop through each row
       List<String> temp = new List<String>();                   //temporary strings indicating a single tile attribute list
@@ -54,10 +53,10 @@ class Board {
     }
   }
 
-  readInfo() async {
-    String file = await new fileStuff.File('../data/board.csv').readAsString();
+  List<String> readInfo() {
+    String file = boardInfo;
     List<String> t = file.split(",");
-    spaces = t;
+    return t;
   }
 
 
