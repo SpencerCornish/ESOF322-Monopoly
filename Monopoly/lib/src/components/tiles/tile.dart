@@ -4,19 +4,25 @@ import '../player/player.dart';
 class Tile {
   //general
   String _name, _type, _color;
-  int _position,    //position of tile on board
-      _price,       //price to buy tile
-      _buildPrice,  //price to build on this tile
-      _baseRent,    //rent of tile without monopoly or building
-      _rent1, _rent2, _rent3, _rent4, _rent5, //rents of upgraded tile
-      _totalNum,        //number of tiles of this type
-      _mortgageCost,    //money gained from mortgaging this tile
-      _x, _y,           //x and y location of tile on canvas
-      _width, _height,  //width and height of tile in pixels
-      _numberOwned;     //number of this type of tile the owner owns
+  int _position, //position of tile on board
+      _price, //price to buy tile
+      _buildPrice, //price to build on this tile
+      _baseRent, //rent of tile without monopoly or building
+      _rent1,
+      _rent2,
+      _rent3,
+      _rent4,
+      _rent5, //rents of upgraded tile
+      _totalNum, //number of tiles of this type
+      _mortgageCost, //money gained from mortgaging this tile
+      _x,
+      _y, //x and y location of tile on canvas
+      _width,
+      _height, //width and height of tile in pixels
+      _numberOwned; //number of this type of tile the owner owns
 
-  bool _isMortgaged,    //if this tile is mortgaged
-      _isInMonopoly;    //if the owner owns all tiles of this type
+  bool _isMortgaged, //if this tile is mortgaged
+      _isInMonopoly; //if the owner owns all tiles of this type
   Player _owner;
 
   // Tile constructor - adds a tile with name, type of tile, color, position on
@@ -69,7 +75,7 @@ class Tile {
     _y = y;
   }
 
-  setSize(int width, int height){
+  setSize(int width, int height) {
     _width = width;
     _height = height;
   }
@@ -80,8 +86,9 @@ class Tile {
     ctx.textAlign = 'center';
 
     ctx.strokeRect(_x, _y, _width, _height); //draw tile boarder
-    ctx.fillRect(_x, _y, _width, _height);   //draw tile color
-    ctx.strokeText(name, _x+_width/2, _y+(9*_height)/10); //write name 9/10 of the way down the tile
+    ctx.fillRect(_x, _y, _width, _height); //draw tile color
+    ctx.strokeText(name, _x + _width / 2,
+        _y + (9 * _height) / 10); //write name 9/10 of the way down the tile
   }
 
   //calulates the rent for each type of tile
