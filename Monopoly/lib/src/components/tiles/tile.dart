@@ -61,25 +61,24 @@ class Tile {
   calcRent() {
     switch (_type) {
       case 'Street':
-        /* need info from board.csv to get rentBuild1, rentBUild2,...
-        if (_numBuildings = null) {
+        if (_numberOwned = null) {
           return _baseRent;
-        } else if (_numBuildings == 1) {
-          return rentBuild1;
-        } else if (_numBuildings == 2) {
-          return rentBuild2;
-        } else if (_numBuildings == 3) {
-          return rentBuild3;
-        } else if (_numBuildings == 4) {
-          return rentBuild4;
-        } else if (_numBuildings == 5) {
-          return rentBuild5;
+        } else if (_numberOwned == 1) {
+          return _rent1;
+        } else if (_numberOwned == 2) {
+          return _rent2;
+        } else if (_numberOwned == 3) {
+          return _rent3;
+        } else if (_numberOwned == 4) {
+          return _rent4;
+        } else if (_numberOwned == 5) {
+          return _rent5;
         } else {
           String error = 'error';
           print(error);
         }
-        */
         break;
+
       case 'Railroad':
         if (_numberOwned == 1) {
           return _baseRent;
@@ -94,6 +93,7 @@ class Tile {
           print(error);
         }
         break;
+
       case 'Utility':
         if (_numberOwned == 1) {
           return _rollVal * 4;
@@ -101,6 +101,7 @@ class Tile {
           return _rollVal * 10;
         }
         break;
+
       case 'Special':
         break;
     }

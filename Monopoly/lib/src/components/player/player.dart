@@ -14,6 +14,7 @@ class Player {
 
   Player(this._name);
 
+
   //player rolls dice and moves position
   void move(){
     if(_inJail)
@@ -57,6 +58,8 @@ class Player {
   void buyTile(Tile t) {
     t.owner = this;
     _money -= t.price;
+    properties.add(t);
+
   }
 
   void buyHouse(Tile p, int numHouse) {
@@ -70,7 +73,7 @@ class Player {
   List<Tile> get properties => _ownedTiles;
   int get money => _money;
   String get name => _name;
-//get token
+  //get token
   int get position => _currentLocation;
 
   void set name(String n) {
@@ -96,6 +99,19 @@ class Player {
 
   void goBankrupt() {
     //display end game message
+    if (this.money == 0) {
+      print("You went BANKRUPT! Game Over!");
+    }
+    /*
+    if (moneyOwed to Player) {
+    give all property to player
+    give all properties to player
+    } else (moneyOwed to bank) {
+    give all money to bank
+    give all properties to bank
+      auction off all properties right away
+    }
+    */
   }
 
   void payRent(Player to, int rent) {
