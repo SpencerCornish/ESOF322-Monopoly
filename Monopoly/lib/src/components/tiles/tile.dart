@@ -3,44 +3,69 @@ import '../player/player.dart';
 
 class Tile {
   //general
-  final String _name;
-  final String _color;
-  final int _price;
-  final int _baseRent;
-  final int _mortgageCost;
-  int _x;
-  int _y;
-  int _size;
-  bool _isMortgaged = false;
+  String _name, _type, _color;
+  int _position, //position of tile on board
+      _price, //price to buy tile
+      _buildPrice, //price to build on this tile
+      _baseRent, //rent of tile without monopoly or building
+      _rent1,
+      _rent2,
+      _rent3,
+      _rent4,
+      _rent5, //rents of upgraded tile
+      _totalNum, //number of tiles of this type
+      _mortgageCost, //money gained from mortgaging this tile
+      _x,
+      _y, //x and y location of tile on canvas
+      _width,
+      _height, //width and height of tile in pixels
+      _numberOwned; //number of this type of tile the owner owns
+
+  bool _isMortgaged, //if this tile is mortgaged
+      _isInMonopoly; //if the owner owns all tiles of this type
   Player _owner;
-  int _numberOwned;
-  String _type;
-  int _rollVal;
 
-  //property specific
-  final int _buildingPrice;
-  int _numBuildings;
-  bool _isInMonopoly = false;
-
-  // Tile constructor
-  Tile(this._name, this._x, this._y, this._size, this._color, this._price,
-      this._baseRent, this._mortgageCost, this._buildingPrice);
+  // Tile constructor - adds a tile with name, type of tile, color, position on
+  // board, price to buy, price to build, base rent (without buildings), the
+  // rent amount for each building configuration, the number of the color of
+  // tile, the mortgage cost of the tile, the number of the monopoly owned, and
+  // flags for if it is mortgaged or in a monopoly
+  Tile(List<String> attr, this._x, this._y, this._width, this._height) {
+    this._name = attr.elementAt(0);
+    this._type = attr.elementAt(1);
+    this._color = attr.elementAt(2);
+    this._position = int.parse(attr.elementAt(3));
+    this._price = int.parse(attr.elementAt(4));
+    this._buildPrice = int.parse(attr.elementAt(5));
+    this._baseRent = int.parse(attr.elementAt(6));
+    this._rent1 = int.parse(attr.elementAt(7));
+    this._rent2 = int.parse(attr.elementAt(8));
+    this._rent3 = int.parse(attr.elementAt(9));
+    this._rent4 = int.parse(attr.elementAt(10));
+    this._rent5 = int.parse(attr.elementAt(11));
+    this._totalNum = int.parse(attr.elementAt(12));
+    this._mortgageCost = (this._price / 2).round();
+    this._numberOwned = 0;
+    this._isMortgaged = false;
+    this._isInMonopoly = false;
+  }
 
   // Getters
   //general
   String get name => _name;
   String get color => _color;
-  //board.csv does not have the mortgage values
+
   int get mortgageCost => _mortgageCost;
   bool get isMortgaged => _isMortgaged;
   int get price => _price;
   int get x => _x;
-  int get y => y;
+  int get y => _y;
+  int get width => _width;
+  int get height => _height;
   Player get owner => _owner;
 
   //property specific
-  int get buildingPrice => _buildingPrice;
-
+  int get buildPrice => _buildPrice;
   bool get isInMonopoly => _isInMonopoly;
 
   // Setter for setting owner
@@ -50,15 +75,24 @@ class Tile {
     _y = y;
   }
 
-  setSize(int size) => _size = size;
+  setSize(int width, int height) {
+    _width = width;
+    _height = height;
+  }
 
   draw(CanvasRenderingContext2D ctx) {
-    ctx.strokeStyle = 'red';
-    ctx.strokeRect(_x, _y, _size, _size);
+    ctx.fillStyle = _color == 'None' ? 'white' : _color;
+    ctx.strokeStyle = 'black';
+    ctx.textAlign = 'center';
+
+    ctx.strokeRect(_x, _y, _width, _height); //draw tile boarder
+    ctx.fillRect(_x, _y, _width, _height); //draw tile color
+    ctx.strokeText(name, _x + _width / 2,
+        _y + (9 * _height) / 10); //write name 9/10 of the way down the tile
   }
 
   //calulates the rent for each type of tile
-  calcRent() {
+  calcRent(int rollVal) {
     switch (_type) {
       case 'Street':
         /* need info from board.csv to get rentBuild1, rentBUild2,...
@@ -96,9 +130,9 @@ class Tile {
         break;
       case 'Utility':
         if (_numberOwned == 1) {
-          return _rollVal * 4;
+          return rollVal * 4;
         } else if (_numberOwned == 2) {
-          return _rollVal * 10;
+          return rollVal * 10;
         }
         break;
       case 'Special':
