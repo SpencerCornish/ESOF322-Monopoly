@@ -66,7 +66,7 @@ class Player {
     //we should be able to work buy hotel into this
     for (var i = 0; i < numHouse; i++) {
       //p.buyHouse() - TODO where p.buyHouse will add the multiplier of a house
-      _money -= p.buildingPrice;
+      _money -= p.buildPrice;
     }
   }
 
