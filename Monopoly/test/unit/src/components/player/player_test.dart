@@ -1,5 +1,5 @@
 import "package:test/test.dart";
-//import "package:monopoly/src/components/player/player.dart";
+import "package:monopoly/src/components/player/player.dart";
 
 void main() {
   setUp(() async {
@@ -11,4 +11,16 @@ void main() {
       expect(someBool, isTrue);
     });
   });
+
+  Player testGoBankrupt;
+
+  Player testGetOutOfJail;
+
+  Player testRollDice;
+
+  Player testNormalMove;
+
+  Player testPayRent;
+
+  Player testSellDeed;
 }

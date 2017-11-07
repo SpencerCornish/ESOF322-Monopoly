@@ -19,7 +19,8 @@ class Tile {
       _y, //x and y location of tile on canvas
       _width,
       _height, //width and height of tile in pixels
-      _numberOwned; //number of this type of tile the owner owns
+      _numberOwned, //number of this type of tile the owner owns
+      _numBuildings;
 
   bool _isMortgaged, //if this tile is mortgaged
       _isInMonopoly; //if the owner owns all tiles of this type
@@ -63,6 +64,7 @@ class Tile {
   int get width => _width;
   int get height => _height;
   Player get owner => _owner;
+  int get buildings => _numBuildings;
 
   //property specific
   int get buildPrice => _buildPrice;
@@ -91,26 +93,38 @@ class Tile {
         _y + (9 * _height) / 10); //write name 9/10 of the way down the tile
   }
 
+  auction(){
+    int startPrice = 10;
+    //all players can increase auction price by 1 at the least
+    //highest bidder wins property
+    //if no one wants it no one pays anything and the deed remains unclaimed
+
+  }
+
   //calulates the rent for each type of tile
   calcRent(int rollVal) {
     switch (_type) {
       case 'Street':
-        if (_numberOwned = null) {
+      if (_isInMonopoly) {
+        //return monopoly rent values for each building
+      } else {
+        if (_numBuildings = null) {
           return _baseRent;
-        } else if (_numberOwned == 1) {
+        } else if (_numBuildings == 1) {
           return _rent1;
-        } else if (_numberOwned == 2) {
+        } else if (_numBuildings == 2) {
           return _rent2;
-        } else if (_numberOwned == 3) {
+        } else if (_numBuildings == 3) {
           return _rent3;
-        } else if (_numberOwned == 4) {
+        } else if (_numBuildings == 4) {
           return _rent4;
-        } else if (_numberOwned == 5) {
+        } else if (_numBuildings == 5) {
           return _rent5;
         } else {
           String error = 'error';
           print(error);
         }
+      }
         break;
 
       case 'Railroad':
@@ -136,7 +150,10 @@ class Tile {
         }
         break;
 
-      case 'Special':
+      case 'mortgaged':
+        if (_isMortgaged) {
+          return null;
+        }
         break;
     }
   }
