@@ -19,7 +19,8 @@ class Tile {
       _y, //x and y location of tile on canvas
       _width,
       _height, //width and height of tile in pixels
-      _numberOwned; //number of this type of tile the owner owns
+      _numberOwned, //number of this type of tile the owner owns
+      _numBuildings; //number of buildings built on the property
 
   bool _isMortgaged, //if this tile is mortgaged
       _isInMonopoly; //if the owner owns all tiles of this type
@@ -48,6 +49,7 @@ class Tile {
     this._numberOwned = 0;
     this._isMortgaged = false;
     this._isInMonopoly = false;
+    this._numBuildings = 0;
   }
 
   //Getters
@@ -63,7 +65,6 @@ class Tile {
   int get y => _y;
   int get width => _width;
   int get height => _height;
-  Player get owner => _owner;
 
   //property specific
   int get buildPrice => _buildPrice;
@@ -75,6 +76,8 @@ class Tile {
   int get rent3 => _rent3;
   int get rent4 => _rent4;
   int get rent5 => _rent5;
+  int get numBuildings => _numBuildings;
+  Player get owner => _owner;
 
   // Setter for setting owner
   setOwner(Player newOwner) => _owner = newOwner;
@@ -97,6 +100,25 @@ class Tile {
     ctx.fillRect(_x, _y, _width, _height); //draw tile color
     ctx.strokeText(name, _x + _width / 2,
         _y + (9 * _height) / 10); //write name 9/10 of the way down the tile
+  }
+
+  build(int buildings) {
+    int i = _numBuildings + buildings;
+    if (i == 5) {
+      if (_numberOwned == _totalNum) {
+        _numBuildings += buildings;
+        int amt = _buildPrice * buildings;
+        _owner.payBank(amt);
+      } else {
+        //print error message - cannot build 5th building until monopoly is owned
+      }
+    } else if (i > 5) {
+      //print error message - cannot build more
+    } else {
+      _numBuildings += buildings;
+      int amt = _buildPrice * buildings;
+      _owner.payBank(amt);
+    }
   }
 
   //calulates the rent for each type of tile

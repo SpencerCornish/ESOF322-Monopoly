@@ -4,7 +4,7 @@ import "package:monopoly/src/components/player/player.dart";
 
 void main() {
   Tile testProperty;
-  setUp(() async {
+  setUp(() {
     List<String> info = new List<String>();
     info.add('Mediterranean Avenue');
     info.add('Street');
@@ -20,6 +20,7 @@ void main() {
     info.add('250');
     info.add('2');
     testProperty = new Tile(info, 0, 20, 50, 100);
+    testProperty.setOwner(new Player("Test Player"));
   });
 
   group("Tile", () {
@@ -59,20 +60,20 @@ void main() {
       //test the tile's setOwner() method
       Player john = new Player("John Doe");
       testProperty.setOwner(john);
-      expect(john, testProperty.owner);
+      expect(testProperty.owner, john);
     });
     test("returns true if build() works correctly", () {
-      //TODO in tile
       //test the tile's build() method
-      //testProperty.build(4);
-      //expect(testProperty.buildings, 4);
-      //testProperty.build(1);
-      //expect(testProperty.buildings, 4);
-      //testProperty.build(7);
-      //expect(testProperty.buildings, 4);
+      testProperty.build(4);
+      expect(testProperty.numBuildings, 4);
+      testProperty.build(1);
+      expect(testProperty.numBuildings, 4);
+      testProperty.build(7);
+      expect(testProperty.numBuildings, 4);
     });
+    /*
     test("returns true if calcRent() works correctly", () {
       //test the tile's calcRent() method
-    });
+    });*/
   });
 }
