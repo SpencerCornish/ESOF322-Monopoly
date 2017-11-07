@@ -71,9 +71,8 @@ void main() {
       testProperty.build(7);
       expect(testProperty.numBuildings, 4);
     });
-    /*
     test("returns true if calcRent() works correctly", () {
       //test the tile's calcRent() method
-    });*/
+    });
   });
 }
