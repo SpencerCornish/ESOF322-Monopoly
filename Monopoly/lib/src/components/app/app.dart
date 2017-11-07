@@ -4,14 +4,6 @@ import 'dart:async';
 import '../player/player.dart';
 import '../board/board.dart';
 
-CanvasElement _canvasBackground = querySelector("#canvas-background");
-CanvasRenderingContext2D _ctxBackground = _canvasBackground.getContext('2d');
-
-CanvasElement _canvasForeground = querySelector("#canvas-foreground");
-CanvasRenderingContext2D _ctxForeground = _canvasForeground.getContext('2d');
-
-Board _board = new Board();
-
 void main() {
   App app = new App();
 }
@@ -20,7 +12,34 @@ class App {
   List<Player> _playerList;
   //Board _gameBoard;
 
+  CanvasElement _canvasBackground;
+  CanvasRenderingContext2D _ctxBackground;
+
+  CanvasElement _canvasForeground;
+  CanvasRenderingContext2D _ctxForeground;
+
+  List<HtmlElement> _buttons = new List<HtmlElement>();
+
+  ButtonElement _rollDiceButton;
+  ButtonElement _buyPropertyButton;
+
+  Board _board = new Board();
+
   App() {
+    _rollDiceButton = new ButtonElement();
+    _rollDiceButton.text = 'Roll Dice';
+    _buttons.add(_rollDiceButton);
+
+    _buyPropertyButton = new ButtonElement();
+    _buyPropertyButton.text = 'Buy Property';
+    _buttons.add(_buyPropertyButton);
+
+    _canvasBackground = querySelector("#canvas-background");
+    _ctxBackground = _canvasBackground.getContext('2d');
+
+    _canvasForeground = querySelector("#canvas-foreground");
+    _ctxForeground = _canvasForeground.getContext('2d');
+
     // Background canvas setup
     _canvasBackground.width = window.innerWidth ?? 1024;
     _canvasBackground.height = window.innerHeight ?? 768;
@@ -34,6 +53,9 @@ class App {
 
     // Instantiate players
     // Player should instantiate game_pieces/banks
+
+    _rollDiceButton.onClick.listen((e) => print('roll the dice'));
+    _buyPropertyButton.onClick.listen((e) => print('buy the property'));
 
     window.onResize.listen((e) {
       _canvasBackground.width = window.innerWidth;
@@ -52,7 +74,9 @@ class App {
   _beginDraw() {
     _ctxBackground.clearRect(0, 0, window.innerWidth, window.innerHeight);
     _ctxForeground.clearRect(0, 0, window.innerWidth, window.innerHeight);
-    querySelector('#output').text = 'Your Dart app is running.';
+    querySelector('#output').text = '';
+    for(ButtonElement button in _buttons)
+      querySelector('#buttons').children.add(button);
     _board.draw(_ctxBackground);
   }
 

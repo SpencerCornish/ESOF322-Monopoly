@@ -14,3 +14,11 @@ html, body {
   padding:0;
   position: absolute;
 }
+
+#buttons{
+  width: 120px;
+  padding: 10px 0 0 10px;
+  margin: 0;
+  position: absolute;
+  z-index: 3;
+}
