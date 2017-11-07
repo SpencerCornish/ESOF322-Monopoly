@@ -22,7 +22,21 @@ void main() {
   });
 
   group("Tile", () {
-    group("Groupname", () {});
+    test("returns true if tile creation values are correct", () {
+      expect(testProperty.name, "Mediterranean Avenue");
+      expect(testProperty.type, "Street");
+      expect(testProperty.color, "Brown");
+      expect(testProperty.position, 1);
+      expect(testProperty.price, 60);
+      expect(testProperty.buildPrice, 50);
+      expect(testProperty.baseRent, 2);
+      expect(testProperty.rent1, 10);
+      expect(testProperty.rent2, 30);
+      expect(testProperty.rent3, 90);
+      expect(testProperty.rent4, 160);
+      expect(testProperty.rent5, 250);
+      expect(testProperty.totalNum, 2);
+    });
     test("x position", () async {
       expect(testProperty.x, 0);
       testProperty.setLocation(20, 15);

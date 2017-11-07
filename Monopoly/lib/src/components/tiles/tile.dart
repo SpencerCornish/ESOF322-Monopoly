@@ -54,7 +54,8 @@ class Tile {
   //general
   String get name => _name;
   String get color => _color;
-
+  String get type => _type;
+  int get position => _position;
   int get mortgageCost => _mortgageCost;
   bool get isMortgaged => _isMortgaged;
   int get price => _price;
@@ -67,6 +68,13 @@ class Tile {
   //property specific
   int get buildPrice => _buildPrice;
   bool get isInMonopoly => _isInMonopoly;
+  int get baseRent => _baseRent;
+  int get totalNum => _totalNum;
+  int get rent1 => _rent1;
+  int get rent2 => _rent2;
+  int get rent3 => _rent3;
+  int get rent4 => _rent4;
+  int get rent5 => _rent5;
 
   // Setter for setting owner
   setOwner(Player newOwner) => _owner = newOwner;
