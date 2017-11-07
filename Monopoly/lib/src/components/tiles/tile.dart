@@ -50,7 +50,7 @@ class Tile {
     this._isInMonopoly = false;
   }
 
-  // Getters
+  //Getters
   //general
   String get name => _name;
   String get color => _color;

@@ -1,5 +1,6 @@
 import "package:test/test.dart";
 import "package:monopoly/src/components/tiles/tile.dart";
+import "package:monopoly/src/components/player/player.dart";
 
 void main() {
   Tile testProperty;
@@ -23,6 +24,7 @@ void main() {
 
   group("Tile", () {
     test("returns true if tile creation values are correct", () {
+      //test the tile creation process
       expect(testProperty.name, "Mediterranean Avenue");
       expect(testProperty.type, "Street");
       expect(testProperty.color, "Brown");
@@ -37,10 +39,19 @@ void main() {
       expect(testProperty.rent5, 250);
       expect(testProperty.totalNum, 2);
     });
-    test("x position", () async {
-      expect(testProperty.x, 0);
+    test("returns true if positional functions work correctly", () {
+      //test the location setting of the tile
+      expect(testProperty.x, 0); //these values reflect the initial settings
+      expect(testProperty.y, 20);
       testProperty.setLocation(20, 15);
       expect(testProperty.x, 20);
+      expect(testProperty.y, 15);
+    });
+    test("returns true if set owner works correctly", () {
+      //test the tile's setOwner() method
+      Player john = new Player("John Doe");
+      testProperty.setOwner(john);
+      expect(john, testProperty.owner);
     });
   });
 }
