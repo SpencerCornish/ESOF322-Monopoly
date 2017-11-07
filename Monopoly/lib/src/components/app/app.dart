@@ -38,8 +38,8 @@ class App {
     _playerList.add(new Player("Nate", 10, 1, 'green', _board));
     _playerList.add(new Player("Keely", 10, 2, 'orange', _board));
     _playerList.add(new Player("Spencer", 10, 3, 'red', _board));
-    _playerList.add(new Player("Keely", 10, 4, 'pink', _board));
-    _playerList.add(new Player("Spencer", 10, 5, 'brown', _board));
+    _playerList.add(new Player("Katy", 10, 4, 'pink', _board));
+    _playerList.add(new Player("Perry", 10, 5, 'brown', _board));
 
     window.onResize.listen((e) {
       _canvasBackground.width = window.innerWidth;
