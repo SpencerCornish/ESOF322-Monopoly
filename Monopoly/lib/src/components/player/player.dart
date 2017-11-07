@@ -1,14 +1,21 @@
 import '../tiles/tile.dart';
+import 'dart:html';
+
+import 'package:monopoly/src/components/board/board.dart';
 
 class Player {
   String _name;
+  int _number;
+  String _color;
+  int _size;
   // Token Type: Enum here?
   int _money;
   int _currentLocation = 0;
   List<Tile> _ownedTiles;
   bool _playerInJail = false;
+  Board _board;
 
-  Player(this._name) {}
+  Player(this._name, this._size, this._number, this._color, this._board) {}
 
   void buyTile(Tile t) {}
 
@@ -87,5 +94,10 @@ void buyUtility(Utility u) {
   void payBank(int amt) {
     //bank.collect(amt);           //instance of bank? or should bank be static?
     this._money -= amt;
+  }
+
+  void draw(CanvasRenderingContext2D ctx){
+    ctx.fillStyle = _color;
+    ctx.fillRect(((_number+1)/8)*_board.tileWidth+_board.tiles[_currentLocation].x, (1/2)*_board.tileHeight+_board.tiles[_currentLocation].y, _size, _size);
   }
 }
