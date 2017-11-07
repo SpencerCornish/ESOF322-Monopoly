@@ -47,6 +47,14 @@ void main() {
       expect(testProperty.x, 20);
       expect(testProperty.y, 15);
     });
+    test("returns true if dimensional functions operate correctly", () {
+      //test the tile's setSize method
+      expect(testProperty.width, 50);
+      expect(testProperty.height, 100);
+      testProperty.setSize(14, 27);
+      expect(testProperty.width, 14);
+      expect(testProperty.height, 27);
+    });
     test("returns true if set owner works correctly", () {
       //test the tile's setOwner() method
       Player john = new Player("John Doe");
