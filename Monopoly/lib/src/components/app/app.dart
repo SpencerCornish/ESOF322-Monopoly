@@ -10,10 +10,29 @@ void main() {
 }
 
 class App {
+  ////////////////////
+  /// Board Variables
+  ////////////////////
+
+  Board _board;
+
+  ////////////////////
+  // Player Variables
+  ////////////////////
+
   List<Player> _playerList;
   Player _activePlayer;
-  //Board _gameBoard;
-  Random random = new Random.secure();
+
+  ////////////////////
+  // Utility Variables
+  ////////////////////
+
+  Random random;
+  bool _isStarted;
+
+  ////////////////////
+  // Canvas/Draw Variables
+  ////////////////////
 
   CanvasElement _canvasBackground;
   CanvasRenderingContext2D _ctxBackground;
@@ -21,7 +40,7 @@ class App {
   CanvasElement _canvasForeground;
   CanvasRenderingContext2D _ctxForeground;
 
-  List<HtmlElement> _buttons = new List<HtmlElement>();
+  List<HtmlElement> _buttons;
 
   LabelElement _statusLabel;
 
@@ -37,30 +56,25 @@ class App {
   ButtonElement _buyBuildingButton;
   ButtonElement _sellBuildingButton;
 
-  Board _board;
-
   App() {
+    // Instantiate a board, init variables
+    _board = new Board();
+    _isStarted = false;
+    random = new Random.secure();
+    _playerList = new List<Player>();
+
+    _playerList.add(new Player("Bryan", 10, 0, 'blue', _board));
+    _playerList.add(new Player("Nate", 10, 1, 'green', _board));
+    _playerList.add(new Player("Keely", 10, 2, 'orange', _board));
+    _playerList.add(new Player("Spencer", 10, 3, 'red', _board));
+    _playerList.add(new Player("Katy", 10, 4, 'pink', _board));
+    _playerList.add(new Player("Perry", 10, 5, 'brown', _board));
+
+    // This builds up a list of controls to add to the sidebar
     _constructButtonControls();
 
-    // Instantiate a board
-    _board = new Board();
-    // Board should parse CSV file for tile data and create tiles
-    // Board should hold a list of players in jail?
-    _canvasBackground = querySelector("#canvas-background");
-    _ctxBackground = _canvasBackground.getContext('2d');
-
-    _canvasForeground = querySelector("#canvas-foreground");
-    _ctxForeground = _canvasForeground.getContext('2d');
-
-    // Background canvas setup
-    _canvasBackground.width = window.innerWidth ?? 1024;
-    _canvasBackground.height = window.innerHeight ?? 768;
-    // Foreground canvas setup
-    _canvasForeground.width = window.innerWidth ?? 1024;
-    _canvasForeground.height = window.innerHeight ?? 768;
-
-    // Instantiate players
-    // Player should instantiate game_pieces/banks
+    // This queryselects for the proper canvas DOM elements, and sets up rendering contexts
+    _constructRenderingContext();
 
     window.onResize.listen((e) {
       _canvasBackground.width = window.innerWidth;
@@ -69,30 +83,38 @@ class App {
       _canvasForeground.height = window.innerHeight;
 
       _board.resize();
-      _beginDraw();
+      _drawBackground();
     });
 
-    Timer loadingSplashScreenTimeout =
-        new Timer(new Duration(seconds: 1), _beginDraw);
+    // Show the splash screen!
+    new Timer(new Duration(seconds: 1), _beginDraw);
+
+    // Start the
+    new Timer.periodic(new Duration(milliseconds: 20), (Timer t) {
+      _drawForeground();
+    });
   }
 
   _beginDraw() {
     _ctxBackground.clearRect(0, 0, window.innerWidth, window.innerHeight);
     _ctxForeground.clearRect(0, 0, window.innerWidth, window.innerHeight);
-    querySelector('#output').text = '';
-    for (ButtonElement button in _buttons)
-      querySelector('.top-button-container').children.add(button);
+    for (ButtonElement button in _buttons) querySelector('.top-button-container').children.add(button);
     _board.draw(_ctxBackground);
+    _isStarted = true;
   }
 
-  _drawForeground() {}
-  _drawBackground() {}
-  _addPlayers() {
-    // Create 4 mock players
-    for (int i = 0; i < 4; i++) {
-      Player newPlayer = new Player('player');
-      _playerList.add(newPlayer);
+  _drawForeground() {
+    if (_isStarted) {
+      _ctxForeground.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      for (Player player in _playerList) {
+        player.draw(_ctxForeground);
+      }
     }
+  }
+
+  _drawBackground() {
+    _ctxBackground.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    _board.draw(_ctxBackground);
   }
 
   _nextPlayer() {
@@ -109,7 +131,25 @@ class App {
     _activePlayer = _playerList[newIndex];
   }
 
+  _constructRenderingContext() {
+    // Instantiate a board
+    _canvasBackground = querySelector("#canvas-background");
+    _ctxBackground = _canvasBackground.getContext('2d');
+
+    _canvasForeground = querySelector("#canvas-foreground");
+    _ctxForeground = _canvasForeground.getContext('2d');
+
+    // Background canvas setup
+    _canvasBackground.width = window.innerWidth ?? 1024;
+    _canvasBackground.height = window.innerHeight ?? 768;
+    // Foreground canvas setup
+    _canvasForeground.width = window.innerWidth ?? 1024;
+    _canvasForeground.height = window.innerHeight ?? 768;
+  }
+
   _constructButtonControls() {
+    _buttons = new List<HtmlElement>();
+
     _statusLabel = new LabelElement();
     _statusLabel.text = ':)';
     _statusLabel.className = 'is-unselectable';
@@ -158,8 +198,7 @@ class App {
     _buttons.add(_sellBuildingButton);
   }
 
-  _constructButtonClasses(String extraClasses, [String extraClassTwo = "a"]) =>
-      [
+  _constructButtonClasses(String extraClasses, [String extraClassTwo = "a"]) => [
         'button',
         'is-success',
         'padded',
