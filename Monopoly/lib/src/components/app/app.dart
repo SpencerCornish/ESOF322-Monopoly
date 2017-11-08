@@ -1,4 +1,5 @@
 import 'dart:html';
+import 'dart:math';
 import 'dart:async';
 
 import '../player/player.dart';
@@ -10,7 +11,9 @@ void main() {
 
 class App {
   List<Player> _playerList;
+  Player _activePlayer;
   //Board _gameBoard;
+  Random random = new Random.secure();
 
   CanvasElement _canvasBackground;
   CanvasRenderingContext2D _ctxBackground;
@@ -23,22 +26,24 @@ class App {
   LabelElement _statusLabel;
 
   // Top button control refs
-  LinkElement _rollDiceButton;
-  LinkElement _buyPropertyButton;
-  LinkElement _auctionPropertyButton;
-  LinkElement _endTurnButton;
+  ButtonElement _rollDiceButton;
+  ButtonElement _buyPropertyButton;
+  ButtonElement _auctionPropertyButton;
+  ButtonElement _endTurnButton;
 
   // Bottom button control refs
-  LinkElement _mortgagePropertyButton;
-  LinkElement _buildBuildingButton;
-  LinkElement _buyBuildingButton;
-  LinkElement _sellBuildingButton;
+  ButtonElement _mortgagePropertyButton;
+  ButtonElement _buildBuildingButton;
+  ButtonElement _buyBuildingButton;
+  ButtonElement _sellBuildingButton;
 
-  Board _board = new Board();
+  Board _board;
 
   App() {
     _constructButtonControls();
+
     // Instantiate a board
+    _board = new Board();
     // Board should parse CSV file for tile data and create tiles
     // Board should hold a list of players in jail?
     _canvasBackground = querySelector("#canvas-background");
@@ -88,52 +93,66 @@ class App {
     }
   }
 
+  _nextPlayer() {
+    if (_activePlayer == null) {
+      _activePlayer = _playerList.first;
+      return;
+    }
+    int newIndex = _playerList.indexOf(_activePlayer) + 1;
+    // Check to see if we need to go back to the start of the playerlist
+    if (newIndex > _playerList.length) {
+      _playerList.indexOf(_playerList.first);
+      return;
+    }
+    _activePlayer = _playerList[newIndex];
+  }
+
   _constructButtonControls() {
     _statusLabel = new LabelElement();
     _statusLabel.text = ':)';
     _statusLabel.className = 'is-unselectable';
     _buttons.add(_statusLabel);
 
-    _rollDiceButton = new LinkElement();
+    _rollDiceButton = new ButtonElement();
     _rollDiceButton.text = 'Roll Dice';
     _rollDiceButton.classes = _constructButtonClasses('is-info');
-    _rollDiceButton.onClick(_rollDice);
+    _rollDiceButton.onClick.listen(_handleRollDice);
     _buttons.add(_rollDiceButton);
 
-    _buyPropertyButton = new LinkElement();
+    _buyPropertyButton = new ButtonElement();
     _buyPropertyButton.text = 'Buy Tile';
     _buyPropertyButton.classes = _constructButtonClasses('is-static');
-    _rollDiceButton.onClick(_rollDice);
+    _buyPropertyButton.onClick.listen(_handleBuyProperty);
     _buttons.add(_buyPropertyButton);
 
-    _auctionPropertyButton = new LinkElement();
+    _auctionPropertyButton = new ButtonElement();
     _auctionPropertyButton.text = 'Auction Tile';
     _auctionPropertyButton.classes = _constructButtonClasses('is-static');
-    _rollDiceButton.onClick(_rollDice);
+    _auctionPropertyButton.onClick.listen(_handleAuctionProperty);
     _buttons.add(_auctionPropertyButton);
 
-    _endTurnButton = new LinkElement();
+    _endTurnButton = new ButtonElement();
     _endTurnButton.text = 'End Turn';
     _endTurnButton.classes = _constructButtonClasses('is-danger');
-    _rollDiceButton.onClick(_rollDice);
+    _endTurnButton.onClick.listen(_handleEndTurn);
     _buttons.add(_endTurnButton);
 
-    _mortgagePropertyButton = new LinkElement();
+    _mortgagePropertyButton = new ButtonElement();
     _mortgagePropertyButton.text = 'Mortgage Tiles';
-    _rollDiceButton.classes = _constructButtonClasses('is-info');
-    _rollDiceButton.onClick(_rollDice);
+    _mortgagePropertyButton.classes = _constructButtonClasses('is-info');
+    _mortgagePropertyButton.onClick.listen(_handleMortgageProperty);
     _buttons.add(_mortgagePropertyButton);
 
-    _buyBuildingButton = new LinkElement();
+    _buyBuildingButton = new ButtonElement();
     _buyBuildingButton.text = 'Buy Buildings';
     _buyBuildingButton.classes = _constructButtonClasses('is-info');
-    _rollDiceButton.onClick(_rollDice);
+    _buyBuildingButton.onClick.listen(_handleBuyBuilding);
     _buttons.add(_buyBuildingButton);
 
-    _sellBuildingButton = new LinkElement();
+    _sellBuildingButton = new ButtonElement();
     _sellBuildingButton.text = 'Sell Buildings';
     _sellBuildingButton.classes = _constructButtonClasses('is-static');
-    _rollDiceButton.onClick(_rollDice);
+    _sellBuildingButton.onClick.listen(_handleSellBuilding);
     _buttons.add(_sellBuildingButton);
   }
 
@@ -148,5 +167,40 @@ class App {
       ];
   _buildBoard(String boardCsv) {}
 
-  _rollDice() {}
+  //
+  // Button Handlers
+  //
+
+  _handleRollDice(_) {
+    int rollVal = random.nextInt(6);
+    //_activePlayer.move(rollVal);
+    _statusLabel.text = "Rolled a ${rollVal}";
+  }
+
+  _handleBuyProperty(_) {
+    _activePlayer.buyTile(_board.tiles[_activePlayer.position]);
+  }
+
+  _handleEndTurn(_) {
+    _nextPlayer();
+  }
+
+  _handleAuctionProperty(_) {
+    print("Auctioning not yet implemented!");
+  }
+
+  _handleMortgageProperty(_) {
+    print("followup ticket is coming to construct modals :-)");
+    // _displayModal(".mortgage-modal");
+  }
+
+  _handleBuyBuilding(_) {
+    print("followup ticket is coming to construct modals :-)");
+    // _displayModal(".mortgage-modal");
+  }
+
+  _handleSellBuilding(_) {
+    print("followup ticket is coming to construct modals :-)");
+    // _displayModal(".mortgage-modal");
+  }
 }
