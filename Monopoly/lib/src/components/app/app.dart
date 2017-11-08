@@ -72,14 +72,16 @@ class App {
       _beginDraw();
     });
 
-    Timer loadingSplashScreenTimeout = new Timer(new Duration(seconds: 1), _beginDraw);
+    Timer loadingSplashScreenTimeout =
+        new Timer(new Duration(seconds: 1), _beginDraw);
   }
 
   _beginDraw() {
     _ctxBackground.clearRect(0, 0, window.innerWidth, window.innerHeight);
     _ctxForeground.clearRect(0, 0, window.innerWidth, window.innerHeight);
     querySelector('#output').text = '';
-    for (ButtonElement button in _buttons) querySelector('.top-button-container').children.add(button);
+    for (ButtonElement button in _buttons)
+      querySelector('.top-button-container').children.add(button);
     _board.draw(_ctxBackground);
   }
 
@@ -156,7 +158,8 @@ class App {
     _buttons.add(_sellBuildingButton);
   }
 
-  _constructButtonClasses(String extraClasses, [String extraClassTwo = "a"]) => [
+  _constructButtonClasses(String extraClasses, [String extraClassTwo = "a"]) =>
+      [
         'button',
         'is-success',
         'padded',
