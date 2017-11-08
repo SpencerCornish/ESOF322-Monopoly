@@ -12,6 +12,8 @@ void main() {
     });
   });
 
+  Player testMove;
+
   Player testGoBankrupt;
 
   Player testGetOutOfJail;

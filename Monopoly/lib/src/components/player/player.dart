@@ -15,20 +15,41 @@ class Player {
 
   Player(this._name);
 
-
   //player rolls dice and moves position
-  void move(){
-    if(_inJail)
+  void move(int rollValue) {
+    int nextLocation = _currentLocation + _rollValue;
+    if (_inJail)
       getOutOfJail();
-    else
-      normalMove(rollDice());
+    else {
+      if (rollValue == 0) {
+        _rollValue = rollDice();
+
+      } else if (rollValue >= 2) {
+        _rollValue = rollValue;
+
+      } else {
+        print("invalid entry");
+      }
+
+      if (nextLocation > 39) {
+        //if the player has landed on or passed go
+        _currentLocation = nextLocation - 40;
+        _money += 200;
+      }
+
+      _currentLocation = nextLocation;
+      setPosition(nextLocation);
+
+      if (_numDoubles > 0) //if the player rolled doubles move again
+        move(rollValue);
+    }
   }
 
-  int rollDice(){
-    int die1 = rand.nextInt(6)+1;
-    int die2 = rand.nextInt(6)+1;
+  int rollDice() {
+    int die1 = rand.nextInt(6) + 1;
+    int die2 = rand.nextInt(6) + 1;
 
-    if(die1 == die2)
+    if (die1 == die2)
       _numDoubles++;
     else
       _numDoubles = 0;
@@ -37,54 +58,39 @@ class Player {
     return _rollValue;
   }
 
-  void normalMove(int rollVal){
-
-    //if the player rolls doubles 3 times in the same turn, go to jail
-    if(_numDoubles == 3)
-      goToJail();
-
-    if(!_inJail){
-      int nextLocation = _currentLocation + rollVal;
-
-      if (nextLocation > 39) { //if the player has landed on or passed go
-        _currentLocation = nextLocation - 40;
-        _money += 200;
-      }
-
-      _currentLocation = nextLocation;
-
-      if (_numDoubles > 0) //if the player rolled doubles move again
-        move();
-    }
-  }
-
   void buyTile(Tile t) {
     t.owner = this;
-    _money -= t.price;
     properties.add(t);
   }
 
-  void buyHouse(Tile p, int numHouse) {
-    //we should be able to work buy hotel into this
-    if(p.buildings < 4) {
-      for (var i = 0; i < numHouse; i++) {
-        //p.buyHouse() - TODO where p.buyHouse will add the multiplier of a house
+  void buyBuilding(Tile p, int numHouse) {
+    if (p.isInMonopoly) {
+      //TODO check that player is building evenly
+      if (p.numBuildings < 4) {
+        for (var i = 0; i < numHouse; i++) {
+          _money -= p.buildPrice;
+          p.addBuilding();
+        }
+      } else if (p.numBuildings == 4) { //build hotel
         _money -= p.buildPrice;
+        p.addBuilding();
+      } else {
+        print("ERROR: Max number of buildings reached. You cannot build anymore on this property");
       }
-    } else if (p.buildings == 4) {
-      //build hotel not house
-      _money -= p.buildPrice;
-    } else {
-      print("Max number of buildings reached. You cannot build anymore on this property");
     }
+    else
+      print ("ERROR: Property not in a monopoly. you cannont build");
   }
 
-  void sellHouse() {}
+  void sellBuilding(Tile t) {
+    t.numBuildings - 1;
+    _money += (t.buildPrice / 2).round();
+  }
 
   List<Tile> get properties => _ownedTiles;
   int get money => _money;
   String get name => _name;
-  //get token
+  //TODO get token
   int get position => _currentLocation;
 
   void set name(String n) {
@@ -105,16 +111,26 @@ class Player {
   }
 
   void getOutOfJail() {
+    int _attempts = 0;
     String _methodToGetOut;
     switch (_methodToGetOut) {
-
       case 'rolled doubles':
         int roll = rollDice();
         if (_numDoubles > 1) {
           _inJail = false;
-          normalMove(roll); //move rolled amount
-          normalMove(rollDice()); //roll again because doubles
-        } else {
+          move(roll); //move rolled amount
+          move(0); //roll again because doubles
+        } else if (_numDoubles < 1) { //after 3 tries paid bail and continue turn
+          if (_attempts >= 3) {
+            _money -= 50;
+            _inJail = false;
+            move(roll);
+          } else {
+            _inJail = true;
+            _attempts++;
+          }
+        }
+        else {
           _inJail = true;
           //end turn
         }
@@ -122,23 +138,24 @@ class Player {
       case 'paid bail':
         _money -= 50;
         _inJail = false;
-        normalMove(rollDice());
+        move(0);
         break;
     }
   }
 
+  /*
+  don't need this for assignment
   void goBankrupt() {
-   /*
    if player money < amount owed
     if buildings > 0
       sell building
       check if money < amount owed
       repeat until buildings = 0 or money >= amount owed
     if money still < amount owed
-      if unmortgaged properties > 0
+      if un-mortgaged properties > 0
         mortgage properties
         check if money < amount owed
-        repeat until unmortgaged properties = 0 or money >= amount owed
+        repeat until un-mortgaged properties = 0 or money >= amount owed
     if money still < amount owed
       you bankrupt --> remove player from game
       display end game message
@@ -149,35 +166,19 @@ class Player {
         if another player owed
           give all money to player
           give all properties to player
-    */
   }
-
+  */
 
   void payRent(Player owner, Player renter, int rent, Tile t) {
     owner.getPaid(t.calcRent(_rollValue));
-    /*
-    if(renter._money <= 0){
-      goBankrupt();
-      owner._money += renter._money;
-      for (int i = 0; i < renter._ownedTiles.length; i++) {
-        owner._ownedTiles.add(renter._ownedTiles[i]);
-      }
-    }
-    */
   }
 
   void getPaid(int amt) {
     this._money += amt;
   }
 
-  void sellDeed(Tile t) {
-    //should this be a repeated method based on utility, railroad, or property?
-    this._ownedTiles.remove(t);
-    //update money
-  }
-
-  void tradeDeed(Player seller, Player buyer, Tile t, int tradeAmount) {
-    seller.sellDeed(t);
+  void tradeProperty(Player seller, Player buyer, Tile t, int tradeAmount) {
+    this._ownedTiles.remove(t);;
     seller._money += tradeAmount;
 
     buyer.buyTile(t);
@@ -195,8 +196,8 @@ class Player {
     }
   }
 
+  //do we need this??
   void payBank(int amt) {
-    //bank.collect(amt);           //instance of bank? or should bank be static?
     this._money -= amt;
   }
 }
