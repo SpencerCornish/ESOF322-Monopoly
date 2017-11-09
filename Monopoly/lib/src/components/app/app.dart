@@ -103,8 +103,7 @@ class App {
     _ctxBackground.clearRect(0, 0, window.innerWidth, window.innerHeight);
     _ctxForeground.clearRect(0, 0, window.innerWidth, window.innerHeight);
     querySelector('#output').text = '';
-    for (ButtonElement button in _buttons)
-      querySelector('.top-button-container').children.add(button);
+    for (HtmlElement button in _buttons) querySelector('.top-button-container').children.add(button);
     _board.draw(_ctxBackground);
     _isStarted = true;
   }
@@ -130,11 +129,12 @@ class App {
     }
     int newIndex = _playerList.indexOf(_activePlayer) + 1;
     // Check to see if we need to go back to the start of the playerlist
-    if (newIndex > _playerList.length) {
+    if (newIndex > _playerList.length - 1) {
       _playerList.indexOf(_playerList.first);
       return;
     }
     _activePlayer = _playerList[newIndex];
+    _statusLabel.text = _activePlayer.name;
   }
 
   _constructRenderingContext() {
@@ -204,8 +204,7 @@ class App {
     _buttons.add(_sellBuildingButton);
   }
 
-  _constructButtonClasses(String extraClasses, [String extraClassTwo = "a"]) =>
-      [
+  _constructButtonClasses(String extraClasses, [String extraClassTwo = "a"]) => [
         'button',
         'is-success',
         'padded',
