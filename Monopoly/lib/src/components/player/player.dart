@@ -5,7 +5,6 @@ import 'dart:html';
 import 'package:monopoly/src/components/board/board.dart';
 
 class Player {
-  Random rand = new Random();
   Board _board;
   String _name;
   int _number;
@@ -16,16 +15,16 @@ class Player {
   int _numDoubles = 0;
   int _currentLocation = 0;
   List<Tile> _ownedTiles;
-  bool _inJail = false;
   int _rollValue;
   int _numRailroads = 0;
   int _numUtilities = 0;
 
   int get money => _money;
   String get name => _name;
-  //TODO get token
   int get position => _currentLocation;
   List<Tile> get ownedTiles => _ownedTiles;
+  int get numRailroads => _numRailroads;
+  int get numUtilities => _numUtilities;
 
   Player(this._name, this._size, this._number, this._color, this._board) {
     _money = 1500;
@@ -97,11 +96,11 @@ class Player {
             "ERROR: Max number of buildings reached. You cannot build anymore on this property");
       }
     } else
-      print("ERROR: Property not in a monopoly. you cannont build");
+      print("ERROR: Property not in a monopoly. You can not build");
   }
 
   void sellBuilding(Tile tile) {
-    tile.numBuildings - 1;
+    tile.numBuildings -= 1;
     _money += (tile.buildPrice / 2).round();
   }
 
@@ -109,20 +108,15 @@ class Player {
     _name = n;
   }
 
-  void setToken(var token) {
-    //TODO
-  }
-
   void payRent(Player owner, Player renter, Tile tile) {
     int _rent = tile.calcRent(_rollValue);
     renter._money -= _rent;
     owner._money += _rent;
-    //owner.getPaid(tile.calcRent(_rollValue));
   }
 
   void tradeProperty(Player seller, Player buyer, Tile tile, int tradeAmount) {
     //TODO trade tile for tile
-    //TODO tradt hybrid for tile
+    //TODO trade hybrid for tile
     this._ownedTiles.remove(tile);
 
     seller._money += tradeAmount;

@@ -12,11 +12,10 @@ void main() {
     });
   });
 
+  /*
   Player testMove;
-
   Player testGetOutOfJail;
-
   Player testPayRent;
-
   Player testSellDeed;
+  */
 }

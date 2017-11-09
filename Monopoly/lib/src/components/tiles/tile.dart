@@ -75,6 +75,7 @@ class Tile {
   set owner(Player newOwner) => _owner = newOwner;
   set isInMonopoly(bool value) => _isInMonopoly = value;
   set isMortgaged(bool value) => _isMortgaged = value;
+  set numBuildings(int buildings) => _numBuildings = buildings;
 
   setLocation(int x, int y) {
     _x = x;
@@ -117,13 +118,13 @@ class Tile {
         break;
 
       case 'Railroad':
-        if (_numberOwned == 1) {
+        if (owner.numRailroads == 1) {
           return _baseRent;
-        } else if (_numberOwned == 2) {
+        } else if (owner.numRailroads == 2) {
           return 50;
-        } else if (_numberOwned == 3) {
+        } else if (owner.numRailroads == 3) {
           return 100;
-        } else if (_numberOwned == 3) {
+        } else if (owner.numRailroads == 3) {
           return 200;
         } else {
           String error = 'error';
@@ -132,9 +133,9 @@ class Tile {
         break;
 
       case 'Utility':
-        if (_numberOwned == 1) {
+        if (owner.numUtilities == 1) {
           return rollVal * 4;
-        } else if (_numberOwned == 2) {
+        } else if (owner.numUtilities == 2) {
           return rollVal * 10;
         }
         break;

@@ -4,8 +4,7 @@ import 'dart:async';
 
 import '../player/player.dart';
 import '../board/board.dart';
-
-import 'package:monopoly/src/components/tiles/tile.dart';
+import '../tiles/tile.dart';
 
 void main() {
   App app = new App();

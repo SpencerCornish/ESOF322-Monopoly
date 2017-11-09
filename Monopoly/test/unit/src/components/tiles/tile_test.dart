@@ -29,8 +29,8 @@ void main() {
       expect(testProperty.x, 20);
     });
   });
-
+  /*
   Tile testCalcRent;
-
   Tile testAuction;
+  */
 }
