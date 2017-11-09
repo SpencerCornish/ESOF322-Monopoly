@@ -29,6 +29,7 @@ class App {
 
   Random random;
   bool _isStarted;
+  bool _shouldRollAgain;
 
   ////////////////////
   // Canvas/Draw Variables
@@ -70,6 +71,9 @@ class App {
     _playerList.add(new Player("Katy", 10, 4, 'pink', _board));
     _playerList.add(new Player("Perry", 10, 5, 'brown', _board));
 
+    // TODO: set the active player in a better way!
+    _activePlayer = _playerList.first;
+
     // This builds up a list of controls to add to the sidebar
     _constructButtonControls();
 
@@ -98,7 +102,8 @@ class App {
   _beginDraw() {
     _ctxBackground.clearRect(0, 0, window.innerWidth, window.innerHeight);
     _ctxForeground.clearRect(0, 0, window.innerWidth, window.innerHeight);
-    for (ButtonElement button in _buttons) querySelector('.top-button-container').children.add(button);
+    querySelector('#output').text = '';
+    for (HtmlElement button in _buttons) querySelector('.top-button-container').children.add(button);
     _board.draw(_ctxBackground);
     _isStarted = true;
   }
@@ -124,11 +129,12 @@ class App {
     }
     int newIndex = _playerList.indexOf(_activePlayer) + 1;
     // Check to see if we need to go back to the start of the playerlist
-    if (newIndex > _playerList.length) {
+    if (newIndex > _playerList.length - 1) {
       _playerList.indexOf(_playerList.first);
       return;
     }
     _activePlayer = _playerList[newIndex];
+    _statusLabel.text = _activePlayer.name;
   }
 
   _constructRenderingContext() {
@@ -207,16 +213,19 @@ class App {
         extraClasses,
         extraClassTwo,
       ];
-  _buildBoard(String boardCsv) {}
 
   //
   // Button Handlers
   //
 
   _handleRollDice(_) {
-    int rollVal = random.nextInt(6);
-    //_activePlayer.move(rollVal);
-    _statusLabel.text = "Rolled a ${rollVal}";
+    int rollDieOne = random.nextInt(6) + 1;
+    int rollDieTwo = random.nextInt(6) + 1;
+    // Sets should roll again if
+    _shouldRollAgain = rollDieOne == rollDieTwo;
+    _activePlayer.setPosition(_activePlayer.position + rollDieOne + rollDieTwo);
+    _statusLabel.text =
+        "Rolled ${_shouldRollAgain ? 'double' : 'a'} ${_shouldRollAgain ? rollDieOne.toString() + '\'s' : rollDieOne + rollDieTwo}";
   }
 
   _handleBuyProperty(_) {
