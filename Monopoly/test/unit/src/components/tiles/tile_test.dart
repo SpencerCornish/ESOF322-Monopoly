@@ -93,6 +93,7 @@ void main() {
       info.add("0");
       info.add("0");
       Tile testUtility = new Tile(info, 1, 1, 1, 1);
+      testUtility.setOwner(new Player("Test Guy", 1, 1, "red", new Board()));
       testUtility.calcRent(11);
       expect(testUtility.currentRent, 44);
       info.clear;
