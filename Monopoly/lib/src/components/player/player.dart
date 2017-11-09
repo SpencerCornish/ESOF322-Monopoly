@@ -25,7 +25,7 @@ class Player {
   String get name => _name;
   //TODO get token
   int get position => _currentLocation;
-  List<Tile> get ownedTiles  => _ownedTiles;
+  List<Tile> get ownedTiles => _ownedTiles;
 
   Player(this._name, this._size, this._number, this._color, this._board) {
     _money = 1500;
@@ -72,8 +72,7 @@ class Player {
     tile.owner = this;
     _ownedTiles.add(tile);
     _money -= tile.price;
-    for (int i = 0; i < _ownedTiles.length; i++)
-      print(_ownedTiles[i].name);
+    for (int i = 0; i < _ownedTiles.length; i++) print(_ownedTiles[i].name);
   }
 
   mortgageTile(Tile tile) {
@@ -120,7 +119,6 @@ class Player {
     owner._money += _rent;
     //owner.getPaid(tile.calcRent(_rollValue));
   }
-
 
   void tradeProperty(Player seller, Player buyer, Tile tile, int tradeAmount) {
     //TODO trade tile for tile
