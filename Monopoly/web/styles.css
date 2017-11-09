@@ -9,8 +9,26 @@ html, body {
   overflow: hidden;
 }
 
-#canvas{
+#canvas-foreground{
   margin:0;
   padding:0;
   position: absolute;
+}
+#canvas-background{
+  margin:0;
+  padding:0;
+  position: absolute;
+}
+
+.buttons-top{
+  max-width:120px;
+  padding: 10px 0 0 10px;
+  margin: 10px;
+  position: absolute;
+  z-index: 3;
+}
+.padded {
+  margin-top:5px;
+  margin-bottom:5px;
+  margin-right:5px;
 }

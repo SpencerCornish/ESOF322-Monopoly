@@ -1,10 +1,17 @@
 import '../tiles/tile.dart';
 import 'dart:math';
+import 'dart:html';
+
+import 'package:monopoly/src/components/board/board.dart';
+
 
 class Player {
   Random rand = new Random();
-
+  Board _board;
   String _name;
+  int _number;
+  String _color;
+  int _size;
   // Token Type: Enum here?
   int _money;
   int _numDoubles = 0;
@@ -13,14 +20,19 @@ class Player {
   bool _inJail = false;
   int _rollValue;
 
-  Player(this._name);
+  Player(this._name, this._size, this._number, this._color, this._board) {
+    _money = 1500;
+    _ownedTiles = new List<Tile>();
+  }
 
   //player rolls dice and moves position
   void move(int rollValue) {
     int nextLocation = _currentLocation + _rollValue;
+
     if (_inJail)
       getOutOfJail();
-    else {
+
+    {
       if (rollValue == 0) {
         _rollValue = rollDice();
 
@@ -45,6 +57,8 @@ class Player {
     }
   }
 
+
+
   int rollDice() {
     int die1 = rand.nextInt(6) + 1;
     int die2 = rand.nextInt(6) + 1;
@@ -61,6 +75,7 @@ class Player {
   void buyTile(Tile t) {
     t.owner = this;
     properties.add(t);
+    _money -= t.price;
   }
 
   void buyBuilding(Tile p, int numHouse) {
@@ -105,6 +120,7 @@ class Player {
     _currentLocation = spot;
   }
 
+
   void goToJail() {
     _currentLocation = 10;
     _inJail = true;
@@ -142,6 +158,7 @@ class Player {
         break;
     }
   }
+
 
   /*
   don't need this for assignment
@@ -199,5 +216,32 @@ class Player {
   //do we need this??
   void payBank(int amt) {
     this._money -= amt;
+  }
+
+  void draw(CanvasRenderingContext2D ctx){
+    //draw player color on board
+    ctx.fillStyle = _color;
+    ctx.fillRect(((_number+1)/8)*_board.tileWidth+_board.tiles[_currentLocation].x,
+        (1/2)*_board.tileHeight+_board.tiles[_currentLocation].y, _size, _size);
+
+    //draw player info inside of board area
+    int infoX = (_board.x + _board.tileWidth*1.75 + _number*_board.tileWidth*1.25).toInt();
+    int infoY = (_board.y + _board.tileHeight*2).toInt();
+    ctx.fillStyle = 'black';
+    ctx.font = 'bold 14pt sans-serif';
+    ctx.fillText(_name, infoX, infoY);  //display "player name"
+
+    ctx.font = '10pt sans-serif';
+    ctx.fillText("Money: ", infoX, infoY + 20); //display "Money:"
+    ctx.font = 'bold 10pt sans-serif';
+    ctx.fillText('\$' + _money.toString(), infoX, infoY + 37); //display amount of money
+
+    ctx.font = '10pt sans-serif';
+    ctx.fillText("Properties Owned:", infoX, infoY + 55); //display "Properties Owned:"
+    ctx.font = '10pt sans-serif';
+
+    for(Tile tile in _ownedTiles){  //display owned properties
+      ctx.fillText(tile.name, infoX, infoY + 70 + _ownedTiles.indexOf(tile)*15);
+    }
   }
 }

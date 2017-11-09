@@ -5,7 +5,7 @@ void main() {
   setUp(() async {
     //Player player = new Player();
   });
-  group("some group", () {
+  group("Player", () {
     test("some asyncronous test", () async {
       bool someBool = true;
       expect(someBool, isTrue);
@@ -14,13 +14,7 @@ void main() {
 
   Player testMove;
 
-  Player testGoBankrupt;
-
   Player testGetOutOfJail;
-
-  Player testRollDice;
-
-  Player testNormalMove;
 
   Player testPayRent;
 
