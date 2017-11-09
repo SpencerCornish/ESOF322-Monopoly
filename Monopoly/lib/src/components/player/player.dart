@@ -102,23 +102,31 @@ void buyUtility(Utility u) {
   void draw(CanvasRenderingContext2D ctx) {
     //draw player color on board
     ctx.fillStyle = _color;
-    ctx.fillRect(((_number + 1) / 8) * _board.tileWidth + _board.tiles[_currentLocation].x,
-        (1 / 2) * _board.tileHeight + _board.tiles[_currentLocation].y, _size, _size);
+    ctx.fillRect(
+        ((_number + 1) / 8) * _board.tileWidth +
+            _board.tiles[_currentLocation].x,
+        (1 / 2) * _board.tileHeight + _board.tiles[_currentLocation].y,
+        _size,
+        _size);
 
     //draw player info inside of board area
-    int infoX = (_board.x + _board.tileWidth * 1.75 + _number * _board.tileWidth * 1.25).toInt();
+    int infoX =
+        (_board.x + _board.tileWidth * 1.75 + _number * _board.tileWidth * 1.25)
+            .toInt();
     int infoY = (_board.y + _board.tileHeight * 2).toInt();
     ctx.fillStyle = 'black';
     ctx.font = 'bold 14pt sans-serif';
     ctx.fillText(_name, infoX, infoY); //display name
     ctx.font = '12pt sans-serif';
-    ctx.fillText("Money: " + _money.toString(), infoX, infoY + 20); //display money
+    ctx.fillText(
+        "Money: " + _money.toString(), infoX, infoY + 20); //display money
     ctx.font = 'bold 12pt sans-serif';
     ctx.fillText("Properties Owned:", infoX, infoY + 45);
     ctx.font = '12pt sans-serif';
     for (Tile tile in _ownedTiles) {
       //display owned properties
-      ctx.fillText(tile.name, infoX, infoY + 60 + _ownedTiles.indexOf(tile) * 15);
+      ctx.fillText(
+          tile.name, infoX, infoY + 60 + _ownedTiles.indexOf(tile) * 15);
     }
   }
 }

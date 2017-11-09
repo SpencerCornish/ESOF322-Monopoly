@@ -103,7 +103,8 @@ class App {
     _ctxBackground.clearRect(0, 0, window.innerWidth, window.innerHeight);
     _ctxForeground.clearRect(0, 0, window.innerWidth, window.innerHeight);
     querySelector('#output').text = '';
-    for (ButtonElement button in _buttons) querySelector('.top-button-container').children.add(button);
+    for (ButtonElement button in _buttons)
+      querySelector('.top-button-container').children.add(button);
     _board.draw(_ctxBackground);
     _isStarted = true;
   }
@@ -203,7 +204,8 @@ class App {
     _buttons.add(_sellBuildingButton);
   }
 
-  _constructButtonClasses(String extraClasses, [String extraClassTwo = "a"]) => [
+  _constructButtonClasses(String extraClasses, [String extraClassTwo = "a"]) =>
+      [
         'button',
         'is-success',
         'padded',
