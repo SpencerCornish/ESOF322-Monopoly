@@ -128,7 +128,7 @@ class Tile {
   //calulates the rent for each type of tile
   calcRent(int rollVal) {
     switch (_type) {
-      case 'Street':
+      case "Street":
         if (_numBuildings == 0) {
           _currentRent = _baseRent;
         } else if (_numBuildings == 1) {
@@ -147,7 +147,7 @@ class Tile {
         }
         return _currentRent;
         break;
-      case 'Railroad':
+      case "Railroad":
         if (_numberOwned == 1) {
           _currentRent = _baseRent;
           return _currentRent;
@@ -165,7 +165,7 @@ class Tile {
           print(error);
         }
         break;
-      case 'Utility':
+      case "Utility":
         if (_numberOwned == 1) {
           _currentRent = rollVal * 4;
           return _currentRent;

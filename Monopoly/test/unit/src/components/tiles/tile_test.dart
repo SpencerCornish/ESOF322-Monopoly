@@ -5,7 +5,8 @@ import "package:monopoly/src/components/board/board.dart";
 
 void main() {
   Tile testProperty;
-  Board testBoard = new Board();
+  Player testPlayer;
+
   setUp(() {
     List<String> info = new List<String>();
     info.add('Mediterranean Avenue');
@@ -22,7 +23,8 @@ void main() {
     info.add('250');
     info.add('2');
     testProperty = new Tile(info, 0, 20, 50, 100);
-    testProperty.setOwner(new Player("Test Player", 1, 1, "red", testBoard));
+    testPlayer = new Player("Test Player", 1, 1, "red", null);
+    testProperty.setOwner(testPlayer);
   });
 
   group("Tile", () {
@@ -60,7 +62,7 @@ void main() {
     });
     test("returns true if setOwner() works correctly", () {
       //test the tile's setOwner() method
-      Player john = new Player("John Doe", 1, 1, "red", testBoard);
+      Player john = new Player("John Doe", 1, 1, "red", null);
       testProperty.setOwner(john);
       expect(testProperty.owner, john);
     });
@@ -94,7 +96,7 @@ void main() {
       info.add("0");
       info.add("0");
       Tile testUtility = new Tile(info, 1, 1, 1, 1);
-      testUtility.setOwner(new Player("Test Guy", 1, 1, "red", testBoard));
+      testUtility.setOwner(testPlayer);
       testUtility.calcRent(11);
       expect(testUtility.currentRent, 44);
       info.clear;
@@ -112,6 +114,7 @@ void main() {
       info.add("0");
       info.add("0");
       Tile testRailroad = new Tile(info, 1, 1, 1, 1);
+      testRailroad.setOwner(testPlayer);
       testRailroad.calcRent(0);
       expect(testRailroad.currentRent, testRailroad.baseRent);
     });
