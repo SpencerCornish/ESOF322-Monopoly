@@ -1,12 +1,12 @@
 import "package:test/test.dart";
-//import "package:monopoly/src/components/board/board.dart";
+import "package:monopoly/src/components/board/board.dart";
 
 void main() {
-  setUp(() async {
-// Board board = new Board();
+  setUp(() {
+    Board testBoard = new Board();
   });
-  group("some group", () {
-    test("some asyncronous test", () async {
+  group("Board", () {
+    test("some asyncronous test", () {
       bool someBool = true;
       expect(someBool, isTrue);
     });
