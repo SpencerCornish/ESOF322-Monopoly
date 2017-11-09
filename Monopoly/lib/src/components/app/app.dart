@@ -4,6 +4,7 @@ import 'dart:async';
 
 import '../player/player.dart';
 import '../board/board.dart';
+import '../tiles/tile.dart';
 
 void main() {
   App app = new App();
@@ -103,8 +104,10 @@ class App {
     _ctxBackground.clearRect(0, 0, window.innerWidth, window.innerHeight);
     _ctxForeground.clearRect(0, 0, window.innerWidth, window.innerHeight);
     querySelector('#output').text = '';
-    for (HtmlElement button in _buttons) querySelector('.top-button-container').children.add(button);
+    for (HtmlElement button in _buttons)
+      querySelector('.top-button-container').children.add(button);
     _board.draw(_ctxBackground);
+    querySelector('#output').text = '';
     _isStarted = true;
   }
 
@@ -129,9 +132,8 @@ class App {
     }
     int newIndex = _playerList.indexOf(_activePlayer) + 1;
     // Check to see if we need to go back to the start of the playerlist
-    if (newIndex > _playerList.length - 1) {
-      _playerList.indexOf(_playerList.first);
-      return;
+    if (newIndex == _playerList.length) {
+      newIndex = 0;
     }
     _activePlayer = _playerList[newIndex];
     _statusLabel.text = _activePlayer.name;
@@ -157,7 +159,7 @@ class App {
     _buttons = new List<HtmlElement>();
 
     _statusLabel = new LabelElement();
-    _statusLabel.text = ':)';
+    _statusLabel.text = _playerList[0].name;
     _statusLabel.className = 'is-unselectable';
     _buttons.add(_statusLabel);
 
@@ -186,8 +188,8 @@ class App {
     _buttons.add(_endTurnButton);
 
     _mortgagePropertyButton = new ButtonElement();
-    _mortgagePropertyButton.text = 'Mortgage Tiles';
-    _mortgagePropertyButton.classes = _constructButtonClasses('is-info');
+    _mortgagePropertyButton.text = 'Mortgage Tile';
+    _mortgagePropertyButton.classes = _constructButtonClasses('is-static');
     _mortgagePropertyButton.onClick.listen(_handleMortgageProperty);
     _buttons.add(_mortgagePropertyButton);
 
@@ -198,13 +200,14 @@ class App {
     _buttons.add(_buyBuildingButton);
 
     _sellBuildingButton = new ButtonElement();
-    _sellBuildingButton.text = 'Sell Buildings';
+    _sellBuildingButton.text = 'Trade Buildings';
     _sellBuildingButton.classes = _constructButtonClasses('is-static');
-    _sellBuildingButton.onClick.listen(_handleSellBuilding);
+    _sellBuildingButton.onClick.listen(_handleTradeBuilding);
     _buttons.add(_sellBuildingButton);
   }
 
-  _constructButtonClasses(String extraClasses, [String extraClassTwo = "a"]) => [
+  _constructButtonClasses(String extraClasses, [String extraClassTwo = "a"]) =>
+      [
         'button',
         'is-success',
         'padded',
@@ -218,40 +221,64 @@ class App {
   // Button Handlers
   //
 
+  _updateButtons() {
+    Tile curTile = _board.tiles[_activePlayer.position];
+    if (curTile.owner == null &&
+        (curTile.type == 'Street' ||
+            curTile.type == 'Railroad' ||
+            curTile.type == 'Utility')) {
+      _buyPropertyButton.classes = _constructButtonClasses('is-info');
+    } else {
+      _buyPropertyButton.classes = _constructButtonClasses('is-static');
+    }
+    if (_activePlayer.ownedTiles.length > 0) {
+      _mortgagePropertyButton.classes = _constructButtonClasses('is-info');
+    }
+  }
+
   _handleRollDice(_) {
     int rollDieOne = random.nextInt(6) + 1;
     int rollDieTwo = random.nextInt(6) + 1;
+    int rollValue = rollDieOne + rollDieTwo;
     // Sets should roll again if
     _shouldRollAgain = rollDieOne == rollDieTwo;
-    _activePlayer.setPosition(_activePlayer.position + rollDieOne + rollDieTwo);
+    _activePlayer.move(rollValue);
     _statusLabel.text =
         "Rolled ${_shouldRollAgain ? 'double' : 'a'} ${_shouldRollAgain ? rollDieOne.toString() + '\'s' : rollDieOne + rollDieTwo}";
+    _updateButtons();
   }
 
   _handleBuyProperty(_) {
     _activePlayer.buyTile(_board.tiles[_activePlayer.position]);
+    _updateButtons();
   }
 
   _handleEndTurn(_) {
     _nextPlayer();
+    _updateButtons();
   }
 
   _handleAuctionProperty(_) {
     print("Auctioning not yet implemented!");
+    _updateButtons();
   }
 
   _handleMortgageProperty(_) {
-    print("followup ticket is coming to construct modals :-)");
+    _activePlayer.mortgageTile(_board.tiles[_activePlayer.position]);
     // _displayModal(".mortgage-modal");
+    _updateButtons();
   }
 
   _handleBuyBuilding(_) {
-    print("followup ticket is coming to construct modals :-)");
+    _activePlayer.buyBuilding(_board.tiles[_activePlayer.position],
+        4); //ask player for number they want to build
     // _displayModal(".mortgage-modal");
+    _updateButtons();
   }
 
-  _handleSellBuilding(_) {
+  _handleTradeBuilding(_) {
     print("followup ticket is coming to construct modals :-)");
     // _displayModal(".mortgage-modal");
+    _updateButtons();
   }
 }
