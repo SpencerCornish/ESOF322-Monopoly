@@ -21,6 +21,10 @@ void main() {
     testProperty = new Tile(info, 0, 20, 50, 100);
   });
 
+/*  Need to test setOwner, setLocation, calcRent, setSize, getters?
+ *
+ */
+
   group("Tile", () {
     test("returns true if tile creation values are correct", () {
       expect(testProperty.name, "Mediterranean Avenue");
