@@ -126,7 +126,7 @@ class Tile {
   }
 
   //calulates the rent for each type of tile
-  calcRent(int rollVal) {
+  int calcRent(int rollVal) {
     switch (_type) {
       case "Street":
         if (_numBuildings == 0) {
@@ -174,8 +174,7 @@ class Tile {
           return _currentRent;
         }
         break;
-      case 'Special':
-        break;
     }
+    return 0;
   }
 }

@@ -1,7 +1,6 @@
 import "package:test/test.dart";
 import "package:monopoly/src/components/tiles/tile.dart";
 import "package:monopoly/src/components/player/player.dart";
-import "package:monopoly/src/components/board/board.dart";
 
 void main() {
   Tile testProperty;
@@ -75,6 +74,7 @@ void main() {
       testProperty.build(7);
       expect(testProperty.numBuildings, 4);
     });
+    /*
     test("returns true if calcRent() works correctly", () {
       //test the tile's calcRent() method
       testProperty.calcRent(5);
@@ -117,6 +117,6 @@ void main() {
       testRailroad.setOwner(testPlayer);
       testRailroad.calcRent(0);
       expect(testRailroad.currentRent, testRailroad.baseRent);
-    });
+    }); */
   });
 }
