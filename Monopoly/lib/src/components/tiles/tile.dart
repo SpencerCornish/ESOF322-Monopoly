@@ -84,7 +84,7 @@ class Tile {
   // Setter for setting owner
   setOwner(Player newOwner) {
     _owner = newOwner;
-    _numberOwned++;
+    _numberOwned++; //update this counter for all the same color
   }
 
   setLocation(int x, int y) {
