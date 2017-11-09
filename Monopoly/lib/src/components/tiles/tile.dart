@@ -149,13 +149,17 @@ class Tile {
         break;
       case 'Railroad':
         if (_numberOwned == 1) {
-          return _baseRent;
+          _currentRent = _baseRent;
+          return _currentRent;
         } else if (_numberOwned == 2) {
-          return 50;
+          _currentRent = 50;
+          return _currentRent;
         } else if (_numberOwned == 3) {
-          return 100;
-        } else if (_numberOwned == 3) {
-          return 200;
+          _currentRent = 100;
+          return _currentRent;
+        } else if (_numberOwned == 4) {
+          _currentRent = 200;
+          return _currentRent;
         } else {
           String error = 'error';
           print(error);
@@ -163,9 +167,11 @@ class Tile {
         break;
       case 'Utility':
         if (_numberOwned == 1) {
-          return rollVal * 4;
+          _currentRent = rollVal * 4;
+          return _currentRent;
         } else if (_numberOwned == 2) {
-          return rollVal * 10;
+          _currentRent = rollVal * 10;
+          return _currentRent;
         }
         break;
       case 'Special':

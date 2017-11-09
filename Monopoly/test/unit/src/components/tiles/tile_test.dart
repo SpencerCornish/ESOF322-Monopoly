@@ -5,6 +5,7 @@ import "package:monopoly/src/components/board/board.dart";
 
 void main() {
   Tile testProperty;
+  Board testBoard = new Board();
   setUp(() {
     List<String> info = new List<String>();
     info.add('Mediterranean Avenue');
@@ -21,7 +22,7 @@ void main() {
     info.add('250');
     info.add('2');
     testProperty = new Tile(info, 0, 20, 50, 100);
-    testProperty.setOwner(new Player("Test Player", 1, 1, "red", new Board()));
+    testProperty.setOwner(new Player("Test Player", 1, 1, "red", testBoard));
   });
 
   group("Tile", () {
@@ -59,7 +60,7 @@ void main() {
     });
     test("returns true if setOwner() works correctly", () {
       //test the tile's setOwner() method
-      Player john = new Player("John Doe", 1, 1, "red", new Board());
+      Player john = new Player("John Doe", 1, 1, "red", testBoard);
       testProperty.setOwner(john);
       expect(testProperty.owner, john);
     });
@@ -93,7 +94,7 @@ void main() {
       info.add("0");
       info.add("0");
       Tile testUtility = new Tile(info, 1, 1, 1, 1);
-      testUtility.setOwner(new Player("Test Guy", 1, 1, "red", new Board()));
+      testUtility.setOwner(new Player("Test Guy", 1, 1, "red", testBoard));
       testUtility.calcRent(11);
       expect(testUtility.currentRent, 44);
       info.clear;
