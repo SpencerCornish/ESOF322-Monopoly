@@ -50,13 +50,13 @@ class Tile {
     this._numberOwned = 0;
     this._isMortgaged = false;
     this._isInMonopoly = false;
-
   }
 
   // Getters
   //general
   String get name => _name;
   String get color => _color;
+  String get type => _type;
   bool get isInMonopoly => _isInMonopoly;
   int get mortgageCost => _mortgageCost;
   bool get isMortgaged => _isMortgaged;
@@ -74,6 +74,7 @@ class Tile {
   // Setter for setting owner
   set owner(Player newOwner) => _owner = newOwner;
   set isInMonopoly(bool value) => _isInMonopoly = value;
+  set isMortgaged(bool value) => _isMortgaged = value;
 
   setLocation(int x, int y) {
     _x = x;
@@ -85,18 +86,6 @@ class Tile {
     _height = height;
   }
 
-  draw(CanvasRenderingContext2D ctx) {
-    ctx.fillStyle = _color == 'None' ? 'white' : _color;
-    ctx.strokeStyle = 'black';
-    ctx.textAlign = 'center';
-
-    ctx.strokeRect(_x, _y, _width, _height); //draw tile boarder
-    ctx.fillRect(_x, _y, _width, _height); //draw tile color
-    ctx.strokeText(name, _x + _width / 2,
-        _y + (9 * _height) / 10); //write name 9/10 of the way down the tile
-  }
-
-
   addBuilding() {
     _numBuildings++;
   }
@@ -105,26 +94,26 @@ class Tile {
   calcRent(int rollVal) {
     switch (_type) {
       case 'Street':
-          if (_numBuildings == 0) {
-            if (_isInMonopoly) {
-              return _baseRent * 2;
-            } else {
-              return _baseRent;
-            }
-          } else if (_numBuildings == 1) {
-            return _rent1;
-          } else if (_numBuildings == 2) {
-            return _rent2;
-          } else if (_numBuildings == 3) {
-            return _rent3;
-          } else if (_numBuildings == 4) {
-            return _rent4;
-          } else if (_numBuildings == 5) {
-            return _rent5;
+        if (_numBuildings == 0) {
+          if (_isInMonopoly) {
+            return _baseRent * 2;
           } else {
-            String error = 'error';
-            print(error);
+            return _baseRent;
           }
+        } else if (_numBuildings == 1) {
+          return _rent1;
+        } else if (_numBuildings == 2) {
+          return _rent2;
+        } else if (_numBuildings == 3) {
+          return _rent3;
+        } else if (_numBuildings == 4) {
+          return _rent4;
+        } else if (_numBuildings == 5) {
+          return _rent5;
+        } else {
+          String error = 'error';
+          print(error);
+        }
         break;
 
       case 'Railroad':
@@ -156,5 +145,18 @@ class Tile {
         }
         break;
     }
+  }
+
+  draw(CanvasRenderingContext2D ctx) {
+    ctx.fillStyle = _color == 'None' ? 'White' : _color;
+    ctx.strokeStyle = 'black';
+    ctx.textAlign = 'center';
+
+    ctx.strokeRect(_x, _y, _width, _height); //draw tile boarder
+    ctx.fillRect(_x, _y, _width, _height); //draw tile color
+    ctx.fillStyle = 'black';
+    ctx.font = '8pt sans-serif';
+    ctx.fillText(name, _x + _width / 2,
+        _y + (9 * _height) / 10); //write name 9/10 of the way down the tile
   }
 }
