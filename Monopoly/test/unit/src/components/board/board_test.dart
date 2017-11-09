@@ -2,8 +2,10 @@ import "package:test/test.dart";
 import "package:monopoly/src/components/board/board.dart";
 
 void main() {
-  Board testBoard = new Board();
-  setUp(() {});
+  Board testBoard;
+  setUp(() {
+    testBoard = new Board();
+  });
   group("Board", () {
     test("returns true if readInfo() reads correctly", () {
       List<String> list = testBoard.readInfo();

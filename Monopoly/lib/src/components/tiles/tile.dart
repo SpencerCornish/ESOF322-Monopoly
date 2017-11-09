@@ -135,7 +135,10 @@ class Tile {
       case "Street":
         {
           if (_numBuildings == 0) {
-            _currentRent = _baseRent;
+            if (_isInMonopoly) {
+              _currentRent = _baseRent * 2;
+            } else
+              _currentRent = _baseRent;
           } else if (_numBuildings == 1) {
             _currentRent = rent1;
           } else if (_numBuildings == 2) {
