@@ -74,56 +74,57 @@ void main() {
       testProperty.build(7);
       expect(testProperty.numBuildings, 4);
     });
+    group("calcRent()", () {
+      test("works correctly for a property", () {
+        //test the tile's calcRent() method on a property tile
+        testProperty.calcRent(5);
+        expect(testProperty.currentRent, testProperty.baseRent);
+        testProperty.build(3);
+        expect(testProperty.currentRent, testProperty.rent3);
+      });
 
-    test("calcRent() works correctly for a property", () {
-      //test the tile's calcRent() method on a property tile
-      testProperty.calcRent(5);
-      expect(testProperty.currentRent, testProperty.baseRent);
-      testProperty.build(3);
-      expect(testProperty.currentRent, testProperty.rent3);
-    });
-
-    test("calcRent() works correctly for a utility", () {
-      //test the tile's calcRent() method on a utility tile
-      List<String> info = new List<String>();
-      info.add("Water Works");
-      info.add("Utility");
-      info.add("None");
-      info.add("28");
-      info.add("150");
-      info.add("0");
-      info.add("4");
-      info.add("0");
-      info.add("0");
-      info.add("0");
-      info.add("0");
-      info.add("0");
-      info.add("0");
-      Tile testUtility = new Tile(info, 1, 1, 1, 1);
-      testUtility.setOwner(testPlayer);
-      testUtility.calcRent(11);
-      expect(testUtility.currentRent, 44);
-    });
-    test("calcRent() works correctly for a railroad", () {
-      //test the tile's calcRent() method on a railroad tile
-      List<String> info = new List<String>();
-      info.add("Short Line");
-      info.add("Railroad");
-      info.add("None");
-      info.add("35");
-      info.add("200");
-      info.add("0");
-      info.add("25");
-      info.add("0");
-      info.add("0");
-      info.add("0");
-      info.add("0");
-      info.add("0");
-      info.add("0");
-      Tile testRailroad = new Tile(info, 1, 1, 1, 1);
-      testRailroad.setOwner(testPlayer);
-      testRailroad.calcRent(0);
-      expect(testRailroad.currentRent, testRailroad.baseRent);
+      test("works correctly for a utility", () {
+        //test the tile's calcRent() method on a utility tile
+        List<String> info = new List<String>();
+        info.add("Water Works");
+        info.add("Utility");
+        info.add("None");
+        info.add("28");
+        info.add("150");
+        info.add("0");
+        info.add("4");
+        info.add("0");
+        info.add("0");
+        info.add("0");
+        info.add("0");
+        info.add("0");
+        info.add("0");
+        Tile testUtility = new Tile(info, 1, 1, 1, 1);
+        testUtility.setOwner(testPlayer);
+        testUtility.calcRent(11);
+        expect(testUtility.currentRent, 44);
+      });
+      test("works correctly for a railroad", () {
+        //test the tile's calcRent() method on a railroad tile
+        List<String> info = new List<String>();
+        info.add("Short Line");
+        info.add("Railroad");
+        info.add("None");
+        info.add("35");
+        info.add("200");
+        info.add("0");
+        info.add("25");
+        info.add("0");
+        info.add("0");
+        info.add("0");
+        info.add("0");
+        info.add("0");
+        info.add("0");
+        Tile testRailroad = new Tile(info, 1, 1, 1, 1);
+        testRailroad.setOwner(testPlayer);
+        testRailroad.calcRent(0);
+        expect(testRailroad.currentRent, testRailroad.baseRent);
+      });
     });
   });
 }
