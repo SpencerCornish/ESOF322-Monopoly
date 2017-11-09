@@ -74,13 +74,17 @@ void main() {
       testProperty.build(7);
       expect(testProperty.numBuildings, 4);
     });
-    /*
-    test("returns true if calcRent() works correctly", () {
-      //test the tile's calcRent() method
+
+    test("returns true if calcRent() works correctly for a property", () {
+      //test the tile's calcRent() method on a property tile
       testProperty.calcRent(5);
       expect(testProperty.currentRent, testProperty.baseRent);
       testProperty.build(3);
       expect(testProperty.currentRent, testProperty.rent3);
+    });
+
+    test("returns true if calcRent() works correctly for a utility", () {
+      //test the tile's calcRent() method on a utility tile
       List<String> info = new List<String>();
       info.add("Water Works");
       info.add("Utility");
@@ -99,7 +103,10 @@ void main() {
       testUtility.setOwner(testPlayer);
       testUtility.calcRent(11);
       expect(testUtility.currentRent, 44);
-      info.clear;
+    });
+    test("returns true if calcRent() works correctly for a railroad", () {
+      //test the tile's calcRent() method on a railroad tile
+      List<String> info = new List<String>();
       info.add("Short Line");
       info.add("Railroad");
       info.add("None");
@@ -117,6 +124,6 @@ void main() {
       testRailroad.setOwner(testPlayer);
       testRailroad.calcRent(0);
       expect(testRailroad.currentRent, testRailroad.baseRent);
-    }); */
+    });
   });
 }

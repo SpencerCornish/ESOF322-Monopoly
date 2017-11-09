@@ -82,7 +82,11 @@ class Tile {
   Player get owner => _owner;
 
   // Setter for setting owner
-  setOwner(Player newOwner) => _owner = newOwner;
+  setOwner(Player newOwner) {
+    _owner = newOwner;
+    _numberOwned++;
+  }
+
   setLocation(int x, int y) {
     _x = x;
     _y = y;
@@ -129,52 +133,56 @@ class Tile {
   int calcRent(int rollVal) {
     switch (_type) {
       case "Street":
-        if (_numBuildings == 0) {
-          _currentRent = _baseRent;
-        } else if (_numBuildings == 1) {
-          _currentRent = rent1;
-        } else if (_numBuildings == 2) {
-          _currentRent = rent2;
-        } else if (_numBuildings == 3) {
-          _currentRent = rent3;
-        } else if (_numBuildings == 4) {
-          _currentRent = rent4;
-        } else if (_numBuildings == 5) {
-          _currentRent = rent5;
-        } else {
-          String error = 'error';
-          print(error);
+        {
+          if (_numBuildings == 0) {
+            _currentRent = _baseRent;
+          } else if (_numBuildings == 1) {
+            _currentRent = rent1;
+          } else if (_numBuildings == 2) {
+            _currentRent = rent2;
+          } else if (_numBuildings == 3) {
+            _currentRent = rent3;
+          } else if (_numBuildings == 4) {
+            _currentRent = rent4;
+          } else if (_numBuildings == 5) {
+            _currentRent = rent5;
+          } else {
+            String error = 'error';
+            print(error);
+          }
+          break;
         }
-        return _currentRent;
-        break;
       case "Railroad":
-        if (_numberOwned == 1) {
-          _currentRent = _baseRent;
-          return _currentRent;
-        } else if (_numberOwned == 2) {
-          _currentRent = 50;
-          return _currentRent;
-        } else if (_numberOwned == 3) {
-          _currentRent = 100;
-          return _currentRent;
-        } else if (_numberOwned == 4) {
-          _currentRent = 200;
-          return _currentRent;
-        } else {
-          String error = 'error';
-          print(error);
+        {
+          if (_numberOwned == 1) {
+            _currentRent = _baseRent;
+          } else if (_numberOwned == 2) {
+            _currentRent = 50;
+          } else if (_numberOwned == 3) {
+            _currentRent = 100;
+          } else if (_numberOwned == 4) {
+            _currentRent = 200;
+          } else {
+            String error = 'error';
+            print(error);
+          }
+          break;
         }
-        break;
       case "Utility":
-        if (_numberOwned == 1) {
-          _currentRent = rollVal * 4;
-          return _currentRent;
-        } else if (_numberOwned == 2) {
-          _currentRent = rollVal * 10;
-          return _currentRent;
+        {
+          if (_numberOwned == 1) {
+            _currentRent = rollVal * 4;
+          } else if (_numberOwned == 2) {
+            _currentRent = rollVal * 10;
+          }
+          break;
         }
-        break;
+      default:
+        {
+          _currentRent = 0;
+          break;
+        }
     }
-    return 0;
+    return _currentRent;
   }
 }
