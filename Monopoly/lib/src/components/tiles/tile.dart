@@ -50,13 +50,14 @@ class Tile {
     this._numberOwned = 0;
     this._isMortgaged = false;
     this._isInMonopoly = false;
+
   }
 
   // Getters
   //general
   String get name => _name;
   String get color => _color;
-
+  bool get isInMonopoly => _isInMonopoly;
   int get mortgageCost => _mortgageCost;
   bool get isMortgaged => _isMortgaged;
   int get price => _price;
@@ -66,13 +67,14 @@ class Tile {
   int get height => _height;
   Player get owner => _owner;
   int get numBuildings => _numBuildings;
-
+  int get totalNum => _totalNum;
   //property specific
   int get buildPrice => _buildPrice;
-  bool get isInMonopoly => _isInMonopoly;
 
   // Setter for setting owner
   set owner(Player newOwner) => _owner = newOwner;
+  set isInMonopoly(bool value) => _isInMonopoly = value;
+
   setLocation(int x, int y) {
     _x = x;
     _y = y;
@@ -94,40 +96,21 @@ class Tile {
         _y + (9 * _height) / 10); //write name 9/10 of the way down the tile
   }
 
-  addBuilding() {
-  }
 
-  auction() {
-    int startPrice = 10;
-    //all players can increase auction price by 1 at the least
-    //highest bidder wins property
-    //if no one wants it no one pays anything and the deed remains unclaimed
+  addBuilding() {
+    _numBuildings++;
   }
 
   //calulates the rent for each type of tile
   calcRent(int rollVal) {
     switch (_type) {
       case 'Street':
-        if (_isInMonopoly) {
-          if (_numBuildings = null) {
-            return _baseRent * 2;
-          } else if (_numBuildings == 1) {
-            return _rent1 * 2;
-          } else if (_numBuildings == 2) {
-            return _rent2 * 2;
-          } else if (_numBuildings == 3) {
-            return _rent3 * 2;
-          } else if (_numBuildings == 4) {
-            return _rent4 * 2;
-          } else if (_numBuildings == 5) {
-            return _rent5 * 2;
-          } else {
-            String error = 'error';
-            print(error);
-          }
-        } else {
-          if (_numBuildings = null) {
-            return _baseRent;
+          if (_numBuildings == 0) {
+            if (_isInMonopoly) {
+              return _baseRent * 2;
+            } else {
+              return _baseRent;
+            }
           } else if (_numBuildings == 1) {
             return _rent1;
           } else if (_numBuildings == 2) {
@@ -142,7 +125,6 @@ class Tile {
             String error = 'error';
             print(error);
           }
-        }
         break;
 
       case 'Railroad':

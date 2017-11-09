@@ -57,7 +57,23 @@ class Player {
     }
   }
 
-
+  updateMonopoly(Tile tile) {
+    List<Tile> count;
+    for(Tile curTile in _ownedTiles) {
+      if(curTile.color == _color) {
+        count.add(curTile);
+      }
+      if(count.length == tile.totalNum) {
+        for (Tile newMonopTile in count)
+          newMonopTile.isInMonopoly = true;
+      }
+      for(Tile curTile in _board.tiles) {
+        if(curTile.color == _color) {
+          curTile.isInMonopoly = false;
+        }
+      }
+    }
+  }
 
   int rollDice() {
     int die1 = rand.nextInt(6) + 1;
@@ -73,22 +89,34 @@ class Player {
   }
 
   void buyTile(Tile t) {
+    if (t = updateMonopoly(t))
     t.owner = this;
     properties.add(t);
     _money -= t.price;
+    //check if all of one color owned by this player
+      //if yes inMonop = true for all tiles of said color
+      //else false
+
   }
+
 
   void buyBuilding(Tile p, int numHouse) {
     if (p.isInMonopoly) {
       //TODO check that player is building evenly
+      //get tiles in monop
+      //check num houses on each
+      //if num houses same or greater
+        //build house
+      //else
+        //return error message
       if (p.numBuildings < 4) {
-        for (var i = 0; i < numHouse; i++) {
-          _money -= p.buildPrice;
-          p.addBuilding();
+        for (int i = 0; i < numHouse; i++) { //build num houses player wants to buy
+          _money -= p.buildPrice; //subtract build price
+          p.addBuilding(); //add a building count on tile
         }
       } else if (p.numBuildings == 4) { //build hotel
-        _money -= p.buildPrice;
-        p.addBuilding();
+        _money -= p.buildPrice; //subtract build price
+        p.addBuilding(); //add a building to count on tile
       } else {
         print("ERROR: Max number of buildings reached. You cannot build anymore on this property");
       }
@@ -159,40 +187,13 @@ class Player {
     }
   }
 
-
-  /*
-  don't need this for assignment
-  void goBankrupt() {
-   if player money < amount owed
-    if buildings > 0
-      sell building
-      check if money < amount owed
-      repeat until buildings = 0 or money >= amount owed
-    if money still < amount owed
-      if un-mortgaged properties > 0
-        mortgage properties
-        check if money < amount owed
-        repeat until un-mortgaged properties = 0 or money >= amount owed
-    if money still < amount owed
-      you bankrupt --> remove player from game
-      display end game message
-        if bank owed
-          give all money to bank
-          give all properties to bank
-          auction all properties
-        if another player owed
-          give all money to player
-          give all properties to player
-  }
-  */
-
-  void payRent(Player owner, Player renter, int rent, Tile t) {
-    owner.getPaid(t.calcRent(_rollValue));
+  void payRent(Player owner, Player renter, Tile t) {
+    int _rent = t.calcRent(_rollValue);
+    renter._money -= _rent;
+    owner._money += _rent;
+    //owner.getPaid(t.calcRent(_rollValue));
   }
 
-  void getPaid(int amt) {
-    this._money += amt;
-  }
 
   void tradeProperty(Player seller, Player buyer, Tile t, int tradeAmount) {
     this._ownedTiles.remove(t);;
@@ -211,11 +212,6 @@ class Player {
           _money -= (t.mortgageCost * 0.9).round();
       }
     }
-  }
-
-  //do we need this??
-  void payBank(int amt) {
-    this._money -= amt;
   }
 
   void draw(CanvasRenderingContext2D ctx){
