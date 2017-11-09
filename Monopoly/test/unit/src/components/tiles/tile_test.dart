@@ -1,6 +1,7 @@
 import "package:test/test.dart";
 import "package:monopoly/src/components/tiles/tile.dart";
 import "package:monopoly/src/components/player/player.dart";
+import "package:monopoly/src/components/board/board.dart";
 
 void main() {
   Tile testProperty;
@@ -20,12 +21,8 @@ void main() {
     info.add('250');
     info.add('2');
     testProperty = new Tile(info, 0, 20, 50, 100);
-    testProperty.setOwner(new Player("Test Player"));
+    testProperty.setOwner(new Player("Test Player", 1, 1, "red", new Board()));
   });
-
-/*  Need to test setOwner, setLocation, calcRent, setSize, getters?
- *
- */
 
   group("Tile", () {
     test("returns true if tile creation values are correct", () {
@@ -62,7 +59,7 @@ void main() {
     });
     test("returns true if setOwner() works correctly", () {
       //test the tile's setOwner() method
-      Player john = new Player("John Doe");
+      Player john = new Player("John Doe", 1, 1, "red", new Board());
       testProperty.setOwner(john);
       expect(testProperty.owner, john);
     });
@@ -77,6 +74,44 @@ void main() {
     });
     test("returns true if calcRent() works correctly", () {
       //test the tile's calcRent() method
+      testProperty.calcRent(5);
+      expect(testProperty.currentRent, testProperty.baseRent);
+      testProperty.build(3);
+      expect(testProperty.currentRent, testProperty.rent3);
+      List<String> info = new List<String>();
+      info.add("Water Works");
+      info.add("Utility");
+      info.add("None");
+      info.add("28");
+      info.add("150");
+      info.add("0");
+      info.add("4");
+      info.add("0");
+      info.add("0");
+      info.add("0");
+      info.add("0");
+      info.add("0");
+      info.add("0");
+      Tile testUtility = new Tile(info, 1, 1, 1, 1);
+      testUtility.calcRent(11);
+      expect(testUtility.currentRent, 44);
+      info.clear;
+      info.add("Short Line");
+      info.add("Railroad");
+      info.add("None");
+      info.add("35");
+      info.add("200");
+      info.add("0");
+      info.add("25");
+      info.add("0");
+      info.add("0");
+      info.add("0");
+      info.add("0");
+      info.add("0");
+      info.add("0");
+      Tile testRailroad = new Tile(info, 1, 1, 1, 1);
+      testRailroad.calcRent(0);
+      expect(testRailroad.currentRent, testRailroad.baseRent);
     });
   });
 }

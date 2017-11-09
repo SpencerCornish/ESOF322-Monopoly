@@ -20,7 +20,8 @@ class Tile {
       _width,
       _height, //width and height of tile in pixels
       _numberOwned, //number of this type of tile the owner owns
-      _numBuildings; //number of buildings built on the property
+      _numBuildings, //number of buildings built on the property
+      _currentRent; //rent multiplier currently
 
   bool _isMortgaged, //if this tile is mortgaged
       _isInMonopoly; //if the owner owns all tiles of this type
@@ -76,6 +77,7 @@ class Tile {
   int get rent3 => _rent3;
   int get rent4 => _rent4;
   int get rent5 => _rent5;
+  int get currentRent => _currentRent;
   int get numBuildings => _numBuildings;
   Player get owner => _owner;
 
@@ -109,6 +111,7 @@ class Tile {
         _numBuildings += buildings;
         int amt = _buildPrice * buildings;
         _owner.payBank(amt);
+        calcRent(0);
       } else {
         //print error message - cannot build 5th building until monopoly is owned
       }
@@ -118,6 +121,7 @@ class Tile {
       _numBuildings += buildings;
       int amt = _buildPrice * buildings;
       _owner.payBank(amt);
+      calcRent(0);
     }
   }
 
@@ -125,24 +129,23 @@ class Tile {
   calcRent(int rollVal) {
     switch (_type) {
       case 'Street':
-        /* need info from board.csv to get rentBuild1, rentBUild2,...
-        if (_numBuildings = null) {
-          return _baseRent;
+        if (_numBuildings == 0) {
+          _currentRent = _baseRent;
         } else if (_numBuildings == 1) {
-          return rentBuild1;
+          _currentRent = rent1;
         } else if (_numBuildings == 2) {
-          return rentBuild2;
+          _currentRent = rent2;
         } else if (_numBuildings == 3) {
-          return rentBuild3;
+          _currentRent = rent3;
         } else if (_numBuildings == 4) {
-          return rentBuild4;
+          _currentRent = rent4;
         } else if (_numBuildings == 5) {
-          return rentBuild5;
+          _currentRent = rent5;
         } else {
           String error = 'error';
           print(error);
         }
-        */
+        return _currentRent;
         break;
       case 'Railroad':
         if (_numberOwned == 1) {
