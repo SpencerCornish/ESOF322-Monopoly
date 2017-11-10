@@ -58,7 +58,6 @@ class Tile {
   String get name => _name;
   String get color => _color;
   String get type => _type;
-  int get position => _position;
   int get mortgageCost => _mortgageCost;
   bool get isMortgaged => _isMortgaged;
   int get price => _price;
@@ -66,7 +65,7 @@ class Tile {
   int get y => _y;
   int get width => _width;
   int get height => _height;
-
+  int get position => _position;
   //property specific
   int get buildPrice => _buildPrice;
   bool get isInMonopoly => _isInMonopoly;
@@ -87,6 +86,12 @@ class Tile {
     _numberOwned++; //update this counter for all the same color
   }
 
+  // Setter for setting owner
+  set owner(Player newOwner) => _owner = newOwner;
+  set isInMonopoly(bool value) => _isInMonopoly = value;
+  set isMortgaged(bool value) => _isMortgaged = value;
+  set numBuildings(int buildings) => _numBuildings = buildings;
+
   setLocation(int x, int y) {
     _x = x;
     _y = y;
@@ -97,36 +102,9 @@ class Tile {
     _height = height;
   }
 
-  draw(CanvasRenderingContext2D ctx) {
-    ctx.fillStyle = _color == 'None' ? 'white' : _color;
-    ctx.strokeStyle = 'black';
-    ctx.textAlign = 'center';
-
-    ctx.strokeRect(_x, _y, _width, _height); //draw tile boarder
-    ctx.fillRect(_x, _y, _width, _height); //draw tile color
-    ctx.strokeText(name, _x + _width / 2,
-        _y + (9 * _height) / 10); //write name 9/10 of the way down the tile
-  }
-
-  build(int buildings) {
-    int i = _numBuildings + buildings;
-    if (i == 5) {
-      if (_numberOwned == _totalNum) {
-        _numBuildings += buildings;
-        int amt = _buildPrice * buildings;
-        _owner.payBank(amt);
-        calcRent(0);
-      } else {
-        //print error message - cannot build 5th building until monopoly is owned
-      }
-    } else if (i > 5) {
-      //print error message - cannot build more
-    } else {
-      _numBuildings += buildings;
-      int amt = _buildPrice * buildings;
-      _owner.payBank(amt);
-      calcRent(0);
-    }
+  addBuilding() {
+    _numBuildings++;
+    calcRent(0);
   }
 
   //calulates the rent for each type of tile
@@ -187,5 +165,18 @@ class Tile {
         }
     }
     return _currentRent;
+  }
+
+  draw(CanvasRenderingContext2D ctx) {
+    ctx.fillStyle = _color == 'None' ? 'White' : _color;
+    ctx.strokeStyle = 'black';
+    ctx.textAlign = 'center';
+
+    ctx.strokeRect(_x, _y, _width, _height); //draw tile boarder
+    ctx.fillRect(_x, _y, _width, _height); //draw tile color
+    ctx.fillStyle = 'black';
+    ctx.font = '8pt sans-serif';
+    ctx.fillText(name, _x + _width / 2,
+        _y + (9 * _height) / 10); //write name 9/10 of the way down the tile
   }
 }

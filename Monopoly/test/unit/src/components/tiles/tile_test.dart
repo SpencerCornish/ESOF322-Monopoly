@@ -65,21 +65,14 @@ void main() {
       testProperty.setOwner(john);
       expect(testProperty.owner, john);
     });
-    test("build() works correctly", () {
-      //test the tile's build() method
-      testProperty.build(4);
-      expect(testProperty.numBuildings, 4);
-      testProperty.build(1);
-      expect(testProperty.numBuildings, 4);
-      testProperty.build(7);
-      expect(testProperty.numBuildings, 4);
-    });
     group("calcRent()", () {
       test("works correctly for a property", () {
         //test the tile's calcRent() method on a property tile
         testProperty.calcRent(5);
         expect(testProperty.currentRent, testProperty.baseRent);
-        testProperty.build(3);
+        testProperty.addBuilding();
+        testProperty.addBuilding();
+        testProperty.addBuilding();
         expect(testProperty.currentRent, testProperty.rent3);
       });
 
@@ -127,4 +120,8 @@ void main() {
       });
     });
   });
+  /*
+  Tile testCalcRent;
+  Tile testAuction;
+  */
 }
