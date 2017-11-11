@@ -6,8 +6,9 @@ void main() {
   Tile testProperty;
   Player testPlayer;
 
+  //setup function performed every test
   setUp(() {
-    List<String> info = new List<String>();
+    List<String> info = new List<String>(); //tile attribute list
     info.add('Mediterranean Avenue');
     info.add('Street');
     info.add('Brown');
@@ -27,8 +28,9 @@ void main() {
   });
 
   group("Tile", () {
+    //group of tile related tests
     test("creation values are correct", () {
-      //test the tile creation process
+      //test the tile creation values
       expect(testProperty.name, "Mediterranean Avenue");
       expect(testProperty.type, "Street");
       expect(testProperty.color, "Brown");
@@ -121,7 +123,6 @@ void main() {
     });
   });
   /*
-  Tile testCalcRent;
   Tile testAuction;
   */
 }

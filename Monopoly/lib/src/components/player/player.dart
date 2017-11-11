@@ -25,6 +25,10 @@ class Player {
   List<Tile> get ownedTiles => _ownedTiles;
   int get numRailroads => _numRailroads;
   int get numUtilities => _numUtilities;
+  int get size => _size;
+  int get number => _number;
+  String get color => _color;
+  Board get board => _board;
 
   Player(this._name, this._size, this._number, this._color, this._board) {
     _money = 1500;
@@ -74,7 +78,7 @@ class Player {
     for (int i = 0; i < _ownedTiles.length; i++) print(_ownedTiles[i].name);
   }
 
-  mortgageTile(Tile tile) {
+  void mortgageTile(Tile tile) {
     tile.isMortgaged = true;
     _money += tile.mortgageCost;
   }
