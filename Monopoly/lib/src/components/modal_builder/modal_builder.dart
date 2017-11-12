@@ -27,7 +27,7 @@ class ModalBuilder {
   Element _tileNameLabel;
   Element _currentBidLabel;
   Element _highestBidderLabel;
-  SpanElement _validationIcon;
+  Element _validationIcon;
   NumberInputElement _bidInputElement;
   ButtonElement _submitBidButton;
   ButtonElement _dropOutButton;

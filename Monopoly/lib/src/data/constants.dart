@@ -51,8 +51,8 @@ class Constants {
         <span class="icon is-small is-left">
           \$
         </span>
-        <span class="icon is-small is-right validation-icon">
-          <i class="" aria-hidden="true"></i>
+        <span class="icon is-small is-right">
+          <i class=" validation-icon" aria-hidden="true"></i>
         </span>
       </div>
       <div class="control">
