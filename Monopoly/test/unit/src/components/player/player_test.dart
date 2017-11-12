@@ -89,7 +89,7 @@ void main() {
     test("payRent() works correctly", () {
       //tests the rent payment function
       Player testOwner = new Player("Groot", 5, 2, "Brown", null);
-      testPlayer.payRent(testOwner, testPlayer, testProperty);
+      testPlayer.payRent(testOwner, testProperty, 5);
       expect(testPlayer.money, 1498);
       expect(testOwner.money, 1502);
     });
