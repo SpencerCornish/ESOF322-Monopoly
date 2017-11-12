@@ -50,6 +50,7 @@ class Tile {
     this._numberOwned = 0;
     this._isMortgaged = false;
     this._isInMonopoly = false;
+    this._numBuildings = 0;
   }
 
   // Getters
@@ -157,7 +158,6 @@ class Tile {
     ctx.fillRect(_x, _y, _width, _height); //draw tile color
     ctx.fillStyle = 'black';
     ctx.font = '8pt sans-serif';
-    ctx.fillText(name, _x + _width / 2,
-        _y + (9 * _height) / 10); //write name 9/10 of the way down the tile
+    ctx.fillText(name, _x + _width / 2, _y + (9 * _height) / 10); //write name 9/10 of the way down the tile
   }
 }

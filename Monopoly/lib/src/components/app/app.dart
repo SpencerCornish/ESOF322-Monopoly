@@ -104,8 +104,7 @@ class App {
     _ctxBackground.clearRect(0, 0, window.innerWidth, window.innerHeight);
     _ctxForeground.clearRect(0, 0, window.innerWidth, window.innerHeight);
     querySelector('#output').text = '';
-    for (HtmlElement button in _buttons)
-      querySelector('.top-button-container').children.add(button);
+    for (HtmlElement button in _buttons) querySelector('.top-button-container').children.add(button);
     _board.draw(_ctxBackground);
     querySelector('#output').text = '';
     _isStarted = true;
@@ -200,14 +199,13 @@ class App {
     _buttons.add(_buyBuildingButton);
 
     _sellBuildingButton = new ButtonElement();
-    _sellBuildingButton.text = 'Trade Buildings';
+    _sellBuildingButton.text = 'Sell Buildings';
     _sellBuildingButton.classes = _constructButtonClasses('is-static');
-    _sellBuildingButton.onClick.listen(_handleTradeBuilding);
+    _sellBuildingButton.onClick.listen(_handleSellBuilding);
     _buttons.add(_sellBuildingButton);
   }
 
-  _constructButtonClasses(String extraClasses, [String extraClassTwo = "a"]) =>
-      [
+  _constructButtonClasses(String extraClasses, [String extraClassTwo = "a"]) => [
         'button',
         'is-success',
         'padded',
@@ -224,9 +222,7 @@ class App {
   _updateButtons() {
     Tile curTile = _board.tiles[_activePlayer.position];
     if (curTile.owner == null &&
-        (curTile.type == 'Street' ||
-            curTile.type == 'Railroad' ||
-            curTile.type == 'Utility')) {
+        (curTile.type == 'Street' || curTile.type == 'Railroad' || curTile.type == 'Utility')) {
       _buyPropertyButton.classes = _constructButtonClasses('is-info');
     } else {
       _buyPropertyButton.classes = _constructButtonClasses('is-static');
@@ -264,21 +260,105 @@ class App {
   }
 
   _handleMortgageProperty(_) {
-    _activePlayer.mortgageTile(_board.tiles[_activePlayer.position]);
-    // _displayModal(".mortgage-modal");
-    _updateButtons();
+    _displayModal("Choose a tile to Mortgage", _activePlayer.ownedTiles, _handleMortgage, mortgage: true);
+    //_updateButtons();
   }
 
   _handleBuyBuilding(_) {
-    _activePlayer.buyBuilding(_board.tiles[_activePlayer.position],
-        4); //ask player for number they want to build
-    // _displayModal(".mortgage-modal");
-    _updateButtons();
+    _displayModal("Choose a tile to build upon", _activePlayer.ownedTiles, _handleBuildingPurchase,
+        showNumBuildings: true);
   }
 
-  _handleTradeBuilding(_) {
-    print("followup ticket is coming to construct modals :-)");
-    // _displayModal(".mortgage-modal");
-    _updateButtons();
+  _handleSellBuilding(_) {
+    _displayModal("Choose a tile to sell a building", _activePlayer.ownedTiles, _handleBuildingSell,
+        showNumBuildings: true);
+  }
+
+  ////////////
+  /// Modal handlers
+  ////////////
+
+  String _displayModal(String title, List<Tile> selectionList, Function onClickFunction,
+      {bool showNumBuildings = false, bool mortgage = false}) {
+    // Core modal elements
+    Element modal = querySelector('.modal');
+    Element modalBackground = querySelector('.modal-background');
+    Element closeButton = querySelector('.delete');
+
+    // User defined modal elements
+    Element modalTitle = querySelector('.modal-card-title');
+    Element modalTable = querySelector('.modal-table-sel');
+
+    // Set the Title String
+    modalTitle.text = title;
+    // Set the modal to visible
+    modal.className = "modal is-active";
+    String tableItems = _buildNodes(selectionList, modalTable, onClickFunction, showNumBuildings, mortgage);
+
+    // Closing handlers
+    closeButton.onClick.listen((e) {
+      modal.className = "modal";
+      modalTable.children.clear();
+    });
+    modalBackground.onClick.listen((e) {
+      modal.className = "modal";
+      modalTable.children.clear();
+    });
+  }
+
+  _buildNodes(List<Tile> tileList, Element modalTable, Function onClickFunction, bool showNumBuildings, bool mortgage) {
+    NodeValidatorBuilder validator = new NodeValidatorBuilder.common();
+    validator.allowInlineStyles();
+    NodeTreeSanitizer sanitizer = new NodeTreeSanitizer(validator);
+    for (Tile tile in tileList) {
+      modalTable.insertAdjacentHtml(
+          "beforeend",
+          """
+          <tr>
+            <th><a class="button is-static is-small" style="background-color:${tile.color}"><span class="icon is-small">
+            <td class="is-unselectable">${tile.name}</td>
+            <td><p class="has-text-${mortgage ? 'success' : 'danger'} is-unselectable">\$${mortgage ? tile.mortgageCost : tile.buildPrice}</p></td>
+            ${showNumBuildings ? '<td><p class="is-unselectable">${tile.numBuildings} Building${tile.numBuildings == 1 ? '' : 's'}</p></td>' : '' }
+            <td><a class="button is-small is-info is-outlined tile-action-${tile.hashCode}">Select</a></td>
+          </tr>
+          """,
+          treeSanitizer: sanitizer);
+      LinkElement button = querySelector('.tile-action-${tile.hashCode}');
+      button.onClick.listen(onClickFunction);
+    }
+  }
+
+  // Modal click handlers
+
+  _handleMortgage(MouseEvent event) {
+    Element target = event.target;
+    for (Tile tile in _activePlayer.ownedTiles)
+      if (target.classes.contains("tile-action-${tile.hashCode}")) {
+        _activePlayer.mortgageTile(tile);
+        _closeModal();
+      }
+  }
+
+  _handleBuildingPurchase(MouseEvent event) {
+    Element target = event.target;
+    for (Tile tile in _activePlayer.ownedTiles)
+      if (target.classes.contains("tile-action-${tile.hashCode}")) {
+        _activePlayer.buyBuilding(tile, 1);
+        _closeModal();
+      }
+  }
+
+  _handleBuildingSell(MouseEvent event) {
+    Element target = event.target;
+    for (Tile tile in _activePlayer.ownedTiles)
+      if (target.classes.contains("tile-action-${tile.hashCode}")) {
+        _activePlayer.sellBuilding(tile);
+        _closeModal();
+      }
+  }
+
+  _closeModal() {
+    Element closeButton = querySelector('.delete');
+    closeButton?.click();
   }
 }
