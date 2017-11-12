@@ -322,6 +322,7 @@ class App {
   _handleEndTurn(_) {
     _nextPlayer();
     _shouldRollAgain = true;
+    _infoLabel.text = null;
     _updateButtons();
   }
 
