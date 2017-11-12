@@ -21,14 +21,23 @@ html, body {
 }
 
 .buttons-top{
-  max-width:120px;
+  max-width:150px;
   padding: 10px 0 0 10px;
   margin: 10px;
   position: absolute;
   z-index: 3;
 }
+
 .padded {
   margin-top:5px;
   margin-bottom:5px;
   margin-right:5px;
+}
+
+label{
+  display: block;
+}
+
+.nameLabel{
+  font-weight: bold;
 }

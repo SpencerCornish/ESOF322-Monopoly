@@ -28,7 +28,7 @@ class App {
   // Utility Variables
   ////////////////////
 
-  Random random;
+  Random _random;
   bool _isStarted;
   bool _shouldRollAgain;
 
@@ -44,7 +44,9 @@ class App {
 
   List<HtmlElement> _buttons;
 
-  LabelElement _statusLabel;
+  LabelElement _nameLabel;
+  LabelElement _rollLabel1;
+  LabelElement _rollLabel2;
 
   // Top button control refs
   ButtonElement _rollDiceButton;
@@ -54,7 +56,6 @@ class App {
 
   // Bottom button control refs
   ButtonElement _mortgagePropertyButton;
-  ButtonElement _buildBuildingButton;
   ButtonElement _buyBuildingButton;
   ButtonElement _sellBuildingButton;
 
@@ -62,7 +63,7 @@ class App {
     // Instantiate a board, init variables
     _board = new Board();
     _isStarted = false;
-    random = new Random.secure();
+    _random = new Random.secure();
     _playerList = new List<Player>();
 
     _playerList.add(new Player("Bryan", 10, 0, 'blue', _board));
@@ -136,7 +137,8 @@ class App {
       newIndex = 0;
     }
     _activePlayer = _playerList[newIndex];
-    _statusLabel.text = _activePlayer.name;
+    _nameLabel.text = _activePlayer.name;
+    _rollLabel2.text = 'none';
   }
 
   _constructRenderingContext() {
@@ -158,10 +160,21 @@ class App {
   _constructButtonControls() {
     _buttons = new List<HtmlElement>();
 
-    _statusLabel = new LabelElement();
-    _statusLabel.text = _playerList[0].name;
-    _statusLabel.className = 'is-unselectable';
-    _buttons.add(_statusLabel);
+    _nameLabel = new LabelElement();
+    _nameLabel.text = _playerList[0].name;
+    _nameLabel.className = 'nameLabel';
+    _buttons.add(_nameLabel);
+
+    _rollLabel1 = new LabelElement();
+    _rollLabel1.text = 'Roll Value:';
+    _rollLabel1.className = 'is-unselectable';
+    _buttons.add(_rollLabel1);
+
+    _rollLabel2 = new LabelElement();
+    _rollLabel2.text = null;
+    _rollLabel2.text = 'none';
+    _rollLabel2.className = 'is-unselectable';
+    _buttons.add(_rollLabel2);
 
     _rollDiceButton = new ButtonElement();
     _rollDiceButton.text = 'Roll Dice';
@@ -170,40 +183,46 @@ class App {
     _buttons.add(_rollDiceButton);
 
     _buyPropertyButton = new ButtonElement();
-    _buyPropertyButton.text = 'Buy Tile';
-    _buyPropertyButton.classes = _constructButtonClasses('is-static');
+    _buyPropertyButton.text = 'Buy Property';
+    _buyPropertyButton.classes = _constructButtonClasses('is-info');
+    _buyPropertyButton.disabled = true;
     _buyPropertyButton.onClick.listen(_handleBuyProperty);
     _buttons.add(_buyPropertyButton);
 
     _auctionPropertyButton = new ButtonElement();
-    _auctionPropertyButton.text = 'Auction Tile';
-    _auctionPropertyButton.classes = _constructButtonClasses('is-static');
+    _auctionPropertyButton.text = 'Auction Property';
+    _auctionPropertyButton.classes = _constructButtonClasses('is-info');
+    _auctionPropertyButton.disabled = true;
     _auctionPropertyButton.onClick.listen(_handleAuctionProperty);
     _buttons.add(_auctionPropertyButton);
 
-    _endTurnButton = new ButtonElement();
-    _endTurnButton.text = 'End Turn';
-    _endTurnButton.classes = _constructButtonClasses('is-danger');
-    _endTurnButton.onClick.listen(_handleEndTurn);
-    _buttons.add(_endTurnButton);
-
     _mortgagePropertyButton = new ButtonElement();
-    _mortgagePropertyButton.text = 'Mortgage Tile';
-    _mortgagePropertyButton.classes = _constructButtonClasses('is-static');
+    _mortgagePropertyButton.text = 'Mortgage Property';
+    _mortgagePropertyButton.classes = _constructButtonClasses('is-info');
+    _mortgagePropertyButton.disabled = true;
     _mortgagePropertyButton.onClick.listen(_handleMortgageProperty);
     _buttons.add(_mortgagePropertyButton);
 
     _buyBuildingButton = new ButtonElement();
     _buyBuildingButton.text = 'Buy Buildings';
     _buyBuildingButton.classes = _constructButtonClasses('is-info');
+    _buyBuildingButton.disabled = true;
     _buyBuildingButton.onClick.listen(_handleBuyBuilding);
     _buttons.add(_buyBuildingButton);
 
     _sellBuildingButton = new ButtonElement();
-    _sellBuildingButton.text = 'Trade Buildings';
-    _sellBuildingButton.classes = _constructButtonClasses('is-static');
+    _sellBuildingButton.text = 'Sell Buildings';
+    _sellBuildingButton.classes = _constructButtonClasses('is-info');
+    _sellBuildingButton.disabled = true;
     _sellBuildingButton.onClick.listen(_handleTradeBuilding);
     _buttons.add(_sellBuildingButton);
+
+    _endTurnButton = new ButtonElement();
+    _endTurnButton.text = 'End Turn';
+    _endTurnButton.disabled = true;
+    _endTurnButton.classes = _constructButtonClasses('is-danger');
+    _endTurnButton.onClick.listen(_handleEndTurn);
+    _buttons.add(_endTurnButton);
   }
 
   _constructButtonClasses(String extraClasses, [String extraClassTwo = "a"]) =>
@@ -222,29 +241,61 @@ class App {
   //
 
   _updateButtons() {
+    //update roll button
+    if (!_shouldRollAgain)
+      _rollDiceButton.disabled = true;
+    else
+      _rollDiceButton.disabled = false;
+
+    //update buy property button
     Tile curTile = _board.tiles[_activePlayer.position];
     if (curTile.owner == null &&
         (curTile.type == 'Street' ||
             curTile.type == 'Railroad' ||
             curTile.type == 'Utility')) {
-      _buyPropertyButton.classes = _constructButtonClasses('is-info');
-    } else {
-      _buyPropertyButton.classes = _constructButtonClasses('is-static');
+      _buyPropertyButton.disabled = false;
     }
-    if (_activePlayer.ownedTiles.length > 0) {
-      _mortgagePropertyButton.classes = _constructButtonClasses('is-info');
+    else {
+      _buyPropertyButton.disabled = true;
     }
+
+    //update mortgage button
+    if (_activePlayer.ownedTiles.length > 0)
+      _mortgagePropertyButton.disabled = false;
+    else
+      _mortgagePropertyButton.disabled = true;
+
+    //update buy building button
+    bool canBuild = false;
+    for(Tile tile in _activePlayer.ownedTiles) {
+      print(tile.name);
+      if (tile.isInMonopoly) {
+        canBuild = true;
+        print('hello');
+        break;
+      }
+    }
+    if(canBuild)
+      _buyBuildingButton.disabled = false;
+    else
+      _buyBuildingButton.disabled = true;
+
+    //update end turn button
+    if(_shouldRollAgain)
+      _endTurnButton.disabled = true;
+    else
+      _endTurnButton.disabled = false;
   }
 
   _handleRollDice(_) {
-    int rollDieOne = random.nextInt(6) + 1;
-    int rollDieTwo = random.nextInt(6) + 1;
+    int rollDieOne = _random.nextInt(6) + 1;
+    int rollDieTwo = _random.nextInt(6) + 1;
     int rollValue = rollDieOne + rollDieTwo;
     // Sets should roll again if
     _shouldRollAgain = rollDieOne == rollDieTwo;
     _activePlayer.move(rollValue);
-    _statusLabel.text =
-        "Rolled ${_shouldRollAgain ? 'double' : 'a'} ${_shouldRollAgain ? rollDieOne.toString() + '\'s' : rollDieOne + rollDieTwo}";
+    _rollLabel2.text =
+        "${_shouldRollAgain ? 'Double' : '     '} ${_shouldRollAgain ? rollDieOne.toString() + '\'s' : rollDieOne.toString() + '&' + rollDieTwo.toString()}";
     _updateButtons();
   }
 
@@ -255,6 +306,7 @@ class App {
 
   _handleEndTurn(_) {
     _nextPlayer();
+    _shouldRollAgain = true;
     _updateButtons();
   }
 

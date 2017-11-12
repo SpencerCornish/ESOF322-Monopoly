@@ -45,15 +45,19 @@ class Player {
 
   void updateMonopoly(Tile tile) {
     List<Tile> count = new List<Tile>();
+    var tileColor = tile.color;
     for (Tile curTile in _ownedTiles) {
-      if (curTile.color == _color) {
+      if (curTile.color == tileColor) {
         count.add(curTile);
       }
-      if (count.length == tile.totalNum) {
-        for (Tile newMonopTile in count) newMonopTile.isInMonopoly = true;
-      }
+    }
+    if (count.length == tile.totalNum) {
+      for (Tile newMonopTile in count)
+        newMonopTile.isInMonopoly = true;
+    }
+    else {
       for (Tile curTile in _board.tiles) {
-        if (curTile.color == _color) {
+        if (curTile.color == tileColor) {
           curTile.isInMonopoly = false;
         }
       }
@@ -71,7 +75,6 @@ class Player {
     tile.owner = this;
     _ownedTiles.add(tile);
     _money -= tile.price;
-    for (int i = 0; i < _ownedTiles.length; i++) print(_ownedTiles[i].name);
   }
 
   mortgageTile(Tile tile) {
@@ -151,10 +154,11 @@ class Player {
         (_board.x + _board.tileWidth * 1.75 + _number * _board.tileWidth * 1.25)
             .toInt();
     int infoY = (_board.y + _board.tileHeight * 2).toInt();
-    ctx.fillStyle = 'black';
+    ctx.fillStyle = _color;
     ctx.font = 'bold 14pt sans-serif';
     ctx.fillText(_name, infoX, infoY); //display "player name"
 
+    ctx.fillStyle = 'black';
     ctx.font = '10pt sans-serif';
     ctx.fillText("Money: ", infoX, infoY + 20); //display "Money:"
     ctx.font = 'bold 10pt sans-serif';
