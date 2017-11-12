@@ -5,6 +5,8 @@ import 'dart:async';
 import '../player/player.dart';
 import '../board/board.dart';
 import '../tiles/tile.dart';
+import '../modal_builder/modal_builder.dart';
+import '../../data/constants.dart';
 
 void main() {
   App app = new App();
@@ -59,6 +61,11 @@ class App {
   ButtonElement _mortgagePropertyButton;
   ButtonElement _buyBuildingButton;
   ButtonElement _sellBuildingButton;
+
+  ////////////////////
+  // Modal Variables
+  ////////////////////
+  ModalBuilder _modalComponent;
 
   App() {
     // Instantiate a board, init variables
@@ -320,79 +327,37 @@ class App {
     _updateButtons();
   }
 
-  _handleAuctionProperty(_) {
-    print("Auctioning not yet implemented!");
+  _handleAuctionProperty(_) async {
+    _modalComponent = await new ModalBuilder.auctionModal(
+        "Auction", _board.tiles[_activePlayer.position], _playerList, _activePlayer);
     _updateButtons();
   }
 
-  _handleMortgageProperty(_) {
-    _displayListModal("Choose a tile to Mortgage", _activePlayer.ownedTiles, _handleMortgage, mortgage: true);
-    //_updateButtons();
+  _handleMortgageProperty(_) async {
+    //_displayListModal
+    _modalComponent = new ModalBuilder.listModal("Choose a tile - Mortgage", _activePlayer.ownedTiles, _handleMortgage,
+        mortgage: true);
+    _updateButtons();
   }
 
-  _handleBuyBuilding(_) {
-    _displayListModal("Choose a tile to build upon", _activePlayer.ownedTiles, _handleBuildingPurchase,
+  _handleBuyBuilding(_) async {
+    _modalComponent = new ModalBuilder.listModal(
+        "Choose a tile - Buy Building", _activePlayer.ownedBuildableTiles, _handleBuildingPurchase,
         showNumBuildings: true);
+    _updateButtons();
   }
 
-  _handleSellBuilding(_) {
-    _displayListModal("Choose a tile to sell a building", _activePlayer.ownedTiles, _handleBuildingSell,
+  _handleSellBuilding(_) async {
+    _modalComponent = new ModalBuilder.listModal(
+        "Choose a tile - Sell Building", _activePlayer.ownedBuildableTiles, _handleBuildingSell,
         showNumBuildings: true);
+
+    _updateButtons();
   }
 
   ////////////
   /// Modal handlers
   ////////////
-
-  String _displayListModal(String title, List<Tile> selectionList, Function onClickFunction,
-      {bool showNumBuildings = false, bool mortgage = false}) {
-    // Core modal elements
-    Element modal = querySelector('.modal');
-    Element modalBackground = querySelector('.modal-background');
-    Element closeButton = querySelector('.delete');
-
-    // User defined modal elements
-    Element modalTitle = querySelector('.modal-card-title');
-    Element modalTable = querySelector('.modal-table-sel');
-
-    // Set the Title String
-    modalTitle.text = title;
-    // Set the modal to visible
-    modal.className = "modal is-active";
-    String tableItems = _buildNodes(selectionList, modalTable, onClickFunction, showNumBuildings, mortgage);
-
-    // Closing handlers
-    closeButton.onClick.listen((e) {
-      modal.className = "modal";
-      modalTable.children.clear();
-    });
-    modalBackground.onClick.listen((e) {
-      modal.className = "modal";
-      modalTable.children.clear();
-    });
-  }
-
-  _buildNodes(List<Tile> tileList, Element modalTable, Function onClickFunction, bool showNumBuildings, bool mortgage) {
-    NodeValidatorBuilder validator = new NodeValidatorBuilder.common();
-    validator.allowInlineStyles();
-    NodeTreeSanitizer sanitizer = new NodeTreeSanitizer(validator);
-    for (Tile tile in tileList) {
-      modalTable.insertAdjacentHtml(
-          "beforeend",
-          """
-          <tr>
-            <th><a class="button is-static is-small" style="background-color:${tile.color}"><span class="icon is-small">
-            <td class="is-unselectable">${tile.name}</td>
-            <td><p class="has-text-${mortgage ? 'success' : 'danger'} is-unselectable">\$${mortgage ? tile.mortgageCost : tile.buildPrice}</p></td>
-            ${showNumBuildings ? '<td><p class="is-unselectable">${tile.numBuildings} Building${tile.numBuildings == 1 ? '' : 's'}</p></td>' : '' }
-            <td><a class="button is-small is-info is-outlined tile-action-${tile.hashCode}">Select</a></td>
-          </tr>
-          """,
-          treeSanitizer: sanitizer);
-      LinkElement button = querySelector('.tile-action-${tile.hashCode}');
-      button.onClick.listen(onClickFunction);
-    }
-  }
 
   // Modal click handlers
 
@@ -400,8 +365,9 @@ class App {
     Element target = event.target;
     for (Tile tile in _activePlayer.ownedTiles)
       if (target.classes.contains("tile-action-${tile.hashCode}")) {
-        _activePlayer.mortgageTile(tile);
-        _closeModal();
+        _activePlayer.toggleMortgage(tile);
+        _modalComponent.closeModal();
+        _modalComponent = null;
       }
   }
 
@@ -410,7 +376,8 @@ class App {
     for (Tile tile in _activePlayer.ownedTiles)
       if (target.classes.contains("tile-action-${tile.hashCode}")) {
         _activePlayer.buyBuilding(tile, 1);
-        _closeModal();
+        _modalComponent.closeModal();
+        _modalComponent = null;
       }
   }
 
@@ -419,12 +386,8 @@ class App {
     for (Tile tile in _activePlayer.ownedTiles)
       if (target.classes.contains("tile-action-${tile.hashCode}")) {
         _activePlayer.sellBuilding(tile);
-        _closeModal();
+        _modalComponent.closeModal();
+        _modalComponent = null;
       }
-  }
-
-  _closeModal() {
-    Element closeButton = querySelector('.delete');
-    closeButton?.click();
   }
 }
