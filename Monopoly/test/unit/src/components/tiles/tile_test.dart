@@ -70,6 +70,7 @@ void main() {
     group("calcRent()", () {
       test("works correctly for a property", () {
         //test the tile's calcRent() method on a property tile
+        expect(testProperty.currentRent, testProperty.baseRent);
         testProperty.calcRent(5);
         expect(testProperty.currentRent, testProperty.baseRent);
         testProperty.addBuilding();
@@ -116,6 +117,7 @@ void main() {
         info.add("0");
         info.add("0");
         Tile testRailroad = new Tile(info, 1, 1, 1, 1);
+        expect(testRailroad.currentRent, testRailroad.baseRent);
         testRailroad.setOwner(testPlayer);
         testRailroad.calcRent(0);
         expect(testRailroad.currentRent, testRailroad.baseRent);

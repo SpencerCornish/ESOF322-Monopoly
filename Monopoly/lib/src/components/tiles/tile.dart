@@ -51,6 +51,7 @@ class Tile {
     this._isMortgaged = false;
     this._isInMonopoly = false;
     this._numBuildings = 0;
+    this._currentRent = this._baseRent;
   }
 
   //Getters

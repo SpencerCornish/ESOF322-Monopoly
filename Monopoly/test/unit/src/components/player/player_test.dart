@@ -38,6 +38,7 @@ void main() {
     });
     test("move() works correctly", () {
       //tests the move function
+      expect(testPlayer.position, 0);
       testPlayer.move(3);
       expect(testPlayer.position, 3);
       testPlayer.move(38);
@@ -49,6 +50,8 @@ void main() {
     });
     test("buyTile() works correctly", () {
       //tests the buy tile function
+      expect(testPlayer.ownedTiles.length, 0);
+      expect(testProperty.owner, null);
       testPlayer.buyTile(testProperty);
       expect(testProperty.owner, testPlayer);
       expect(testPlayer.ownedTiles.elementAt(0), testProperty);
@@ -63,6 +66,8 @@ void main() {
     });
     test("buyBuilding() works correctly", () {
       //tests the building purchase function
+      expect(testProperty.numBuildings, 0);
+      expect(testPlayer.money, 1500);
       testPlayer.buyBuilding(testProperty, 3);
       expect(testProperty.numBuildings, 0);
       expect(testPlayer.money, 1500);
@@ -75,6 +80,8 @@ void main() {
     });
     test("sellBuilding() works correctly", () {
       //tests the building sale function
+      expect(testPlayer.money, 1500);
+      expect(testProperty.numBuildings, 0);
       testProperty.isInMonopoly = true;
       testPlayer.buyBuilding(testProperty, 1);
       testPlayer.sellBuilding(testProperty);
@@ -83,12 +90,15 @@ void main() {
     });
     test("setName() works correctly", () {
       //tests the name setter function
+      expect(testPlayer.name, "John Doe");
       testPlayer.name = "Ada Lovelace";
       expect(testPlayer.name, "Ada Lovelace");
     });
     test("payRent() works correctly", () {
       //tests the rent payment function
+      expect(testPlayer.money, 1500);
       Player testOwner = new Player("Groot", 5, 2, "Brown", null);
+      expect(testOwner.money, 1500);
       testPlayer.payRent(testOwner, testProperty, 5);
       expect(testPlayer.money, 1498);
       expect(testOwner.money, 1502);

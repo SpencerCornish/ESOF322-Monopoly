@@ -14,7 +14,7 @@ class Player {
   int _money;
   int _numDoubles = 0;
   int _currentLocation = 0;
-  List<Tile> _ownedTiles;
+  List<Tile> _ownedTiles = new List<Tile>();
   int _numRailroads = 0;
   int _numUtilities = 0;
 
@@ -31,7 +31,6 @@ class Player {
 
   Player(this._name, this._size, this._number, this._color, this._board) {
     _money = 1500;
-    _ownedTiles = new List<Tile>();
   }
 
   //player rolls dice and moves position

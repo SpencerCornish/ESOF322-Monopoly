@@ -7,7 +7,7 @@ void main() {
     testBoard = new Board();
   });
   group("Board", () {
-    test("returns true if readInfo() reads correctly", () {
+    test("readInfo() reads correctly", () {
       List<String> list = testBoard.readInfo();
       expect(list.elementAt(0), "Go");
       expect(list.elementAt(7), "0");
