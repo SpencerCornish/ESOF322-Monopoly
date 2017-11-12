@@ -93,6 +93,7 @@ class Player {
         }
       } else if (tile.numBuildings == 4) {
         //build hotel
+        //check if conditions are met to build hotel (check each color tile for 4 buildings)
         _money -= tile.buildPrice; //subtract build price
         tile.addBuilding(); //add a building to count on tile
       } else {

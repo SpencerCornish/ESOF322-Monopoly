@@ -63,9 +63,23 @@ void main() {
     });
     test("buyBuilding() works correctly", () {
       //tests the building purchase function
+      testPlayer.buyBuilding(testProperty, 3);
+      expect(testProperty.numBuildings, 0);
+      expect(testPlayer.money, 1500);
+      testProperty.isInMonopoly = true;
+      testPlayer.buyBuilding(testProperty, 3);
+      expect(testProperty.numBuildings, 3);
+      expect(testPlayer.money, 1350);
+      testPlayer.buyBuilding(testProperty, 2);
+      expect(testProperty.numBuildings, 3);
     });
     test("sellBuilding() works correctly", () {
       //tests the building sale function
+      testProperty.isInMonopoly = true;
+      testPlayer.buyBuilding(testProperty, 1);
+      testPlayer.sellBuilding(testProperty);
+      expect(testPlayer.money, 1475);
+      expect(testProperty.numBuildings, 0);
     });
     test("setName() works correctly", () {
       //tests the name setter function
@@ -85,9 +99,6 @@ void main() {
   });
 
   /*
-  Player testMove;
-  Player testGetOutOfJail;
-  Player testPayRent;
   Player testSellDeed;
   */
 }
