@@ -274,7 +274,6 @@ class App {
     //update buy building button
     bool canBuild = false;
     for (Tile tile in _activePlayer.ownedTiles) {
-      print(tile.name);
       if (tile.isInMonopoly) {
         canBuild = true;
         break;

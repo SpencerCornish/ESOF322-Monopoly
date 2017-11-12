@@ -70,7 +70,6 @@ class Player {
       updateMonopoly(tile);
     }
     tile.owner = this;
-    print(tile.owner.name);
     _ownedTiles.add(tile);
     _money -= tile.price;
   }
@@ -111,7 +110,6 @@ class Player {
 
   int payRent(Player owner, Tile tile, int rollValue) {
     int rent = tile.calcRent(rollValue);
-    print(rent);
     _money -= rent;
     owner._money += rent;
     return rent;
