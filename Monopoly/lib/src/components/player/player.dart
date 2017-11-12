@@ -15,7 +15,6 @@ class Player {
   int _numDoubles = 0;
   int _currentLocation = 0;
   List<Tile> _ownedTiles;
-  int _rollValue;
   int _numRailroads = 0;
   int _numUtilities = 0;
 
@@ -73,6 +72,7 @@ class Player {
       updateMonopoly(tile);
     }
     tile.owner = this;
+    print(tile.owner.name);
     _ownedTiles.add(tile);
     _money -= tile.price;
   }
@@ -111,10 +111,12 @@ class Player {
     _name = n;
   }
 
-  void payRent(Player owner, Player renter, Tile tile) {
-    int _rent = tile.calcRent(_rollValue);
-    renter._money -= _rent;
-    owner._money += _rent;
+  int payRent(Player owner, Tile tile, int rollValue) {
+    int rent = tile.calcRent(rollValue);
+    print(rent);
+    _money -= rent;
+    owner._money += rent;
+    return rent;
   }
 
   void tradeProperty(Player seller, Player buyer, Tile tile, int tradeAmount) {
@@ -140,14 +142,15 @@ class Player {
   }
 
   void draw(CanvasRenderingContext2D ctx) {
-    //draw player color on board
+    //draw player token on board
     ctx.fillStyle = _color;
-    ctx.fillRect(
-        ((_number + 1) / 8) * _board.tileWidth +
-            _board.tiles[_currentLocation].x,
-        (1 / 2) * _board.tileHeight + _board.tiles[_currentLocation].y,
-        _size,
-        _size);
+
+    ctx.beginPath();
+    ctx.arc(((_number + 1) / 8) * _board.tileWidth +
+        _board.tiles[_currentLocation].x, (2 / 5) * _board.tileHeight + _board.tiles[_currentLocation].y,
+        _size/2, 0, PI*2);
+    ctx.closePath();
+    ctx.fill();
 
     //draw player info inside of board area
     int infoX =

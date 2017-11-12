@@ -50,6 +50,7 @@ class Tile {
     this._numberOwned = 0;
     this._isMortgaged = false;
     this._isInMonopoly = false;
+    this._numBuildings = 0;
   }
 
   // Getters
@@ -155,9 +156,14 @@ class Tile {
 
     ctx.strokeRect(_x, _y, _width, _height); //draw tile boarder
     ctx.fillRect(_x, _y, _width, _height); //draw tile color
+
     ctx.fillStyle = 'black';
     ctx.font = '8pt sans-serif';
+    if(_owner != null)
+      ctx.fillText('Owner: ' + owner.name, _x + _width/2, _y + 7*height/10); //draw owner's name
+
+    ctx.font = 'bold 8pt sans-serif';
     ctx.fillText(name, _x + _width / 2,
-        _y + (9 * _height) / 10); //write name 9/10 of the way down the tile
+        _y + 9*height/10); //write name of tile
   }
 }

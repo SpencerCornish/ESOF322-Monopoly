@@ -47,6 +47,7 @@ class App {
   LabelElement _nameLabel;
   LabelElement _rollLabel1;
   LabelElement _rollLabel2;
+  LabelElement _infoLabel;
 
   // Top button control refs
   ButtonElement _rollDiceButton;
@@ -166,12 +167,11 @@ class App {
     _buttons.add(_nameLabel);
 
     _rollLabel1 = new LabelElement();
-    _rollLabel1.text = 'Roll Value:';
+    _rollLabel1.text = 'Dice Values:';
     _rollLabel1.className = 'is-unselectable';
     _buttons.add(_rollLabel1);
 
     _rollLabel2 = new LabelElement();
-    _rollLabel2.text = null;
     _rollLabel2.text = 'none';
     _rollLabel2.className = 'is-unselectable';
     _buttons.add(_rollLabel2);
@@ -223,6 +223,11 @@ class App {
     _endTurnButton.classes = _constructButtonClasses('is-danger');
     _endTurnButton.onClick.listen(_handleEndTurn);
     _buttons.add(_endTurnButton);
+
+    _infoLabel = new LabelElement();
+    _infoLabel.text = null;
+    _infoLabel.className = 'is-unselectable';
+    _buttons.add(_infoLabel);
   }
 
   _constructButtonClasses(String extraClasses, [String extraClassTwo = "a"]) =>
@@ -271,7 +276,6 @@ class App {
       print(tile.name);
       if (tile.isInMonopoly) {
         canBuild = true;
-        print('hello');
         break;
       }
     }
@@ -291,16 +295,24 @@ class App {
     int rollDieOne = _random.nextInt(6) + 1;
     int rollDieTwo = _random.nextInt(6) + 1;
     int rollValue = rollDieOne + rollDieTwo;
-    // Sets should roll again if
+    // Sets should roll again if the dice are the same value
     _shouldRollAgain = rollDieOne == rollDieTwo;
     _activePlayer.move(rollValue);
     _rollLabel2.text =
-        "${_shouldRollAgain ? 'Double' : '     '} ${_shouldRollAgain ? rollDieOne.toString() + '\'s' : rollDieOne.toString() + '&' + rollDieTwo.toString()}";
+        "${_shouldRollAgain ? 'Double ' + rollDieOne.toString() + '\'s' : rollDieOne.toString() + '&' + rollDieTwo.toString()}";
+
+    //pay rent if necessary
+    Tile curTile = _board.tiles[_activePlayer.position];
+    if(curTile.owner != null && curTile.owner != _activePlayer){
+      int amount = _activePlayer.payRent(curTile.owner, curTile, rollValue);
+      _infoLabel.text = 'Paid ' + curTile.owner.name + ' \$' + amount.toString() + '.';
+    }
     _updateButtons();
   }
 
   _handleBuyProperty(_) {
     _activePlayer.buyTile(_board.tiles[_activePlayer.position]);
+    _drawBackground();
     _updateButtons();
   }
 
