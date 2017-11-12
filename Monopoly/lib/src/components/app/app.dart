@@ -252,17 +252,20 @@ class App {
     else
       _rollDiceButton.disabled = false;
 
-    //update buy property button
+    //update buy property button & auction property button
     Tile curTile = _board.tiles[_activePlayer.position];
     if (curTile.owner == null &&
         (curTile.type == 'Street' ||
             curTile.type == 'Railroad' ||
             curTile.type == 'Utility')) {
       _buyPropertyButton.disabled = false;
+      _auctionPropertyButton.disabled = false;
     }
     else {
       _buyPropertyButton.disabled = true;
+      _auctionPropertyButton.disabled = true;
     }
+
 
     //update mortgage button
     if (_activePlayer.ownedTiles.length > 0)
@@ -285,7 +288,7 @@ class App {
       _buyBuildingButton.disabled = true;
 
     //update end turn button
-    if(_shouldRollAgain)
+    if(_shouldRollAgain || curTile.owner == null)
       _endTurnButton.disabled = true;
     else
       _endTurnButton.disabled = false;
