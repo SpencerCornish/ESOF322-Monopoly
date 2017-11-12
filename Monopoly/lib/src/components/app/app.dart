@@ -260,17 +260,17 @@ class App {
   }
 
   _handleMortgageProperty(_) {
-    _displayModal("Choose a tile to Mortgage", _activePlayer.ownedTiles, _handleMortgage, mortgage: true);
+    _displayListModal("Choose a tile to Mortgage", _activePlayer.ownedTiles, _handleMortgage, mortgage: true);
     //_updateButtons();
   }
 
   _handleBuyBuilding(_) {
-    _displayModal("Choose a tile to build upon", _activePlayer.ownedTiles, _handleBuildingPurchase,
+    _displayListModal("Choose a tile to build upon", _activePlayer.ownedTiles, _handleBuildingPurchase,
         showNumBuildings: true);
   }
 
   _handleSellBuilding(_) {
-    _displayModal("Choose a tile to sell a building", _activePlayer.ownedTiles, _handleBuildingSell,
+    _displayListModal("Choose a tile to sell a building", _activePlayer.ownedTiles, _handleBuildingSell,
         showNumBuildings: true);
   }
 
@@ -278,7 +278,7 @@ class App {
   /// Modal handlers
   ////////////
 
-  String _displayModal(String title, List<Tile> selectionList, Function onClickFunction,
+  String _displayListModal(String title, List<Tile> selectionList, Function onClickFunction,
       {bool showNumBuildings = false, bool mortgage = false}) {
     // Core modal elements
     Element modal = querySelector('.modal');
