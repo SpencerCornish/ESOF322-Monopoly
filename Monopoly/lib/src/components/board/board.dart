@@ -31,7 +31,6 @@ class Board {
       }
       k +=
           130; //iterate the counter for the overall string by a side of the board (bottom to left)
-      print(temp);
       tiles[i] = new Tile(temp, x + i * tileWidth, y, tileWidth,
           tileHeight); //create a new tile on bottom
       temp.clear(); //reset the tile attribute list for a new tile
@@ -41,7 +40,6 @@ class Board {
       }
       k +=
           130; //iterate the counter for the overall string by a side of the board (left to top)
-      print(temp);
       tiles[i + 10] = new Tile(temp, 10 * tileWidth + x, y + i * tileHeight,
           tileWidth, tileHeight); //create a new tile on left
       temp.clear();
@@ -51,7 +49,6 @@ class Board {
       }
       k +=
           130; //iterate the counter for the overall string by a side of the board (top to right)
-      print(temp);
       tiles[i + 20] = new Tile(
           temp,
           (10 - i) * tileWidth + x,
@@ -63,11 +60,9 @@ class Board {
       for (int j = k; j < k + 13; j++) {
         temp.add(spaces.elementAt(j));
       }
-      print(temp);
       tiles[i + 30] = new Tile(temp, x, (10 - i) * tileHeight + y, tileWidth,
           tileHeight); //create a new tile on right
     }
-    for (Tile tile in tiles) print(tile.name);
   }
 
   List<String> readInfo() {
