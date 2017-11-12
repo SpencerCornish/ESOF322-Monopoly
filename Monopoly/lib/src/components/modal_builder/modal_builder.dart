@@ -27,6 +27,7 @@ class ModalBuilder {
   Element _tileNameLabel;
   Element _currentBidLabel;
   Element _highestBidderLabel;
+  SpanElement _validationIcon;
   NumberInputElement _bidInputElement;
   ButtonElement _submitBidButton;
   ButtonElement _dropOutButton;
@@ -84,6 +85,7 @@ class ModalBuilder {
     _currentBidLabel = querySelector('.current-bid');
     _highestBidderLabel = querySelector('.bid-leader');
     _bidInputElement = querySelector('.bid-input');
+    _validationIcon = querySelector('.validation-icon');
     _submitBidButton = querySelector('.submit-bid-button');
     _dropOutButton = querySelector('.drop-out-button');
 
@@ -135,7 +137,9 @@ class ModalBuilder {
   }
 
   _validateBidInput(_) {
-    if (_bidInputElement.valueAsNumber <= _bidAmount) {}
+    if (_bidInputElement.valueAsNumber <= _bidAmount) {
+      _bidInputElement.classes.add('is-danger');
+    }
   }
 
   _submitBid(_) {

@@ -46,10 +46,13 @@ class Constants {
       Bid:
     </a>
       </p>
-      <div class="control has-icons-left">
+      <div class="control has-icons-left has-icons-right">
         <input class="input bid-input" type="number">
         <span class="icon is-small is-left">
           \$
+        </span>
+        <span class="icon is-small is-right validation-icon">
+          <i class="" aria-hidden="true"></i>
         </span>
       </div>
       <div class="control">
