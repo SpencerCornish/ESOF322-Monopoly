@@ -285,7 +285,9 @@ class App {
       _buyBuildingButton.disabled = true;
 
     //update end turn button
-    if (_shouldRollAgain || curTile.owner == null)
+    if (_shouldRollAgain || (curTile.owner == null && (curTile.type == 'Street' ||
+        curTile.type == 'Railroad' ||
+        curTile.type == 'Utility')))
       _endTurnButton.disabled = true;
     else
       _endTurnButton.disabled = false;
