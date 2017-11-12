@@ -337,8 +337,7 @@ class App {
   }
 
   _handleBuyBuilding(_) {
-    _activePlayer.buyBuilding(_board.tiles[_activePlayer.position],
-        4); //ask player for number they want to build
+    _activePlayer.buyBuilding(_board.tiles[_activePlayer.position]);
     // _displayModal(".mortgage-modal");
     _updateButtons();
   }
