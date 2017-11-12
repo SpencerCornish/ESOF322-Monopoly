@@ -51,10 +51,8 @@ class Player {
       }
     }
     if (count.length == tile.totalNum) {
-      for (Tile newMonopTile in count)
-        newMonopTile.isInMonopoly = true;
-    }
-    else {
+      for (Tile newMonopTile in count) newMonopTile.isInMonopoly = true;
+    } else {
       for (Tile curTile in _board.tiles) {
         if (curTile.color == tileColor) {
           curTile.isInMonopoly = false;
@@ -144,11 +142,14 @@ class Player {
   void draw(CanvasRenderingContext2D ctx) {
     //draw player token on board
     ctx.fillStyle = _color;
-
     ctx.beginPath();
-    ctx.arc(((_number + 1) / 8) * _board.tileWidth +
-        _board.tiles[_currentLocation].x, (2 / 5) * _board.tileHeight + _board.tiles[_currentLocation].y,
-        _size/2, 0, PI*2);
+    ctx.arc(
+        ((_number + 1) / 8) * _board.tileWidth +
+            _board.tiles[_currentLocation].x,
+        (2 / 5) * _board.tileHeight + _board.tiles[_currentLocation].y,
+        _size / 2,
+        0,
+        PI * 2);
     ctx.closePath();
     ctx.fill();
 

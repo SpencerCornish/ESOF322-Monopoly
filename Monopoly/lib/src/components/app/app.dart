@@ -96,7 +96,7 @@ class App {
     // Show the splash screen!
     new Timer(new Duration(seconds: 1), _beginDraw);
 
-    // Start the
+    // Start the timer for drawing the foreground canvas
     new Timer.periodic(new Duration(milliseconds: 20), (Timer t) {
       _drawForeground();
     });
@@ -260,12 +260,10 @@ class App {
             curTile.type == 'Utility')) {
       _buyPropertyButton.disabled = false;
       _auctionPropertyButton.disabled = false;
-    }
-    else {
+    } else {
       _buyPropertyButton.disabled = true;
       _auctionPropertyButton.disabled = true;
     }
-
 
     //update mortgage button
     if (_activePlayer.ownedTiles.length > 0)
@@ -275,20 +273,20 @@ class App {
 
     //update buy building button
     bool canBuild = false;
-    for(Tile tile in _activePlayer.ownedTiles) {
+    for (Tile tile in _activePlayer.ownedTiles) {
       print(tile.name);
       if (tile.isInMonopoly) {
         canBuild = true;
         break;
       }
     }
-    if(canBuild)
+    if (canBuild)
       _buyBuildingButton.disabled = false;
     else
       _buyBuildingButton.disabled = true;
 
     //update end turn button
-    if(_shouldRollAgain || curTile.owner == null)
+    if (_shouldRollAgain || curTile.owner == null)
       _endTurnButton.disabled = true;
     else
       _endTurnButton.disabled = false;
@@ -306,9 +304,10 @@ class App {
 
     //pay rent if necessary
     Tile curTile = _board.tiles[_activePlayer.position];
-    if(curTile.owner != null && curTile.owner != _activePlayer){
+    if (curTile.owner != null && curTile.owner != _activePlayer) {
       int amount = _activePlayer.payRent(curTile.owner, curTile, rollValue);
-      _infoLabel.text = 'Paid ' + curTile.owner.name + ' \$' + amount.toString() + '.';
+      _infoLabel.text =
+          'Paid ' + curTile.owner.name + ' \$' + amount.toString() + '.';
     }
     _updateButtons();
   }

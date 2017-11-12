@@ -159,11 +159,12 @@ class Tile {
 
     ctx.fillStyle = 'black';
     ctx.font = '8pt sans-serif';
-    if(_owner != null)
-      ctx.fillText('Owner: ' + owner.name, _x + _width/2, _y + 7*height/10); //draw owner's name
+    if (_owner != null)
+      ctx.fillText('Owner: ' + owner.name, _x + _width / 2,
+          _y + 7 * height / 10); //draw owner's name
 
     ctx.font = 'bold 8pt sans-serif';
-    ctx.fillText(name, _x + _width / 2,
-        _y + 9*height/10); //write name of tile
+    ctx.fillText(
+        name, _x + _width / 2, _y + 9 * height / 10); //write name of tile
   }
 }
