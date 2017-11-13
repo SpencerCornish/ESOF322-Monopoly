@@ -264,6 +264,10 @@ class App {
       _buyPropertyButton.disabled = true;
       _auctionPropertyButton.disabled = true;
     }
+    //if player doesn't have enough money
+    if(_activePlayer.money < curTile.price){
+      _buyPropertyButton.disabled = true;
+    }
 
     //update mortgage button
     if (_activePlayer.ownedTiles.length > 0)
