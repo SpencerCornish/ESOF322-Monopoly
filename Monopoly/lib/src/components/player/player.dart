@@ -122,28 +122,6 @@ class Player {
     return rent;
   }
 
-  void tradeProperty(Player seller, Player buyer, Tile tile, int tradeAmount) {
-    //TODO trade tile for tile
-    //TODO trade hybrid for tile
-    this._ownedTiles.remove(tile);
-
-    seller._money += tradeAmount;
-
-    buyer.buyTile(tile);
-    buyer._money -= tradeAmount;
-
-    if (tile.isMortgaged) {
-      String _choice;
-      switch (_choice) {
-        case 'repay mortgage':
-          _money -= tile.mortgageCost;
-          break;
-        case 'keep mortgaged':
-          _money -= (tile.mortgageCost * 0.9).round();
-      }
-    }
-  }
-
   void draw(CanvasRenderingContext2D ctx) {
     //draw player token on board
     ctx.fillStyle = _color;
