@@ -33,6 +33,9 @@ class App {
   Random _random;
   bool _isStarted;
   bool _shouldRollAgain;
+  int _turnNum;
+  int _turnLimit;
+  bool _gameOver;
 
   ////////////////////
   // Canvas/Draw Variables
@@ -46,6 +49,7 @@ class App {
 
   List<HtmlElement> _buttons;
 
+  LabelElement _turnLabel;
   LabelElement _nameLabel;
   LabelElement _rollLabel1;
   LabelElement _rollLabel2;
@@ -56,6 +60,7 @@ class App {
   ButtonElement _buyPropertyButton;
   ButtonElement _auctionPropertyButton;
   ButtonElement _endTurnButton;
+  ButtonElement _exampleButton;
 
   // Bottom button control refs
   ButtonElement _mortgagePropertyButton;
@@ -72,6 +77,11 @@ class App {
     _board = new Board();
     _isStarted = false;
     _random = new Random.secure();
+    _turnNum = 1;
+    _turnLimit = 10;
+    _gameOver = false;
+    _shouldRollAgain = true;
+
     _playerList = new List<Player>();
 
     _playerList.add(new Player("Bryan", 10, 0, 'blue', _board));
@@ -142,10 +152,27 @@ class App {
     // Check to see if we need to go back to the start of the playerlist
     if (newIndex == _playerList.length) {
       newIndex = 0;
+      _turnNum++;
+      _turnLabel.text = "Turn: " + _turnNum.toString();
+    }
+    if(_turnNum > _turnLimit) {
+      _gameOver = true;
+      _calcWinner();
+      updateButtons();
+      return;
     }
     _activePlayer = _playerList[newIndex];
     _nameLabel.text = _activePlayer.name;
     _rollLabel2.text = 'none';
+  }
+
+  _calcWinner(){
+    Player winner = _playerList[0];
+    for(Player player in _playerList) {
+      if(player.money > winner.money)
+        winner = player;
+    }
+    _infoLabel.text = "Winner: " + winner.name;
   }
 
   _constructRenderingContext() {
@@ -171,6 +198,11 @@ class App {
     _nameLabel.text = _playerList[0].name;
     _nameLabel.className = 'nameLabel';
     _buttons.add(_nameLabel);
+
+    _turnLabel = new LabelElement();
+    _turnLabel.text = "Turn: " + _turnNum.toString();
+    _turnLabel.className = 'is-unselectable';
+    _buttons.add(_turnLabel);
 
     _rollLabel1 = new LabelElement();
     _rollLabel1.text = 'Dice Values:';
@@ -230,6 +262,13 @@ class App {
     _endTurnButton.onClick.listen(_handleEndTurn);
     _buttons.add(_endTurnButton);
 
+    _exampleButton = new ButtonElement();
+    _exampleButton.text = 'Setup Example';
+    _exampleButton.disabled = false;
+    _exampleButton.classes = _constructButtonClasses('is-warning');
+    _exampleButton.onClick.listen(_handleExampleSetup);
+    _buttons.add(_exampleButton);
+
     _infoLabel = new LabelElement();
     _infoLabel.text = null;
     _infoLabel.className = 'is-unselectable';
@@ -251,6 +290,18 @@ class App {
   //
 
   updateButtons() {
+    //if game is over make all buttons disabled
+    if(_gameOver){
+      _rollDiceButton.disabled = true;
+      _buyPropertyButton.disabled = true;
+      _auctionPropertyButton.disabled = true;
+      _mortgagePropertyButton.disabled = true;
+      _buyBuildingButton.disabled = true;
+      _sellBuildingButton.disabled = true;
+      _endTurnButton.disabled = true;
+      return;
+    }
+
     //update roll button
     if (!_shouldRollAgain)
       _rollDiceButton.disabled = true;
@@ -345,10 +396,10 @@ class App {
   }
 
   _handleEndTurn(_) {
-    _nextPlayer();
     _shouldRollAgain = true;
     _infoLabel.text = null;
     updateButtons();
+    _nextPlayer();
   }
 
   _handleAuctionProperty(_) {
@@ -421,5 +472,14 @@ class App {
         _modalComponent.closeModal();
         _modalComponent = null;
       }
+  }
+
+  _handleExampleSetup(_){
+    _playerList[0].buyTile(_board.tiles[1], 0);
+    _playerList[0].buyTile(_board.tiles[3], 0);
+    _board.tiles[1].addBuilding();
+    _board.tiles[3].addBuilding();
+    drawBackground();
+    updateButtons();
   }
 }

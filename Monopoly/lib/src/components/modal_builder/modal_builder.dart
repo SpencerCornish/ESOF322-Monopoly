@@ -64,7 +64,7 @@ class ModalBuilder {
           validator: _basicValidator);
 
       // Add a listener to the button
-      LinkElement button = querySelector('.tile-action-${tile.hashCode}');
+      Element button = querySelector('.tile-action-${tile.hashCode}');
       button.onClick.listen(onClickFunction);
     }
     // Closing handlers
