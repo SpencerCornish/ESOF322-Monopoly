@@ -12,7 +12,6 @@ class Player {
   int _size;
   // Token Type: Enum here?
   double _money;
-  int _numDoubles = 0;
   int _currentLocation = 0;
   List<Tile> _ownedTiles;
   int _numRailroads = 0;
@@ -64,6 +63,10 @@ class Player {
 
   // Optional parameter is only used when a tile is won in an auction
   void buyTile(Tile tile, [int fromAuction]) {
+    tile.owner = this;
+    _ownedTiles.add(tile);
+    _money -= fromAuction ?? tile.price;
+
     if (tile.type == 'Railroad') {
       _numRailroads++;
     } else if (tile.type == 'Utility') {
@@ -71,9 +74,6 @@ class Player {
     } else if (tile.type == 'Street') {
       updateMonopoly(tile);
     }
-    tile.owner = this;
-    _ownedTiles.add(tile);
-    _money -= fromAuction ?? tile.price;
   }
 
   toggleMortgage(Tile tile) {
@@ -97,11 +97,8 @@ class Player {
         //build hotel
         _money -= tile.buildPrice; //subtract build price
         tile.addBuilding(); //add a building to count on tile
-      } else {
-        print("ERROR: Max number of buildings reached. You cannot build anymore on this property");
       }
-    } else
-      print("ERROR: Property not in a monopoly. You can not build");
+    }
   }
 
   void sellBuilding(Tile tile) {

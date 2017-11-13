@@ -114,9 +114,6 @@ class Tile {
           return _rent4;
         } else if (_numBuildings == 5) {
           return _rent5;
-        } else {
-          String error = 'error';
-          print(error);
         }
         break;
 
@@ -129,9 +126,6 @@ class Tile {
           return 100;
         } else if (owner.numRailroads == 3) {
           return 200;
-        } else {
-          String error = 'error';
-          print(error);
         }
         break;
 
@@ -154,10 +148,10 @@ class Tile {
     ctx.fillRect(_x, _y, _width, _height); //draw tile color
 
     //draw indicator if tile is mortgaged
-    if(_isMortgaged) {
+    if (_isMortgaged) {
       ctx.fillStyle = 'black';
       ctx.font = '14pt sans-serif';
-      ctx.fillText('M', _x + 9*_width/10, _y + _height/5);
+      ctx.fillText('M', _x + 9 * _width / 10, _y + _height / 5);
     }
 
     //draw owner's name

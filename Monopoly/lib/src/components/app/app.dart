@@ -303,7 +303,7 @@ class App {
     if (canSellBuildings)
       _sellBuildingButton.disabled = false;
     else
-      _buyBuildingButton.disabled = true;
+      _sellBuildingButton.disabled = true;
 
     //update end turn button
     if (_shouldRollAgain ||
@@ -370,10 +370,8 @@ class App {
   _handleBuyBuilding(_) {
     List<Tile> filteredList = new List<Tile>();
     for (Tile tile in _activePlayer.ownedTiles) {
-      print(tile.isInMonopoly);
-      if (tile.isInMonopoly) filteredList.add(tile);
+      if (tile.isInMonopoly && tile.numBuildings < 5) filteredList.add(tile);
     }
-    print(filteredList);
     _modalComponent = new ModalBuilder.listModal(
         "Choose a tile - Buy Building", filteredList, _handleBuildingPurchase, this,
         showNumBuildings: true);
@@ -385,7 +383,6 @@ class App {
     for (Tile tile in _activePlayer.ownedTiles) {
       if (tile.numBuildings > 0) filteredList.add(tile);
     }
-    print(filteredList);
     _modalComponent = new ModalBuilder.listModal(
         "Choose a tile - Sell Building", filteredList, _handleBuildingSell, this,
         showNumBuildings: true);
