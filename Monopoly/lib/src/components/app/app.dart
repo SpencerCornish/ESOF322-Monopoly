@@ -6,10 +6,9 @@ import '../player/player.dart';
 import '../board/board.dart';
 import '../tiles/tile.dart';
 import '../modal_builder/modal_builder.dart';
-import '../../data/constants.dart';
 
 void main() {
-  App app = new App();
+  new App();
 }
 
 class App {
@@ -111,7 +110,7 @@ class App {
     });
 
     // Show the splash screen!
-    new Timer(new Duration(seconds: 1), _beginDraw);
+    new Timer(new Duration(seconds: 3), _beginDraw);
 
     // Start the timer for drawing the foreground canvas
     new Timer.periodic(new Duration(milliseconds: 20), (Timer t) {
@@ -156,7 +155,7 @@ class App {
       _turnNum++;
       _turnLabel.text = "Turn: " + _turnNum.toString();
     }
-    if(_turnNum > _turnLimit) {
+    if (_turnNum > _turnLimit) {
       _gameOver = true;
       _calcWinner();
       updateButtons();
@@ -167,11 +166,10 @@ class App {
     _rollLabel2.text = 'none';
   }
 
-  _calcWinner(){
+  _calcWinner() {
     Player winner = _playerList[0];
-    for(Player player in _playerList) {
-      if(player.money > winner.money)
-        winner = player;
+    for (Player player in _playerList) {
+      if (player.money > winner.money) winner = player;
     }
     _infoLabel.text = "Winner: " + winner.name;
   }
@@ -293,7 +291,7 @@ class App {
 
   updateButtons() {
     //if game is over make all buttons disabled
-    if(_gameOver){
+    if (_gameOver) {
       _rollDiceButton.disabled = true;
       _buyPropertyButton.disabled = true;
       _auctionPropertyButton.disabled = true;
@@ -487,7 +485,7 @@ class App {
       }
   }
 
-  _handleExampleSetup(_){
+  _handleExampleSetup(_) {
     _playerList[0].buyTile(_board.tiles[1], 0);
     _playerList[0].buyTile(_board.tiles[3], 0);
     _board.tiles[1].addBuilding();
