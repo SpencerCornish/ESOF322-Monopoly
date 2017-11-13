@@ -124,7 +124,4 @@ void main() {
       });
     });
   });
-  /*
-  Tile testAuction;
-  */
 }

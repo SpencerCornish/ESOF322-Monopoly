@@ -82,8 +82,6 @@ void main() {
       testPlayer.buyBuilding(testProperty);
       expect(testProperty.numBuildings, 4);
       expect(testPlayer.money, 1300);
-      testPlayer.buyBuilding(testProperty);
-      expect(testProperty.numBuildings, 4);
     });
     test("sellBuilding() works correctly", () {
       //tests the building sale function
@@ -110,12 +108,5 @@ void main() {
       expect(testPlayer.money, 1498);
       expect(testOwner.money, 1502);
     });
-    test("tradeProperty() works correctly", () {
-      //tests the property trade function
-    });
   });
-
-  /*
-  Player testSellDeed;
-  */
 }
