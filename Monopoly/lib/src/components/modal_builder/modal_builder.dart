@@ -34,7 +34,7 @@ class ModalBuilder {
   ButtonElement _submitBidButton;
   ButtonElement _dropOutButton;
 
-  ModalBuilder.listModal(this._title, List<Tile> selectionList, Function onClickFunction,
+  ModalBuilder.listModal(this._title, List<Tile> selectionList, Function onClickFunction, this._app,
       {bool showNumBuildings = false, bool mortgage = false}) {
     _modalBody.appendHtml(Constants.tileListTableModal, validator: _basicValidator);
 
@@ -201,7 +201,8 @@ class ModalBuilder {
   _closeModal(MouseEvent e) {
     _modal.className = "modal";
     _modalBody.children.clear();
-    _app?.updateButtons();
+    _app.updateButtons();
+    _app.drawBackground();
   }
 
   // HTML Validator required for Modal construction

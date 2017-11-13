@@ -100,7 +100,7 @@ class App {
       _canvasForeground.height = window.innerHeight;
 
       _board.resize();
-      _drawBackground();
+      drawBackground();
     });
 
     // Show the splash screen!
@@ -131,7 +131,7 @@ class App {
     }
   }
 
-  _drawBackground() {
+  drawBackground() {
     _ctxBackground.clearRect(0, 0, window.innerWidth, window.innerHeight);
     _board.draw(_ctxBackground);
   }
@@ -270,6 +270,10 @@ class App {
       _buyPropertyButton.disabled = true;
       _auctionPropertyButton.disabled = true;
     }
+    //if player doesn't have enough money
+    if (_activePlayer.money < curTile.price) {
+      _buyPropertyButton.disabled = true;
+    }
 
     //update mortgage button
     if (_activePlayer.ownedTiles.length > 0)
@@ -326,18 +330,27 @@ class App {
       int amount = _activePlayer.payRent(curTile.owner, curTile, rollValue);
       _infoLabel.text = 'Paid ' + curTile.owner.name + ' \$' + amount.toString() + '.';
     }
+    //display cost if unowned
+    else if (curTile.owner == null &&
+        (curTile.type == 'Street' || curTile.type == 'Railroad' || curTile.type == 'Utility'))
+      _infoLabel.text = 'Cost: \$' + curTile.price.toString();
+    //otherwise display nothing
+    else {
+      _infoLabel.text = null;
+    }
     updateButtons();
   }
 
   _handleBuyProperty(_) {
     _activePlayer.buyTile(_board.tiles[_activePlayer.position]);
-    _drawBackground();
+    drawBackground();
     updateButtons();
   }
 
   _handleEndTurn(_) {
     _nextPlayer();
     _shouldRollAgain = true;
+    _infoLabel.text = null;
     updateButtons();
   }
 
@@ -348,7 +361,8 @@ class App {
 
   _handleMortgageProperty(_) {
     //_displayListModal
-    _modalComponent = new ModalBuilder.listModal("Choose a tile - Mortgage", _activePlayer.ownedTiles, _handleMortgage,
+    _modalComponent = new ModalBuilder.listModal(
+        "Choose a tile - Mortgage", _activePlayer.ownedTiles, _handleMortgage, this,
         mortgage: true);
     updateButtons();
   }
@@ -360,7 +374,8 @@ class App {
       if (tile.isInMonopoly) filteredList.add(tile);
     }
     print(filteredList);
-    _modalComponent = new ModalBuilder.listModal("Choose a tile - Buy Building", filteredList, _handleBuildingPurchase,
+    _modalComponent = new ModalBuilder.listModal(
+        "Choose a tile - Buy Building", filteredList, _handleBuildingPurchase, this,
         showNumBuildings: true);
     updateButtons();
   }
@@ -371,7 +386,8 @@ class App {
       if (tile.numBuildings > 0) filteredList.add(tile);
     }
     print(filteredList);
-    _modalComponent = new ModalBuilder.listModal("Choose a tile - Sell Building", filteredList, _handleBuildingSell,
+    _modalComponent = new ModalBuilder.listModal(
+        "Choose a tile - Sell Building", filteredList, _handleBuildingSell, this,
         showNumBuildings: true);
 
     updateButtons();
@@ -397,7 +413,7 @@ class App {
     Element target = event.target;
     for (Tile tile in _activePlayer.ownedTiles)
       if (target.classes.contains("tile-action-${tile.hashCode}")) {
-        _activePlayer.buyBuilding(tile, 1);
+        _activePlayer.buyBuilding(tile);
         _modalComponent.closeModal();
         _modalComponent = null;
       }

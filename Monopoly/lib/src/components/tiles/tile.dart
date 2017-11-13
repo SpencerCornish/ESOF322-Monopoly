@@ -94,6 +94,8 @@ class Tile {
 
   //calulates the rent for each type of tile
   calcRent(int rollVal) {
+    if (_isMortgaged) return 0;
+
     switch (_type) {
       case 'Street':
         if (_numBuildings == 0) {
@@ -140,12 +142,6 @@ class Tile {
           return rollVal * 10;
         }
         break;
-
-      case 'mortgaged':
-        if (_isMortgaged) {
-          return null;
-        }
-        break;
     }
   }
 
@@ -157,11 +153,24 @@ class Tile {
     ctx.strokeRect(_x, _y, _width, _height); //draw tile boarder
     ctx.fillRect(_x, _y, _width, _height); //draw tile color
 
+    //draw owner's name
     ctx.fillStyle = 'black';
     ctx.font = '8pt sans-serif';
     if (_owner != null) ctx.fillText('Owner: ' + owner.name, _x + _width / 2, _y + 7 * height / 10); //draw owner's name
 
+    //write name of tile
     ctx.font = 'bold 8pt sans-serif';
-    ctx.fillText(name, _x + _width / 2, _y + 9 * height / 10); //write name of tile
+    ctx.fillText(name, _x + _width / 2, _y + 9 * height / 10);
+
+    //draw buildings
+    if (numBuildings == 5) {
+      ctx.fillStyle = 'red';
+      ctx.fillRect(_x + _width / 2 - 10, y + height / 10, 20, 10);
+    } else {
+      for (int i = 0; i < numBuildings; i++) {
+        ctx.fillStyle = 'green';
+        ctx.fillRect(_x + ((i + 1) / 5) * _width - 5, _y + height / 10, 10, 10);
+      }
+    }
   }
 }
