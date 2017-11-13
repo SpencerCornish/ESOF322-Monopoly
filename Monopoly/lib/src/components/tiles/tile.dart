@@ -94,8 +94,7 @@ class Tile {
 
   //calulates the rent for each type of tile
   calcRent(int rollVal) {
-    if (_isMortgaged)
-      return 0;
+    if (_isMortgaged) return 0;
 
     switch (_type) {
       case 'Street':
@@ -115,9 +114,6 @@ class Tile {
           return _rent4;
         } else if (_numBuildings == 5) {
           return _rent5;
-        } else {
-          String error = 'error';
-          print(error);
         }
         break;
 
@@ -130,9 +126,6 @@ class Tile {
           return 100;
         } else if (owner.numRailroads == 3) {
           return 200;
-        } else {
-          String error = 'error';
-          print(error);
         }
         break;
 
@@ -155,33 +148,29 @@ class Tile {
     ctx.fillRect(_x, _y, _width, _height); //draw tile color
 
     //draw indicator if tile is mortgaged
-    if(_isMortgaged) {
+    if (_isMortgaged) {
       ctx.fillStyle = 'black';
       ctx.font = '14pt sans-serif';
-      ctx.fillText('M', _x + 9*_width/10, _y + _height/5);
+      ctx.fillText('M', _x + 9 * _width / 10, _y + _height / 5);
     }
 
     //draw owner's name
     ctx.fillStyle = 'black';
     ctx.font = '8pt sans-serif';
-    if (_owner != null)
-      ctx.fillText('Owner: ' + owner.name, _x + _width / 2,
-          _y + 7 * height / 10);
+    if (_owner != null) ctx.fillText('Owner: ' + owner.name, _x + _width / 2, _y + 7 * height / 10); //draw owner's name
 
     //write name of tile
     ctx.font = 'bold 8pt sans-serif';
-    ctx.fillText(
-        name, _x + _width / 2, _y + 9 * height / 10);
+    ctx.fillText(name, _x + _width / 2, _y + 9 * height / 10);
 
     //draw buildings
-    if(numBuildings == 5){
+    if (numBuildings == 5) {
       ctx.fillStyle = 'red';
-      ctx.fillRect(_x + _width/2 - 10, y + height/10, 20, 10);
-    }
-    else {
+      ctx.fillRect(_x + _width / 2 - 10, y + height / 10, 20, 10);
+    } else {
       for (int i = 0; i < numBuildings; i++) {
         ctx.fillStyle = 'green';
-        ctx.fillRect(_x + ((i+1)/5)*_width-5, _y + height/10, 10, 10);
+        ctx.fillRect(_x + ((i + 1) / 5) * _width - 5, _y + height / 10, 10, 10);
       }
     }
   }
