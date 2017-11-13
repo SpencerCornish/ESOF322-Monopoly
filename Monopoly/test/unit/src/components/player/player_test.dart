@@ -1,13 +1,15 @@
 import "package:test/test.dart";
 import "package:monopoly/src/components/player/player.dart";
 import "package:monopoly/src/components/tiles/tile.dart";
+import "package:monopoly/src/components/board/board.dart";
 
 void main() {
   Player testPlayer;
   Tile testProperty;
+  Board testBoard = new Board();
 
   setUp(() {
-    testPlayer = new Player("John Doe", 1, 1, "Cyan", null);
+    testPlayer = new Player("John Doe", 1, 1, "Cyan", testBoard);
     List<String> info = new List<String>();
     info.add('Mediterranean Avenue');
     info.add('Street');
@@ -32,7 +34,7 @@ void main() {
       expect(testPlayer.size, 1);
       expect(testPlayer.number, 1);
       expect(testPlayer.color, "Cyan");
-      expect(testPlayer.board, null);
+      expect(testPlayer.board, testBoard);
       expect(testPlayer.money, 1500);
       expect(testPlayer.ownedTiles.length, 0);
     });
@@ -60,7 +62,7 @@ void main() {
     test("mortgage() works correctly", () {
       //tests the mortgage function
       expect(testProperty.isMortgaged, false);
-      testPlayer.mortgageTile(testProperty);
+      testPlayer.toggleMortgage(testProperty);
       expect(testProperty.isMortgaged, true);
       expect(testPlayer.money, 1530);
     });

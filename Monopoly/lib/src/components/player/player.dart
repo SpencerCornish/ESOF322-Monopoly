@@ -11,17 +11,15 @@ class Player {
   String _color;
   int _size;
   // Token Type: Enum here?
-  int _money;
-  int _numDoubles = 0;
+  double _money;
   int _currentLocation = 0;
   List<Tile> _ownedTiles = new List<Tile>();
   int _numRailroads = 0;
   int _numUtilities = 0;
 
-  int get money => _money;
+  double get money => _money;
   String get name => _name;
   int get position => _currentLocation;
-  List<Tile> get ownedTiles => _ownedTiles;
   int get numRailroads => _numRailroads;
   int get numUtilities => _numUtilities;
   int get size => _size;
@@ -29,8 +27,11 @@ class Player {
   String get color => _color;
   Board get board => _board;
 
+  List<Tile> get ownedTiles => _ownedTiles;
+
   Player(this._name, this._size, this._number, this._color, this._board) {
-    _money = 1500;
+    _money = 1500.0;
+    _ownedTiles = new List<Tile>();
   }
 
   //player rolls dice and moves position
@@ -64,7 +65,12 @@ class Player {
     }
   }
 
-  void buyTile(Tile tile) {
+  // Optional parameter is only used when a tile is won in an auction
+  void buyTile(Tile tile, [int fromAuction]) {
+    tile.owner = this;
+    _ownedTiles.add(tile);
+    _money -= fromAuction ?? tile.price;
+
     if (tile.type == 'Railroad') {
       _numRailroads++;
     } else if (tile.type == 'Utility') {
@@ -72,14 +78,17 @@ class Player {
     } else if (tile.type == 'Street') {
       updateMonopoly(tile);
     }
-    tile.owner = this;
-    _ownedTiles.add(tile);
-    _money -= tile.price;
   }
 
-  void mortgageTile(Tile tile) {
-    tile.isMortgaged = true;
-    _money += tile.mortgageCost;
+  toggleMortgage(Tile tile) {
+    // If mortgaged, unmortgage the tile
+    if (tile.isMortgaged) {
+      tile.isMortgaged = false;
+      _money -= (tile.mortgageCost * 1.10);
+    } else {
+      tile.isMortgaged = true;
+      _money += tile.mortgageCost;
+    }
   }
 
   void buyBuilding(Tile tile) {
@@ -93,12 +102,8 @@ class Player {
         //check if conditions are met to build hotel (check each color tile for 4 buildings)
         _money -= tile.buildPrice; //subtract build price
         tile.addBuilding(); //add a building to count on tile
-      } else {
-        print(
-            "ERROR: Max number of buildings reached. You cannot build anymore on this property");
       }
-    } else
-      print("ERROR: Property not in a monopoly. You can not build");
+    }
   }
 
   void sellBuilding(Tile tile) {
@@ -166,8 +171,8 @@ class Player {
     ctx.font = '10pt sans-serif';
     ctx.fillText("Money: ", infoX, infoY + 20); //display "Money:"
     ctx.font = 'bold 10pt sans-serif';
-    ctx.fillText(
-        '\$' + _money.toString(), infoX, infoY + 37); //display amount of money
+    ctx.fillText('\$' + _money.toStringAsFixed(2), infoX,
+        infoY + 37); //display amount of money
 
     ctx.font = '10pt sans-serif';
     ctx.fillText(
