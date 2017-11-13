@@ -1,14 +1,17 @@
 import "package:test/test.dart";
-//import "package:monopoly/src/components/board/board.dart";
+import "package:monopoly/src/components/board/board.dart";
 
 void main() {
-  setUp(() async {
-// Board board = new Board();
+  Board testBoard;
+  setUp(() {
+    testBoard = new Board();
   });
-  group("some group", () {
-    test("some asyncronous test", () async {
-      bool someBool = true;
-      expect(someBool, isTrue);
+  group("Board", () {
+    test("readInfo() reads correctly", () {
+      List<String> list = testBoard.readInfo();
+      expect(list.elementAt(0), "Go");
+      expect(list.elementAt(7), "0");
+      expect(list.elementAt(14), "Street");
     });
   });
 }

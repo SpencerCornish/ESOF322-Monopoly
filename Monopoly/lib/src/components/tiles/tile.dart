@@ -20,8 +20,8 @@ class Tile {
       _width,
       _height, //width and height of tile in pixels
       _numberOwned, //number of this type of tile the owner owns
-      _numBuildings, //number of buildings owned
-      _currentRent; //current rent of property
+      _numBuildings, //number of buildings built on the property
+      _currentRent; //rent multiplier currently
 
   bool _isMortgaged, //if this tile is mortgaged
       _isInMonopoly; //if the owner owns all tiles of this type
@@ -51,14 +51,14 @@ class Tile {
     this._isMortgaged = false;
     this._isInMonopoly = false;
     this._numBuildings = 0;
+    this._currentRent = this._baseRent;
   }
 
-  // Getters
+  //Getters
   //general
   String get name => _name;
   String get color => _color;
   String get type => _type;
-  bool get isInMonopoly => _isInMonopoly;
   int get mortgageCost => _mortgageCost;
   bool get isMortgaged => _isMortgaged;
   int get price => _price;
@@ -66,11 +66,26 @@ class Tile {
   int get y => _y;
   int get width => _width;
   int get height => _height;
-  Player get owner => _owner;
-  int get numBuildings => _numBuildings;
-  int get totalNum => _totalNum;
+  int get position => _position;
   //property specific
   int get buildPrice => _buildPrice;
+  bool get isInMonopoly => _isInMonopoly;
+  int get baseRent => _baseRent;
+  int get totalNum => _totalNum;
+  int get rent1 => _rent1;
+  int get rent2 => _rent2;
+  int get rent3 => _rent3;
+  int get rent4 => _rent4;
+  int get rent5 => _rent5;
+  int get currentRent => _currentRent;
+  int get numBuildings => _numBuildings;
+  Player get owner => _owner;
+
+  // Setter for setting owner
+  setOwner(Player newOwner) {
+    _owner = newOwner;
+    _numberOwned++; //update this counter for all the same color
+  }
 
   // Setter for setting owner
   set owner(Player newOwner) => _owner = newOwner;
@@ -90,6 +105,7 @@ class Tile {
 
   addBuilding() {
     _numBuildings++;
+    calcRent(0);
   }
 
   //calulates the rent for each type of tile
@@ -97,46 +113,61 @@ class Tile {
     if (_isMortgaged) return 0;
 
     switch (_type) {
-      case 'Street':
-        if (_numBuildings == 0) {
-          if (_isInMonopoly) {
-            return _baseRent * 2;
+      case "Street":
+        {
+          if (_numBuildings == 0) {
+            if (_isInMonopoly) {
+              _currentRent = _baseRent * 2;
+            } else
+              _currentRent = _baseRent;
+          } else if (_numBuildings == 1) {
+            _currentRent = rent1;
+          } else if (_numBuildings == 2) {
+            _currentRent = rent2;
+          } else if (_numBuildings == 3) {
+            _currentRent = rent3;
+          } else if (_numBuildings == 4) {
+            _currentRent = rent4;
+          } else if (_numBuildings == 5) {
+            _currentRent = rent5;
           } else {
-            return _baseRent;
+            String error = 'error';
+            print(error);
           }
-        } else if (_numBuildings == 1) {
-          return _rent1;
-        } else if (_numBuildings == 2) {
-          return _rent2;
-        } else if (_numBuildings == 3) {
-          return _rent3;
-        } else if (_numBuildings == 4) {
-          return _rent4;
-        } else if (_numBuildings == 5) {
-          return _rent5;
+          break;
         }
-        break;
-
-      case 'Railroad':
-        if (owner.numRailroads == 1) {
-          return _baseRent;
-        } else if (owner.numRailroads == 2) {
-          return 50;
-        } else if (owner.numRailroads == 3) {
-          return 100;
-        } else if (owner.numRailroads == 3) {
-          return 200;
+      case "Railroad":
+        {
+          if (_numberOwned == 1) {
+            _currentRent = _baseRent;
+          } else if (_numberOwned == 2) {
+            _currentRent = 50;
+          } else if (_numberOwned == 3) {
+            _currentRent = 100;
+          } else if (_numberOwned == 4) {
+            _currentRent = 200;
+          } else {
+            String error = 'error';
+            print(error);
+          }
+          break;
         }
-        break;
-
-      case 'Utility':
-        if (owner.numUtilities == 1) {
-          return rollVal * 4;
-        } else if (owner.numUtilities == 2) {
-          return rollVal * 10;
+      case "Utility":
+        {
+          if (_numberOwned == 1) {
+            _currentRent = rollVal * 4;
+          } else if (_numberOwned == 2) {
+            _currentRent = rollVal * 10;
+          }
+          break;
         }
-        break;
+      default:
+        {
+          _currentRent = 0;
+          break;
+        }
     }
+    return _currentRent;
   }
 
   draw(CanvasRenderingContext2D ctx) {
@@ -157,7 +188,9 @@ class Tile {
     //draw owner's name
     ctx.fillStyle = 'black';
     ctx.font = '8pt sans-serif';
-    if (_owner != null) ctx.fillText('Owner: ' + owner.name, _x + _width / 2, _y + 7 * height / 10); //draw owner's name
+    if (_owner != null)
+      ctx.fillText('Owner: ' + owner.name, _x + _width / 2,
+          _y + 7 * height / 10); //draw owner's name
 
     //write name of tile
     ctx.font = 'bold 8pt sans-serif';

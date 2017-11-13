@@ -13,7 +13,7 @@ class Player {
   // Token Type: Enum here?
   double _money;
   int _currentLocation = 0;
-  List<Tile> _ownedTiles;
+  List<Tile> _ownedTiles = new List<Tile>();
   int _numRailroads = 0;
   int _numUtilities = 0;
 
@@ -22,6 +22,10 @@ class Player {
   int get position => _currentLocation;
   int get numRailroads => _numRailroads;
   int get numUtilities => _numUtilities;
+  int get size => _size;
+  int get number => _number;
+  String get color => _color;
+  Board get board => _board;
 
   List<Tile> get ownedTiles => _ownedTiles;
 
@@ -95,6 +99,7 @@ class Player {
         tile.addBuilding(); //add a building count on tile
       } else if (tile.numBuildings == 4) {
         //build hotel
+        //check if conditions are met to build hotel (check each color tile for 4 buildings)
         _money -= tile.buildPrice; //subtract build price
         tile.addBuilding(); //add a building to count on tile
       }
@@ -143,13 +148,20 @@ class Player {
     //draw player token on board
     ctx.fillStyle = _color;
     ctx.beginPath();
-    ctx.arc(((_number + 1) / 8) * _board.tileWidth + _board.tiles[_currentLocation].x,
-        (2 / 5) * _board.tileHeight + _board.tiles[_currentLocation].y, _size / 2, 0, PI * 2);
+    ctx.arc(
+        ((_number + 1) / 8) * _board.tileWidth +
+            _board.tiles[_currentLocation].x,
+        (2 / 5) * _board.tileHeight + _board.tiles[_currentLocation].y,
+        _size / 2,
+        0,
+        PI * 2);
     ctx.closePath();
     ctx.fill();
 
     //draw player info inside of board area
-    int infoX = (_board.x + _board.tileWidth * 1.75 + _number * _board.tileWidth * 1.25).toInt();
+    int infoX =
+        (_board.x + _board.tileWidth * 1.75 + _number * _board.tileWidth * 1.25)
+            .toInt();
     int infoY = (_board.y + _board.tileHeight * 2).toInt();
     ctx.fillStyle = _color;
     ctx.font = 'bold 14pt sans-serif';
@@ -159,15 +171,18 @@ class Player {
     ctx.font = '10pt sans-serif';
     ctx.fillText("Money: ", infoX, infoY + 20); //display "Money:"
     ctx.font = 'bold 10pt sans-serif';
-    ctx.fillText('\$' + _money.toStringAsFixed(2), infoX, infoY + 37); //display amount of money
+    ctx.fillText('\$' + _money.toStringAsFixed(2), infoX,
+        infoY + 37); //display amount of money
 
     ctx.font = '10pt sans-serif';
-    ctx.fillText("Properties Owned:", infoX, infoY + 55); //display "Properties Owned:"
+    ctx.fillText(
+        "Properties Owned:", infoX, infoY + 55); //display "Properties Owned:"
     ctx.font = '10pt sans-serif';
 
     for (Tile tile in _ownedTiles) {
       //display owned properties
-      ctx.fillText(tile.name, infoX, infoY + 70 + _ownedTiles.indexOf(tile) * 15);
+      ctx.fillText(
+          tile.name, infoX, infoY + 70 + _ownedTiles.indexOf(tile) * 15);
     }
   }
 }
