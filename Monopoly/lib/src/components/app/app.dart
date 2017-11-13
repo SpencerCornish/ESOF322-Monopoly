@@ -264,6 +264,10 @@ class App {
       _buyPropertyButton.disabled = true;
       _auctionPropertyButton.disabled = true;
     }
+    //if player doesn't have enough money
+    if(_activePlayer.money < curTile.price){
+      _buyPropertyButton.disabled = true;
+    }
 
     //update mortgage button
     if (_activePlayer.ownedTiles.length > 0)
@@ -310,6 +314,15 @@ class App {
       _infoLabel.text =
           'Paid ' + curTile.owner.name + ' \$' + amount.toString() + '.';
     }
+    //display cost if unowned
+    else if(curTile.owner == null && (curTile.type == 'Street' ||
+        curTile.type == 'Railroad' ||
+        curTile.type == 'Utility'))
+      _infoLabel.text = 'Cost: \$' + curTile.price.toString();
+    //otherwise display nothing
+    else{
+      _infoLabel.text = null;
+    }
     _updateButtons();
   }
 
@@ -322,6 +335,7 @@ class App {
   _handleEndTurn(_) {
     _nextPlayer();
     _shouldRollAgain = true;
+    _infoLabel.text = null;
     _updateButtons();
   }
 
@@ -337,8 +351,7 @@ class App {
   }
 
   _handleBuyBuilding(_) {
-    _activePlayer.buyBuilding(_board.tiles[_activePlayer.position],
-        4); //ask player for number they want to build
+    _activePlayer.buyBuilding(_board.tiles[_activePlayer.position]);
     // _displayModal(".mortgage-modal");
     _updateButtons();
   }
