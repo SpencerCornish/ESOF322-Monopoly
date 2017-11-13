@@ -6,10 +6,9 @@ import '../player/player.dart';
 import '../board/board.dart';
 import '../tiles/tile.dart';
 import '../modal_builder/modal_builder.dart';
-import '../../data/constants.dart';
 
 void main() {
-  App app = new App();
+  new App();
 }
 
 class App {
@@ -111,7 +110,7 @@ class App {
     });
 
     // Show the splash screen!
-    new Timer(new Duration(seconds: 1), _beginDraw);
+    new Timer(new Duration(seconds: 3), _beginDraw);
 
     // Start the timer for drawing the foreground canvas
     new Timer.periodic(new Duration(milliseconds: 20), (Timer t) {
@@ -123,7 +122,8 @@ class App {
     _ctxBackground.clearRect(0, 0, window.innerWidth, window.innerHeight);
     _ctxForeground.clearRect(0, 0, window.innerWidth, window.innerHeight);
     querySelector('#output').text = '';
-    for (HtmlElement button in _buttons) querySelector('.top-button-container').children.add(button);
+    for (HtmlElement button in _buttons)
+      querySelector('.top-button-container').children.add(button);
     _board.draw(_ctxBackground);
     querySelector('#output').text = '';
     _isStarted = true;
@@ -155,7 +155,7 @@ class App {
       _turnNum++;
       _turnLabel.text = "Turn: " + _turnNum.toString();
     }
-    if(_turnNum > _turnLimit) {
+    if (_turnNum > _turnLimit) {
       _gameOver = true;
       _calcWinner();
       updateButtons();
@@ -166,11 +166,10 @@ class App {
     _rollLabel2.text = 'none';
   }
 
-  _calcWinner(){
+  _calcWinner() {
     Player winner = _playerList[0];
-    for(Player player in _playerList) {
-      if(player.money > winner.money)
-        winner = player;
+    for (Player player in _playerList) {
+      if (player.money > winner.money) winner = player;
     }
     _infoLabel.text = "Winner: " + winner.name;
   }
@@ -275,7 +274,8 @@ class App {
     _buttons.add(_infoLabel);
   }
 
-  _constructButtonClasses(String extraClasses, [String extraClassTwo = "a"]) => [
+  _constructButtonClasses(String extraClasses, [String extraClassTwo = "a"]) =>
+      [
         'button',
         'is-success',
         'padded',
@@ -291,7 +291,7 @@ class App {
 
   updateButtons() {
     //if game is over make all buttons disabled
-    if(_gameOver){
+    if (_gameOver) {
       _rollDiceButton.disabled = true;
       _buyPropertyButton.disabled = true;
       _auctionPropertyButton.disabled = true;
@@ -311,7 +311,9 @@ class App {
     //update buy property button & auction property button
     Tile curTile = _board.tiles[_activePlayer.position];
     if (curTile.owner == null &&
-        (curTile.type == 'Street' || curTile.type == 'Railroad' || curTile.type == 'Utility')) {
+        (curTile.type == 'Street' ||
+            curTile.type == 'Railroad' ||
+            curTile.type == 'Utility')) {
       _buyPropertyButton.disabled = false;
       _auctionPropertyButton.disabled = false;
     } else {
@@ -356,7 +358,9 @@ class App {
     //update end turn button
     if (_shouldRollAgain ||
         (curTile.owner == null &&
-            (curTile.type == 'Street' || curTile.type == 'Railroad' || curTile.type == 'Utility')))
+            (curTile.type == 'Street' ||
+                curTile.type == 'Railroad' ||
+                curTile.type == 'Utility')))
       _endTurnButton.disabled = true;
     else
       _endTurnButton.disabled = false;
@@ -376,11 +380,14 @@ class App {
     Tile curTile = _board.tiles[_activePlayer.position];
     if (curTile.owner != null && curTile.owner != _activePlayer) {
       int amount = _activePlayer.payRent(curTile.owner, curTile, rollValue);
-      _infoLabel.text = 'Paid ' + curTile.owner.name + ' \$' + amount.toString() + '.';
+      _infoLabel.text =
+          'Paid ' + curTile.owner.name + ' \$' + amount.toString() + '.';
     }
     //display cost if unowned
     else if (curTile.owner == null &&
-        (curTile.type == 'Street' || curTile.type == 'Railroad' || curTile.type == 'Utility'))
+        (curTile.type == 'Street' ||
+            curTile.type == 'Railroad' ||
+            curTile.type == 'Utility'))
       _infoLabel.text = 'Cost: \$' + curTile.price.toString();
     //otherwise display nothing
     else {
@@ -403,14 +410,15 @@ class App {
   }
 
   _handleAuctionProperty(_) {
-    new ModalBuilder.auctionModal("Auction", _board.tiles[_activePlayer.position], _playerList, _activePlayer, this);
+    new ModalBuilder.auctionModal("Auction",
+        _board.tiles[_activePlayer.position], _playerList, _activePlayer, this);
     updateButtons();
   }
 
   _handleMortgageProperty(_) {
     //_displayListModal
-    _modalComponent = new ModalBuilder.listModal(
-        "Choose a tile - Mortgage", _activePlayer.ownedTiles, _handleMortgage, this,
+    _modalComponent = new ModalBuilder.listModal("Choose a tile - Mortgage",
+        _activePlayer.ownedTiles, _handleMortgage, this,
         mortgage: true);
     updateButtons();
   }
@@ -420,8 +428,8 @@ class App {
     for (Tile tile in _activePlayer.ownedTiles) {
       if (tile.isInMonopoly && tile.numBuildings < 5) filteredList.add(tile);
     }
-    _modalComponent = new ModalBuilder.listModal(
-        "Choose a tile - Buy Building", filteredList, _handleBuildingPurchase, this,
+    _modalComponent = new ModalBuilder.listModal("Choose a tile - Buy Building",
+        filteredList, _handleBuildingPurchase, this,
         showNumBuildings: true);
     updateButtons();
   }
@@ -432,7 +440,10 @@ class App {
       if (tile.numBuildings > 0) filteredList.add(tile);
     }
     _modalComponent = new ModalBuilder.listModal(
-        "Choose a tile - Sell Building", filteredList, _handleBuildingSell, this,
+        "Choose a tile - Sell Building",
+        filteredList,
+        _handleBuildingSell,
+        this,
         showNumBuildings: true);
 
     updateButtons();
@@ -474,7 +485,7 @@ class App {
       }
   }
 
-  _handleExampleSetup(_){
+  _handleExampleSetup(_) {
     _playerList[0].buyTile(_board.tiles[1], 0);
     _playerList[0].buyTile(_board.tiles[3], 0);
     _board.tiles[1].addBuilding();
