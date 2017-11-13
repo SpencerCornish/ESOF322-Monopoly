@@ -153,6 +153,13 @@ class Tile {
     ctx.strokeRect(_x, _y, _width, _height); //draw tile boarder
     ctx.fillRect(_x, _y, _width, _height); //draw tile color
 
+    //draw indicator if tile is mortgaged
+    if(_isMortgaged) {
+      ctx.fillStyle = 'black';
+      ctx.font = '14pt sans-serif';
+      ctx.fillText('M', _x + 9*_width/10, _y + _height/5);
+    }
+
     //draw owner's name
     ctx.fillStyle = 'black';
     ctx.font = '8pt sans-serif';
