@@ -47,17 +47,55 @@ void main() {
       expect(testPlayer.position, 1);
       expect(testPlayer.money, 1700);
     });
-    test("updateMonopoly() works correctly", () {
-      //tests the monopoly update function
-    });
     test("buyTile() works correctly", () {
       //tests the buy tile function
+      //test with property
       expect(testPlayer.ownedTiles.length, 0);
       expect(testProperty.owner, null);
       testPlayer.buyTile(testProperty);
       expect(testProperty.owner, testPlayer);
       expect(testPlayer.ownedTiles.elementAt(0), testProperty);
       expect(testPlayer.money, 1440);
+      //test with utility
+      List<String> info = new List<String>();
+      info.add("Water Works");
+      info.add("Utility");
+      info.add("None");
+      info.add("28");
+      info.add("150");
+      info.add("0");
+      info.add("4");
+      info.add("0");
+      info.add("0");
+      info.add("0");
+      info.add("0");
+      info.add("0");
+      info.add("0");
+      Tile testUtility = new Tile(info, 1, 1, 1, 1);
+      testPlayer.buyTile(testUtility);
+      expect(testUtility.owner, testPlayer);
+      expect(testPlayer.ownedTiles.elementAt(1), testUtility);
+      expect(testPlayer.money, 1290);
+      //test with railroad
+      info = new List<String>();
+      info.add("Short Line");
+      info.add("Railroad");
+      info.add("None");
+      info.add("35");
+      info.add("200");
+      info.add("0");
+      info.add("25");
+      info.add("0");
+      info.add("0");
+      info.add("0");
+      info.add("0");
+      info.add("0");
+      info.add("0");
+      Tile testRailroad = new Tile(info, 1, 1, 1, 1);
+      testPlayer.buyTile(testRailroad);
+      expect(testRailroad.owner, testPlayer);
+      expect(testPlayer.ownedTiles.elementAt(2), testRailroad);
+      expect(testPlayer.money, 1090);
     });
     test("mortgage() works correctly", () {
       //tests the mortgage function
@@ -65,6 +103,9 @@ void main() {
       testPlayer.toggleMortgage(testProperty);
       expect(testProperty.isMortgaged, true);
       expect(testPlayer.money, 1530);
+      testPlayer.toggleMortgage(testProperty);
+      expect(testProperty.isMortgaged, false);
+      expect(testPlayer.money, 1497);
     });
     test("buyBuilding() works correctly", () {
       //tests the building purchase function
