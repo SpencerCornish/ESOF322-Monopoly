@@ -58,7 +58,7 @@ class Constants {
       <div class="control">
         <button class="button is-info submit-bid-button">
           <span class="icon is-small is-right">
-            <i class="fa fa-check"></i>
+            <i class="fa fa-arrow-right"></i>
           </span>
 
         </button>

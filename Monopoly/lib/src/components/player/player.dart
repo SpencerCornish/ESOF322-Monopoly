@@ -26,9 +26,6 @@ class Player {
 
   List<Tile> get ownedTiles => _ownedTiles;
 
-  /// [ownedBuildableTiles] Returns a list of owned tiles that are elligible for buildings
-  List<Tile> get ownedBuildableTiles => _ownedTiles.where((f) => f.isInMonopoly);
-
   Player(this._name, this._size, this._number, this._color, this._board) {
     _money = 1500.0;
     _ownedTiles = new List<Tile>();
@@ -65,7 +62,8 @@ class Player {
     }
   }
 
-  void buyTile(Tile tile) {
+  // Optional parameter is only used when a tile is won in an auction
+  void buyTile(Tile tile, [int fromAuction]) {
     if (tile.type == 'Railroad') {
       _numRailroads++;
     } else if (tile.type == 'Utility') {
@@ -75,7 +73,7 @@ class Player {
     }
     tile.owner = this;
     _ownedTiles.add(tile);
-    _money -= tile.price;
+    _money -= fromAuction ?? tile.price;
   }
 
   toggleMortgage(Tile tile) {

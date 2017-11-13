@@ -1,6 +1,7 @@
 import 'dart:html';
 
 import '../tiles/tile.dart';
+import '../app/app.dart';
 import '../player/player.dart';
 import '../../data/constants.dart';
 
@@ -22,6 +23,7 @@ class ModalBuilder {
   Player _currentBidder;
 
   // Auction Elements
+  App _app;
   Element _currentBidderLabel;
   Element _tileColorIcon;
   Element _tileNameLabel;
@@ -71,7 +73,9 @@ class ModalBuilder {
   }
 
   /// Builds a modal for auctioning, and handles all auction logic
-  ModalBuilder.auctionModal(this._title, this._tile, this._playerList, Player activePlayer) {
+  ModalBuilder.auctionModal(this._title, this._tile, List<Player> playerList, Player activePlayer, this._app) {
+    // Deep clone the list
+    _playerList = playerList.sublist(0);
     // Set the current bidder to the current player
     _currentBidder = activePlayer;
 
@@ -103,15 +107,13 @@ class ModalBuilder {
     _modal.className = 'modal is-active';
 
     // Validation Handlers
+    _bidInputElement.onInput.listen(_validateBidInput);
+    // Validates synthetic change events
     _bidInputElement.onChange.listen(_validateBidInput);
 
     // Button Handlers
     _submitBidButton.onClick.listen(_submitBid);
     _dropOutButton.onClick.listen(_dropOut);
-
-    // Closing handlers
-    _closeButton.onClick.listen(_closeModal);
-    _modalBackground.onClick.listen(_closeModal);
   }
 
   ////////////////
@@ -137,26 +139,37 @@ class ModalBuilder {
   }
 
   _validateBidInput(_) {
-    if (_bidInputElement.valueAsNumber <= _bidAmount) {
+    if (_bidInputElement.valueAsNumber <= _bidAmount || _bidInputElement.valueAsNumber >= _currentBidder.money) {
+      _bidInputElement.classes.remove('is-success');
       _bidInputElement.classes.add('is-danger');
+      _validationIcon.className = "fa fa-exclamation-triangle has-text-danger validation-icon";
+      _submitBidButton.disabled = true;
+    } else {
+      _bidInputElement.classes.remove('is-danger');
+      _bidInputElement.classes.add('is-success');
+      _validationIcon.className = "fa fa-check has-text-success validation-icon";
+      _submitBidButton.disabled = false;
     }
   }
 
   _submitBid(_) {
-    _bidAmount = (_bidInputElement.value as int);
+    _bidAmount = _bidInputElement.valueAsNumber;
+    _bidInputElement.valueAsNumber = _bidAmount + 10;
     _highestBidder = _currentBidder;
     _nextBidder();
   }
 
   _dropOut(_) {
-    _playerList.remove(_currentBidder);
-    if (_playerList.length == 1) {
-      // Handle a winning bid here
-    }
+    Player droppedPlayer = _currentBidder;
     _nextBidder();
+    _playerList.remove(droppedPlayer);
+    if (_playerList.length == 1) {
+      _handleWinner();
+    }
   }
 
   _nextBidder() {
+    if (_playerList.length == 0) return;
     int nextIndex = _playerList.indexOf(_currentBidder) + 1;
     if (nextIndex > _playerList.length - 1) {
       _currentBidder = _playerList.first;
@@ -166,10 +179,29 @@ class ModalBuilder {
     _updateAuctionData();
   }
 
+  _handleWinner() async {
+    _submitBidButton.disabled = true;
+    _dropOutButton.text = 'Close';
+    _bidInputElement.disabled = true;
+
+    await window.animationFrame;
+    _currentBidderLabel.text = "The winner is: ${_highestBidder.name}";
+
+    // Display the highest bidder's name, or "None" if there isn't one
+    _highestBidderLabel.text = _highestBidder?.name ?? "None";
+
+    _highestBidder.buyTile(_tile, _bidAmount);
+
+    // Closing handlers
+    _dropOutButton.onClick.listen(_closeModal);
+    _modalBackground.onClick.listen(_closeModal);
+  }
+
   /// This is required in addition to [closeModal] above to support MouseEvent callbacks
   _closeModal(MouseEvent e) {
     _modal.className = "modal";
     _modalBody.children.clear();
+    _app?.updateButtons();
   }
 
   // HTML Validator required for Modal construction

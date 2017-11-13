@@ -81,6 +81,9 @@ class App {
     _playerList.add(new Player("Katy", 10, 4, 'pink', _board));
     _playerList.add(new Player("Perry", 10, 5, 'brown', _board));
 
+    _playerList[0].buyTile(_board.tiles[1]);
+    _playerList[0].buyTile(_board.tiles[3]);
+
     // TODO: set the active player in a better way!
     _activePlayer = _playerList.first;
 
@@ -250,7 +253,7 @@ class App {
   // Button Handlers
   //
 
-  _updateButtons() {
+  updateButtons() {
     //update roll button
     if (!_shouldRollAgain)
       _rollDiceButton.disabled = true;
@@ -276,7 +279,13 @@ class App {
 
     //update buy building button
     bool canBuild = false;
+    bool canSellBuildings = false;
     for (Tile tile in _activePlayer.ownedTiles) {
+      if (tile.numBuildings > 0) {
+        canBuild = true;
+        canSellBuildings = true;
+        break;
+      }
       if (tile.isInMonopoly) {
         canBuild = true;
         break;
@@ -284,6 +293,11 @@ class App {
     }
     if (canBuild)
       _buyBuildingButton.disabled = false;
+    else
+      _buyBuildingButton.disabled = true;
+
+    if (canSellBuildings)
+      _sellBuildingButton.disabled = false;
     else
       _buyBuildingButton.disabled = true;
 
@@ -312,47 +326,55 @@ class App {
       int amount = _activePlayer.payRent(curTile.owner, curTile, rollValue);
       _infoLabel.text = 'Paid ' + curTile.owner.name + ' \$' + amount.toString() + '.';
     }
-    _updateButtons();
+    updateButtons();
   }
 
   _handleBuyProperty(_) {
     _activePlayer.buyTile(_board.tiles[_activePlayer.position]);
     _drawBackground();
-    _updateButtons();
+    updateButtons();
   }
 
   _handleEndTurn(_) {
     _nextPlayer();
     _shouldRollAgain = true;
-    _updateButtons();
+    updateButtons();
   }
 
-  _handleAuctionProperty(_) async {
-    _modalComponent = await new ModalBuilder.auctionModal(
-        "Auction", _board.tiles[_activePlayer.position], _playerList, _activePlayer);
-    _updateButtons();
+  _handleAuctionProperty(_) {
+    new ModalBuilder.auctionModal("Auction", _board.tiles[_activePlayer.position], _playerList, _activePlayer, this);
+    updateButtons();
   }
 
-  _handleMortgageProperty(_) async {
+  _handleMortgageProperty(_) {
     //_displayListModal
     _modalComponent = new ModalBuilder.listModal("Choose a tile - Mortgage", _activePlayer.ownedTiles, _handleMortgage,
         mortgage: true);
-    _updateButtons();
+    updateButtons();
   }
 
-  _handleBuyBuilding(_) async {
-    _modalComponent = new ModalBuilder.listModal(
-        "Choose a tile - Buy Building", _activePlayer.ownedBuildableTiles, _handleBuildingPurchase,
+  _handleBuyBuilding(_) {
+    List<Tile> filteredList = new List<Tile>();
+    for (Tile tile in _activePlayer.ownedTiles) {
+      print(tile.isInMonopoly);
+      if (tile.isInMonopoly) filteredList.add(tile);
+    }
+    print(filteredList);
+    _modalComponent = new ModalBuilder.listModal("Choose a tile - Buy Building", filteredList, _handleBuildingPurchase,
         showNumBuildings: true);
-    _updateButtons();
+    updateButtons();
   }
 
-  _handleSellBuilding(_) async {
-    _modalComponent = new ModalBuilder.listModal(
-        "Choose a tile - Sell Building", _activePlayer.ownedBuildableTiles, _handleBuildingSell,
+  _handleSellBuilding(_) {
+    List<Tile> filteredList = new List<Tile>();
+    for (Tile tile in _activePlayer.ownedTiles) {
+      if (tile.numBuildings > 0) filteredList.add(tile);
+    }
+    print(filteredList);
+    _modalComponent = new ModalBuilder.listModal("Choose a tile - Sell Building", filteredList, _handleBuildingSell,
         showNumBuildings: true);
 
-    _updateButtons();
+    updateButtons();
   }
 
   ////////////
