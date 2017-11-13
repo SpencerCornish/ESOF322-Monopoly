@@ -68,22 +68,27 @@ void main() {
       //tests the building purchase function
       expect(testProperty.numBuildings, 0);
       expect(testPlayer.money, 1500);
-      testPlayer.buyBuilding(testProperty, 3);
+      testPlayer.buyBuilding(testProperty);
       expect(testProperty.numBuildings, 0);
       expect(testPlayer.money, 1500);
       testProperty.isInMonopoly = true;
-      testPlayer.buyBuilding(testProperty, 3);
-      expect(testProperty.numBuildings, 3);
-      expect(testPlayer.money, 1350);
-      testPlayer.buyBuilding(testProperty, 2);
-      expect(testProperty.numBuildings, 3);
+      testPlayer.buyBuilding(testProperty);
+      expect(testProperty.numBuildings, 1);
+      expect(testPlayer.money, 1450);
+      testPlayer.buyBuilding(testProperty);
+      testPlayer.buyBuilding(testProperty);
+      testPlayer.buyBuilding(testProperty);
+      expect(testProperty.numBuildings, 4);
+      expect(testPlayer.money, 1300);
+      testPlayer.buyBuilding(testProperty);
+      expect(testProperty.numBuildings, 4);
     });
     test("sellBuilding() works correctly", () {
       //tests the building sale function
       expect(testPlayer.money, 1500);
       expect(testProperty.numBuildings, 0);
       testProperty.isInMonopoly = true;
-      testPlayer.buyBuilding(testProperty, 1);
+      testPlayer.buyBuilding(testProperty);
       testPlayer.sellBuilding(testProperty);
       expect(testPlayer.money, 1475);
       expect(testProperty.numBuildings, 0);

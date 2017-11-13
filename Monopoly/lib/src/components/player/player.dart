@@ -82,14 +82,12 @@ class Player {
     _money += tile.mortgageCost;
   }
 
-  void buyBuilding(Tile tile, int numHouse) {
+  void buyBuilding(Tile tile) {
     if (tile.isInMonopoly) {
       if (tile.numBuildings < 4) {
-        for (int i = 0; i < numHouse; i++) {
-          //build num houses player wants to buy
-          _money -= tile.buildPrice; //subtract build price
-          tile.addBuilding(); //add a building count on tile
-        }
+        //build house
+        _money -= tile.buildPrice; //subtract build price
+        tile.addBuilding(); //add a building count on tile
       } else if (tile.numBuildings == 4) {
         //build hotel
         //check if conditions are met to build hotel (check each color tile for 4 buildings)
