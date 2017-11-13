@@ -81,9 +81,6 @@ class App {
     _playerList.add(new Player("Katy", 10, 4, 'pink', _board));
     _playerList.add(new Player("Perry", 10, 5, 'brown', _board));
 
-    _playerList[0].buyTile(_board.tiles[1]);
-    _playerList[0].buyTile(_board.tiles[3]);
-
     // TODO: set the active player in a better way!
     _activePlayer = _playerList.first;
 

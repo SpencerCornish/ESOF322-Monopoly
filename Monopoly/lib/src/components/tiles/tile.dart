@@ -50,7 +50,7 @@ class Tile {
     this._numberOwned = 0;
     this._isMortgaged = false;
     this._isInMonopoly = false;
-    this._numBuildings = 1;
+    this._numBuildings = 0;
   }
 
   // Getters
