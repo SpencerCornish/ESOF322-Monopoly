@@ -314,6 +314,15 @@ class App {
       _infoLabel.text =
           'Paid ' + curTile.owner.name + ' \$' + amount.toString() + '.';
     }
+    //display cost if unowned
+    else if(curTile.owner == null && (curTile.type == 'Street' ||
+        curTile.type == 'Railroad' ||
+        curTile.type == 'Utility'))
+      _infoLabel.text = 'Cost: \$' + curTile.price.toString();
+    //otherwise display nothing
+    else{
+      _infoLabel.text = null;
+    }
     _updateButtons();
   }
 
