@@ -168,43 +168,4 @@ class Tile {
     }
     return _currentRent;
   }
-
-  /*
-  draw(CanvasRenderingContext2D ctx) {
-    ctx.fillStyle = _color == 'None' ? 'White' : _color;
-    ctx.strokeStyle = 'black';
-    ctx.textAlign = 'center';
-
-    ctx.strokeRect(_x, _y, _width, _height); //draw tile boarder
-    ctx.fillRect(_x, _y, _width, _height); //draw tile color
-
-    //draw indicator if tile is mortgaged
-    if (_isMortgaged) {
-      ctx.fillStyle = 'black';
-      ctx.font = '14pt sans-serif';
-      ctx.fillText('M', _x + 9 * _width / 10, _y + _height / 5);
-    }
-
-    //draw owner's name
-    ctx.fillStyle = 'black';
-    ctx.font = '8pt sans-serif';
-    if (_owner != null)
-      ctx.fillText('Owner: ' + owner.name, _x + _width / 2,
-          _y + 7 * height / 10); //draw owner's name
-
-    //write name of tile
-    ctx.font = 'bold 8pt sans-serif';
-    ctx.fillText(name, _x + _width / 2, _y + 9 * height / 10);
-
-    //draw buildings
-    if (numBuildings == 5) {
-      ctx.fillStyle = 'red';
-      ctx.fillRect(_x + _width / 2 - 10, y + height / 10, 20, 10);
-    } else {
-      for (int i = 0; i < numBuildings; i++) {
-        ctx.fillStyle = 'green';
-        ctx.fillRect(_x + ((i + 1) / 5) * _width - 5, _y + height / 10, 10, 10);
-      }
-    }
-  } */
 }
