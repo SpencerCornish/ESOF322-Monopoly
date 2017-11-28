@@ -1,6 +1,4 @@
 import '../tiles/tile.dart';
-import 'dart:math';
-import 'dart:html';
 
 import 'package:monopoly/src/components/board/board.dart';
 
@@ -24,6 +22,7 @@ class Player {
   int get numUtilities => _numUtilities;
   int get size => _size;
   int get number => _number;
+  int get currentLocation => _currentLocation;
   String get color => _color;
   Board get board => _board;
 
@@ -122,6 +121,7 @@ class Player {
     return rent;
   }
 
+/*
   void draw(CanvasRenderingContext2D ctx) {
     //draw player token on board
     ctx.fillStyle = _color;
@@ -163,4 +163,5 @@ class Player {
           tile.name, infoX, infoY + 70 + _ownedTiles.indexOf(tile) * 15);
     }
   }
+  */
 }

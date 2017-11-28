@@ -1,6 +1,8 @@
 import 'dart:html';
 import '../tiles/tile.dart';
 import '../board/board.dart';
+import '../player/player.dart';
+import 'dart:math';
 
 class GUI {
 
@@ -70,4 +72,48 @@ class GUI {
       }
     }
   }
+
+
+  void drawPlayer(CanvasRenderingContext2D ctx, Player player) {
+    //draw player token on board
+    ctx.fillStyle = player.color;
+    ctx.beginPath();
+    ctx.arc(
+        ((player.number + 1) / 8) * player.board.tileWidth +
+            player.board.tiles[player.currentLocation].x,
+        (2 / 5) * player.board.tileHeight + player.board.tiles[player.currentLocation].y,
+        player.size / 2,
+        0,
+        PI * 2);
+    ctx.closePath();
+    ctx.fill();
+
+    //draw player info inside of board area
+    int infoX =
+        (player.board.x + player.board.tileWidth * 1.75 + player.number * player.board.tileWidth * 1.25)
+            .toInt();
+    int infoY = (player.board.y + player.board.tileHeight * 2).toInt();
+    ctx.fillStyle = player.color;
+    ctx.font = 'bold 14pt sans-serif';
+    ctx.fillText(player.name, infoX, infoY); //display "player name"
+
+    ctx.fillStyle = 'black';
+    ctx.font = '10pt sans-serif';
+    ctx.fillText("Money: ", infoX, infoY + 20); //display "Money:"
+    ctx.font = 'bold 10pt sans-serif';
+    ctx.fillText('\$' + player.money.toStringAsFixed(2), infoX,
+        infoY + 37); //display amount of money
+
+    ctx.font = '10pt sans-serif';
+    ctx.fillText(
+        "Properties Owned:", infoX, infoY + 55); //display "Properties Owned:"
+    ctx.font = '10pt sans-serif';
+
+    for (Tile tile in player.ownedTiles) {
+      //display owned properties
+      ctx.fillText(
+          tile.name, infoX, infoY + 70 + player.ownedTiles.indexOf(tile) * 15);
+    }
+  }
+
 }

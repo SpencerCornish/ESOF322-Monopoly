@@ -1,4 +1,3 @@
-import 'dart:html';
 import '../player/player.dart';
 
 class Tile {

@@ -141,7 +141,7 @@ class App {
     if (_isStarted) {
       _ctxForeground.clearRect(0, 0, window.innerWidth, window.innerHeight);
       for (Player player in _playerList) {
-        player.draw(_ctxForeground);
+        _gui.drawPlayer(_ctxForeground, player);
       }
     }
   }

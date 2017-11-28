@@ -74,9 +74,8 @@ class Board {
   /*
   void draw(CanvasRenderingContext2D ctx) {
     for (Tile tile in tiles) gui.draw(ctx, tile);
-  }*/
-
-  /*
+  }
+  
   void resize() {
     //resize size of tile
     tileWidth = (window.innerWidth - 50) ~/ 11;
