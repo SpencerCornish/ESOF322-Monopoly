@@ -36,6 +36,8 @@ class App {
   int _turnLimit;
   bool _gameOver;
 
+  int rollValue;
+
   ////////////////////
   // Canvas/Draw Variables
   ////////////////////
@@ -70,6 +72,18 @@ class App {
   // Modal Variables
   ////////////////////
   ModalBuilder _modalComponent;
+
+  ///////////////////////////////////
+  // button availability  Variables
+  ///////////////////////////////////
+
+  bool isRollDiceAvailable = true,
+      isBuyPropertyAvailable = true,
+      isAuctionPropertyAvailable = true,
+      isMortgagePropertyAvailable = true,
+      isBuyBuildingsAvailable = true,
+      isSellBuildingsAvailable = true,
+      isEndTurnAvailable = true;
 
   App() {
     // Instantiate a board, init variables
@@ -230,7 +244,7 @@ class App {
     _auctionPropertyButton.text = 'Auction Property';
     _auctionPropertyButton.classes = _constructButtonClasses('is-info');
     _auctionPropertyButton.disabled = true;
-    _auctionPropertyButton.onClick.listen(_handleAuctionProperty);
+    _auctionPropertyButton.onClick.listen(handleAuctionProperty);
     _buttons.add(_auctionPropertyButton);
 
     _mortgagePropertyButton = new ButtonElement();
@@ -303,10 +317,13 @@ class App {
     }
 
     //update roll button
-    if (!_shouldRollAgain)
+    if (!_shouldRollAgain) {
       _rollDiceButton.disabled = true;
-    else
+      isRollDiceAvailable = false;
+    } else {
       _rollDiceButton.disabled = false;
+      isRollDiceAvailable = true;
+    }
 
     //update buy property button & auction property button
     Tile curTile = _board.tiles[_activePlayer.position];
@@ -315,21 +332,29 @@ class App {
             curTile.type == 'Railroad' ||
             curTile.type == 'Utility')) {
       _buyPropertyButton.disabled = false;
+      isBuyPropertyAvailable = true;
       _auctionPropertyButton.disabled = false;
+      isAuctionPropertyAvailable = true;
     } else {
       _buyPropertyButton.disabled = true;
+      isBuyPropertyAvailable = false;
       _auctionPropertyButton.disabled = true;
+      isAuctionPropertyAvailable = false;
     }
     //if player doesn't have enough money
     if (_activePlayer.money < curTile.price) {
       _buyPropertyButton.disabled = true;
+      isBuyPropertyAvailable = false;
     }
 
     //update mortgage button
-    if (_activePlayer.ownedTiles.length > 0)
+    if (_activePlayer.ownedTiles.length > 0) {
       _mortgagePropertyButton.disabled = false;
-    else
+      isMortgagePropertyAvailable = true;
+    } else {
       _mortgagePropertyButton.disabled = true;
+      isMortgagePropertyAvailable = false;
+    }
 
     //update buy building button
     bool canBuild = false;
@@ -345,31 +370,38 @@ class App {
         break;
       }
     }
-    if (canBuild)
+    if (canBuild) {
       _buyBuildingButton.disabled = false;
-    else
+      isBuyBuildingsAvailable = true;
+    } else {
       _buyBuildingButton.disabled = true;
-
-    if (canSellBuildings)
+      isBuyBuildingsAvailable = false;
+    }
+    if (canSellBuildings) {
       _sellBuildingButton.disabled = false;
-    else
+      isSellBuildingsAvailable = true;
+    } else {
       _sellBuildingButton.disabled = true;
-
+      isSellBuildingsAvailable = false;
+    }
     //update end turn button
     if (_shouldRollAgain ||
         (curTile.owner == null &&
             (curTile.type == 'Street' ||
                 curTile.type == 'Railroad' ||
-                curTile.type == 'Utility')))
+                curTile.type == 'Utility'))) {
       _endTurnButton.disabled = true;
-    else
+      isEndTurnAvailable = false;
+    } else {
       _endTurnButton.disabled = false;
+      isEndTurnAvailable = true;
+    }
   }
 
   _handleRollDice(_) {
     int rollDieOne = _random.nextInt(6) + 1;
     int rollDieTwo = _random.nextInt(6) + 1;
-    int rollValue = rollDieOne + rollDieTwo;
+    rollValue = rollDieOne + rollDieTwo;
     // Sets should roll again if the dice are the same value
     _shouldRollAgain = rollDieOne == rollDieTwo;
     _activePlayer.move(rollValue);
@@ -409,7 +441,7 @@ class App {
     _nextPlayer();
   }
 
-  _handleAuctionProperty(_) {
+  handleAuctionProperty(_) {
     new ModalBuilder.auctionModal("Auction",
         _board.tiles[_activePlayer.position], _playerList, _activePlayer, this);
     updateButtons();
