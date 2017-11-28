@@ -1,9 +1,37 @@
 import 'dart:html';
 import '../tiles/tile.dart';
+import '../board/board.dart';
 
 class GUI {
 
   GUI(){}
+
+  void drawBoard(CanvasRenderingContext2D ctx, Board board) {
+    for (Tile tile in board.tiles) drawTile(ctx, tile);
+  }
+
+  void resizeBoard(Board board) {
+    //resize size of tile
+    board.tileWidth = (window.innerWidth - 50) ~/ 11;
+    board.tileWidth = board.tileWidth * 10 ~/ 11; //leave room on left side for buttons
+    board.tileHeight = (window.innerHeight - 50) ~/ 11;
+
+    //reset board x and y location
+    board.x = (window.innerWidth / 2 - board.tileWidth * 5).toInt();
+    board.y = (window.innerHeight / 2 - board.tileHeight * 5.5).toInt();
+
+    //reset location and size of each tile
+    for (int i = 0; i < 10; i++) {
+      board.tiles[i].setLocation(board.x + i * board.tileWidth, board.y);
+      board.tiles[i].setSize(board.tileWidth, board.tileHeight);
+      board.tiles[i + 10].setLocation(10 * board.tileWidth + board.x, board.y + i * board.tileHeight);
+      board.tiles[i + 10].setSize(board.tileWidth, board.tileHeight);
+      board.tiles[i + 20].setLocation((10 - i) * board.tileWidth + board.x, 10 * board.tileHeight + board.y);
+      board.tiles[i + 20].setSize(board.tileWidth, board.tileHeight);
+      board.tiles[i + 30].setLocation(board.x, (10 - i) * board.tileHeight + board.y);
+      board.tiles[i + 30].setSize(board.tileWidth, board.tileHeight);
+    }
+  }
 
   drawTile(CanvasRenderingContext2D ctx, Tile tile) {
     ctx.fillStyle = tile.color == 'None' ? 'White' : tile.color;

@@ -71,10 +71,12 @@ class Board {
     return t;
   }
 
+  /*
   void draw(CanvasRenderingContext2D ctx) {
     for (Tile tile in tiles) gui.draw(ctx, tile);
-  }
+  }*/
 
+  /*
   void resize() {
     //resize size of tile
     tileWidth = (window.innerWidth - 50) ~/ 11;
@@ -96,5 +98,5 @@ class Board {
       tiles[i + 30].setLocation(x, (10 - i) * tileHeight + y);
       tiles[i + 30].setSize(tileWidth, tileHeight);
     }
-  }
+  } */
 }
