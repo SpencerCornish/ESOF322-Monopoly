@@ -170,6 +170,7 @@ class Tile {
     return _currentRent;
   }
 
+  /*
   draw(CanvasRenderingContext2D ctx) {
     ctx.fillStyle = _color == 'None' ? 'White' : _color;
     ctx.strokeStyle = 'black';
@@ -206,5 +207,5 @@ class Tile {
         ctx.fillRect(_x + ((i + 1) / 5) * _width - 5, _y + height / 10, 10, 10);
       }
     }
-  }
+  } */
 }

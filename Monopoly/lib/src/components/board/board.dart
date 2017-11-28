@@ -72,7 +72,7 @@ class Board {
   }
 
   void draw(CanvasRenderingContext2D ctx) {
-    for (Tile tile in tiles) tile.draw(ctx);
+    for (Tile tile in tiles) gui.draw(ctx, tile);
   }
 
   void resize() {
