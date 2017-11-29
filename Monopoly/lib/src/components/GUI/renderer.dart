@@ -6,8 +6,6 @@ import 'dart:math';
 
 class Renderer {
 
-  Renderer(){}
-
   void drawBoard(CanvasRenderingContext2D ctx, Board board) {
     for (Tile tile in board.tiles) drawTile(ctx, tile);
   }
