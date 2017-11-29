@@ -6,7 +6,7 @@ import '../player/player.dart';
 import '../board/board.dart';
 import '../tiles/tile.dart';
 import '../modal_builder/modal_builder.dart';
-import '../GUI/gui.dart';
+import '../GUI/renderer.dart';
 
 void main() {
   new App();
@@ -17,7 +17,7 @@ class App {
   /// GUI Variables
   ////////////////////
 
-  GUI _gui;
+  Renderer _rend;
 
   ////////////////////
   /// Board Variables
@@ -80,7 +80,7 @@ class App {
 
   App() {
     // Instantiate a board, init variables
-    _gui = new GUI();
+    _rend = new Renderer();
     _board = new Board();
     _isStarted = false;
     _random = new Random.secure();
@@ -113,7 +113,7 @@ class App {
       _canvasForeground.width = window.innerWidth;
       _canvasForeground.height = window.innerHeight;
 
-      _gui.resizeBoard(_board);
+      _rend.resizeBoard(_board);
       drawBackground();
     });
 
@@ -132,7 +132,7 @@ class App {
     querySelector('#output').text = '';
     for (HtmlElement button in _buttons)
       querySelector('.top-button-container').children.add(button);
-    _gui.drawBoard(_ctxBackground, _board);
+    _rend.drawBoard(_ctxBackground, _board);
     querySelector('#output').text = '';
     _isStarted = true;
   }
@@ -141,14 +141,14 @@ class App {
     if (_isStarted) {
       _ctxForeground.clearRect(0, 0, window.innerWidth, window.innerHeight);
       for (Player player in _playerList) {
-        _gui.drawPlayer(_ctxForeground, player);
+        _rend.drawPlayer(_ctxForeground, player);
       }
     }
   }
 
   drawBackground() {
     _ctxBackground.clearRect(0, 0, window.innerWidth, window.innerHeight);
-    _gui.drawBoard(_ctxBackground, _board);
+    _rend.drawBoard(_ctxBackground, _board);
   }
 
   _nextPlayer() {

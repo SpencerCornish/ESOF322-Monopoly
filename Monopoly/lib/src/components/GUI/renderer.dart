@@ -4,9 +4,9 @@ import '../board/board.dart';
 import '../player/player.dart';
 import 'dart:math';
 
-class GUI {
+class Renderer {
 
-  GUI(){}
+  Renderer(){}
 
   void drawBoard(CanvasRenderingContext2D ctx, Board board) {
     for (Tile tile in board.tiles) drawTile(ctx, tile);
