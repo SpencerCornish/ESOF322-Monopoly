@@ -16,6 +16,7 @@ class Player {
   List<Tile> _ownedTiles = new List<Tile>();
   int _numRailroads = 0;
   int _numUtilities = 0;
+  bool isComputer = false;
 
   double get money => _money;
   String get name => _name;
@@ -28,6 +29,9 @@ class Player {
   Board get board => _board;
 
   List<Tile> get ownedTiles => _ownedTiles;
+
+  set position(int currentPosition) => _currentLocation = currentPosition;
+  set money(double totalMoney) => _money = totalMoney;
 
   Player(this._name, this._size, this._number, this._color, this._board) {
     _money = 1500.0;

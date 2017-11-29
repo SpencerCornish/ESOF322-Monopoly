@@ -3,6 +3,7 @@ import 'dart:math';
 import 'dart:async';
 
 import '../player/player.dart';
+import '../computer_player/computer_player.dart';
 import '../board/board.dart';
 import '../tiles/tile.dart';
 import '../modal_builder/modal_builder.dart';
@@ -12,6 +13,7 @@ void main() {
 }
 
 class App {
+  App _app;
   ////////////////////
   /// Board Variables
   ////////////////////
@@ -24,6 +26,10 @@ class App {
 
   List<Player> _playerList;
   Player _activePlayer;
+
+
+  Player get activePlayer => _activePlayer;
+
 
   ////////////////////
   // Utility Variables
@@ -97,12 +103,18 @@ class App {
 
     _playerList = new List<Player>();
 
+    Player computer = new ComputerPlayer(_app, "robit", 10, 2, 'orange', _board);
+
     _playerList.add(new Player("Bryan", 10, 0, 'blue', _board));
     _playerList.add(new Player("Nate", 10, 1, 'green', _board));
-    _playerList.add(new Player("Keely", 10, 2, 'orange', _board));
+    //_playerList.add(new Player("Keely", 10, 2, 'orange', _board));
+    //_playerList.add(new ComputerPlayer(_app, "computer", 10, 2, 'orange', _board));
+    _playerList.add(computer);
     _playerList.add(new Player("Spencer", 10, 3, 'red', _board));
     _playerList.add(new Player("Katy", 10, 4, 'pink', _board));
     _playerList.add(new Player("Perry", 10, 5, 'brown', _board));
+
+    _playerList[2].isComputer = true;
 
     // TODO: set the active player in a better way!
     _activePlayer = _playerList.first;
@@ -163,6 +175,12 @@ class App {
       return;
     }
     int newIndex = _playerList.indexOf(_activePlayer) + 1;
+
+    if(_activePlayer.isComputer) {
+      //_playerList[2].computerTurn(_board.tiles[_activePlayer.position]);
+      ComputerPlayer computr = _playerList[2];
+      computr.computerTurn(_board.tiles[_activePlayer.position]);
+    }
     // Check to see if we need to go back to the start of the playerlist
     if (newIndex == _playerList.length) {
       newIndex = 0;
@@ -230,7 +248,11 @@ class App {
     _rollDiceButton = new ButtonElement();
     _rollDiceButton.text = 'Roll Dice';
     _rollDiceButton.classes = _constructButtonClasses('is-info');
-    _rollDiceButton.onClick.listen(_handleRollDice);
+    if(_activePlayer.isComputer){
+      handleRollDice;
+    } else {
+      _rollDiceButton.onClick.listen(handleRollDice);
+    }
     _buttons.add(_rollDiceButton);
 
     _buyPropertyButton = new ButtonElement();
@@ -251,7 +273,11 @@ class App {
     _mortgagePropertyButton.text = 'Mortgage Property';
     _mortgagePropertyButton.classes = _constructButtonClasses('is-info');
     _mortgagePropertyButton.disabled = true;
-    _mortgagePropertyButton.onClick.listen(_handleMortgageProperty);
+    if(_activePlayer.isComputer) {
+      handleComputerMortgageProperty;
+    } else {
+      _mortgagePropertyButton.onClick.listen(_handleMortgageProperty);
+    }
     _buttons.add(_mortgagePropertyButton);
 
     _buyBuildingButton = new ButtonElement();
@@ -272,7 +298,7 @@ class App {
     _endTurnButton.text = 'End Turn';
     _endTurnButton.disabled = true;
     _endTurnButton.classes = _constructButtonClasses('is-danger');
-    _endTurnButton.onClick.listen(_handleEndTurn);
+    _endTurnButton.onClick.listen(handleEndTurn);
     _buttons.add(_endTurnButton);
 
     _exampleButton = new ButtonElement();
@@ -317,91 +343,111 @@ class App {
     }
 
     //update roll button
-    if (!_shouldRollAgain) {
+    if(_activePlayer.isComputer){
       _rollDiceButton.disabled = true;
-      isRollDiceAvailable = false;
     } else {
-      _rollDiceButton.disabled = false;
-      isRollDiceAvailable = true;
+      if (!_shouldRollAgain) {
+        _rollDiceButton.disabled = true;
+        isRollDiceAvailable = false;
+      } else {
+        _rollDiceButton.disabled = false;
+        isRollDiceAvailable = true;
+      }
     }
 
     //update buy property button & auction property button
-    Tile curTile = _board.tiles[_activePlayer.position];
-    if (curTile.owner == null &&
-        (curTile.type == 'Street' ||
-            curTile.type == 'Railroad' ||
-            curTile.type == 'Utility')) {
-      _buyPropertyButton.disabled = false;
-      isBuyPropertyAvailable = true;
-      _auctionPropertyButton.disabled = false;
-      isAuctionPropertyAvailable = true;
-    } else {
+    if(_activePlayer.isComputer){
       _buyPropertyButton.disabled = true;
-      isBuyPropertyAvailable = false;
       _auctionPropertyButton.disabled = true;
-      isAuctionPropertyAvailable = false;
-    }
-    //if player doesn't have enough money
-    if (_activePlayer.money < curTile.price) {
-      _buyPropertyButton.disabled = true;
-      isBuyPropertyAvailable = false;
+    } else {
+      Tile curTile = _board.tiles[_activePlayer.position];
+      if (curTile.owner == null &&
+          (curTile.type == 'Street' ||
+              curTile.type == 'Railroad' ||
+              curTile.type == 'Utility')) {
+        _buyPropertyButton.disabled = false;
+        isBuyPropertyAvailable = true;
+        _auctionPropertyButton.disabled = false;
+        isAuctionPropertyAvailable = true;
+      } else {
+        _buyPropertyButton.disabled = true;
+        isBuyPropertyAvailable = false;
+        _auctionPropertyButton.disabled = true;
+        isAuctionPropertyAvailable = false;
+      }
+      //if player doesn't have enough money
+      if (_activePlayer.money < curTile.price) {
+        _buyPropertyButton.disabled = true;
+        isBuyPropertyAvailable = false;
+      }
     }
 
     //update mortgage button
-    if (_activePlayer.ownedTiles.length > 0) {
-      _mortgagePropertyButton.disabled = false;
-      isMortgagePropertyAvailable = true;
-    } else {
+    if(_activePlayer.isComputer) {
       _mortgagePropertyButton.disabled = true;
-      isMortgagePropertyAvailable = false;
+    } else {
+      if (_activePlayer.ownedTiles.length > 0) {
+        _mortgagePropertyButton.disabled = false;
+        isMortgagePropertyAvailable = true;
+      } else {
+        _mortgagePropertyButton.disabled = true;
+        isMortgagePropertyAvailable = false;
+      }
     }
 
     //update buy building button
-    bool canBuild = false;
-    bool canSellBuildings = false;
-    for (Tile tile in _activePlayer.ownedTiles) {
-      if (tile.numBuildings > 0) {
-        canBuild = true;
-        canSellBuildings = true;
-        break;
-      }
-      if (tile.isInMonopoly) {
-        canBuild = true;
-        break;
-      }
-    }
-    if (canBuild) {
-      _buyBuildingButton.disabled = false;
-      isBuyBuildingsAvailable = true;
-    } else {
+    if(_activePlayer.isComputer) {
       _buyBuildingButton.disabled = true;
-      isBuyBuildingsAvailable = false;
-    }
-    if (canSellBuildings) {
-      _sellBuildingButton.disabled = false;
-      isSellBuildingsAvailable = true;
-    } else {
       _sellBuildingButton.disabled = true;
-      isSellBuildingsAvailable = false;
-    }
-    //update end turn button
-    if (_shouldRollAgain ||
-        (curTile.owner == null &&
-            (curTile.type == 'Street' ||
-                curTile.type == 'Railroad' ||
-                curTile.type == 'Utility'))) {
-      _endTurnButton.disabled = true;
-      isEndTurnAvailable = false;
     } else {
-      _endTurnButton.disabled = false;
-      isEndTurnAvailable = true;
+      bool canBuild = false;
+      bool canSellBuildings = false;
+      for (Tile tile in _activePlayer.ownedTiles) {
+        if (tile.numBuildings > 0) {
+          canBuild = true;
+          canSellBuildings = true;
+          break;
+        }
+        if (tile.isInMonopoly) {
+          canBuild = true;
+          break;
+        }
+      }
+      if (canBuild) {
+        _buyBuildingButton.disabled = false;
+        isBuyBuildingsAvailable = true;
+      } else {
+        _buyBuildingButton.disabled = true;
+        isBuyBuildingsAvailable = false;
+      }
+      if (canSellBuildings) {
+        _sellBuildingButton.disabled = false;
+        isSellBuildingsAvailable = true;
+      } else {
+        _sellBuildingButton.disabled = true;
+        isSellBuildingsAvailable = false;
+      }
+      //update end turn button
+      Tile curTile = _board.tiles[_activePlayer.position];
+      if (_shouldRollAgain ||
+          (curTile.owner == null &&
+              (curTile.type == 'Street' ||
+                  curTile.type == 'Railroad' ||
+                  curTile.type == 'Utility'))) {
+        _endTurnButton.disabled = true;
+        isEndTurnAvailable = false;
+      } else {
+        _endTurnButton.disabled = false;
+        isEndTurnAvailable = true;
+      }
     }
   }
 
-  _handleRollDice(_) {
+  handleRollDice(_) {
     int rollDieOne = _random.nextInt(6) + 1;
     int rollDieTwo = _random.nextInt(6) + 1;
     rollValue = rollDieOne + rollDieTwo;
+    print("roll value");
     // Sets should roll again if the dice are the same value
     _shouldRollAgain = rollDieOne == rollDieTwo;
     _activePlayer.move(rollValue);
@@ -434,11 +480,12 @@ class App {
     updateButtons();
   }
 
-  _handleEndTurn(_) {
+  handleEndTurn(_) {
     _shouldRollAgain = true;
     _infoLabel.text = null;
     updateButtons();
     _nextPlayer();
+    print("end of turn");
   }
 
   handleAuctionProperty(_) {
@@ -452,6 +499,19 @@ class App {
     _modalComponent = new ModalBuilder.listModal("Choose a tile - Mortgage",
         _activePlayer.ownedTiles, _handleMortgage, this,
         mortgage: true);
+    updateButtons();
+  }
+
+  handleComputerMortgageProperty(_) {
+    for (int i; i < _activePlayer.ownedTiles.length;) {
+      if (!_activePlayer.ownedTiles[i].isMortgaged) {
+        _activePlayer.ownedTiles[i].isMortgaged = true;
+        _activePlayer.money -= _activePlayer.ownedTiles[i].mortgageCost;
+        break;
+      } else {
+        i++;
+      }
+    }
     updateButtons();
   }
 
