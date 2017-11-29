@@ -66,7 +66,7 @@ class Board {
   }
 
   List<String> readInfo() {
-    String file = Constants.boardInfo;
+    String file = Constants.classicBoardInfo;
     List<String> t = file.split(",");
     return t;
   }
