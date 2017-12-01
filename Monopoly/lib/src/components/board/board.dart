@@ -9,7 +9,7 @@ class Board {
   int tileWidth;
   int tileHeight;
 
-  Board() {
+  Board(String file) {
     tiles = new List<Tile>(40);
 
     tileWidth = (window.innerWidth - 50) ~/ 11;
@@ -19,7 +19,7 @@ class Board {
     x = (window.innerWidth / 2 - tileWidth * 5).toInt();
     y = (window.innerHeight / 2 - tileHeight * 5.5).toInt();
 
-    List<String> spaces = readInfo();
+    List<String> spaces = readInfo(file);
     for (int i = 0; i < 10; i++) {
       //loop through each row
       int k = i * 13; //starting index
@@ -65,8 +65,7 @@ class Board {
     }
   }
 
-  List<String> readInfo() {
-    String file = Constants.classicBoardInfo;
+  List<String> readInfo(String file) {
     List<String> t = file.split(",");
     return t;
   }

@@ -6,6 +6,9 @@ import '../player/player.dart';
 import '../board/board.dart';
 import '../tiles/tile.dart';
 import '../modal_builder/modal_builder.dart';
+import '../game_factory/game_factory.dart';
+import '../game_factory/standard_game_factory.dart';
+import '../game_factory/bozeman_game_factory.dart';
 
 void main() {
   new App();
@@ -16,6 +19,7 @@ class App {
   /// Board Variables
   ////////////////////
 
+  GameFactory _gameFactory;
   Board _board;
 
   ////////////////////
@@ -73,7 +77,8 @@ class App {
 
   App() {
     // Instantiate a board, init variables
-    _board = new Board();
+    _gameFactory = new BozemanGameFactory();
+    _board = _gameFactory.createBoard();
     _isStarted = false;
     _random = new Random.secure();
     _turnNum = 1;

@@ -2,11 +2,12 @@ import "package:test/test.dart";
 import "package:monopoly/src/components/player/player.dart";
 import "package:monopoly/src/components/tiles/tile.dart";
 import "package:monopoly/src/components/board/board.dart";
+import "package:monopoly/src/data/constants.dart";
 
 void main() {
   Player testPlayer;
   Tile testProperty;
-  Board testBoard = new Board();
+  Board testBoard = new Board(Constants.classicBoardInfo);
 
   setUp(() {
     testPlayer = new Player("John Doe", 1, 1, "Cyan", testBoard);
