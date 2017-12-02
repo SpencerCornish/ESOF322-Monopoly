@@ -26,10 +26,9 @@ class App {
 
   List<Player> _playerList;
   Player _activePlayer;
-
-
   Player get activePlayer => _activePlayer;
-
+  //ComputerPlayer computer = new ComputerPlayer(this, "robit", 10, 2, 'orange', _board);
+  ComputerPlayer computer;
 
   ////////////////////
   // Utility Variables
@@ -103,12 +102,12 @@ class App {
 
     _playerList = new List<Player>();
 
-    Player computer = new ComputerPlayer(_app, "robit", 10, 2, 'orange', _board);
+
 
     _playerList.add(new Player("Bryan", 10, 0, 'blue', _board));
     _playerList.add(new Player("Nate", 10, 1, 'green', _board));
     //_playerList.add(new Player("Keely", 10, 2, 'orange', _board));
-    //_playerList.add(new ComputerPlayer(_app, "computer", 10, 2, 'orange', _board));
+    computer = new ComputerPlayer(this, "computer", 10, 2, 'orange', _board);
     _playerList.add(computer);
     _playerList.add(new Player("Spencer", 10, 3, 'red', _board));
     _playerList.add(new Player("Katy", 10, 4, 'pink', _board));
@@ -169,7 +168,7 @@ class App {
     _board.draw(_ctxBackground);
   }
 
-  _nextPlayer() {
+  nextPlayer() {
     if (_activePlayer == null) {
       _activePlayer = _playerList.first;
       return;
@@ -178,8 +177,8 @@ class App {
 
     if(_activePlayer.isComputer) {
       //_playerList[2].computerTurn(_board.tiles[_activePlayer.position]);
-      ComputerPlayer computr = _playerList[2];
-      computr.computerTurn(_board.tiles[_activePlayer.position]);
+      //ComputerPlayer computr = _playerList[2];
+      computer.computerTurn(_board.tiles[_activePlayer.position]);
     }
     // Check to see if we need to go back to the start of the playerlist
     if (newIndex == _playerList.length) {
@@ -248,11 +247,7 @@ class App {
     _rollDiceButton = new ButtonElement();
     _rollDiceButton.text = 'Roll Dice';
     _rollDiceButton.classes = _constructButtonClasses('is-info');
-    if(_activePlayer.isComputer){
-      handleRollDice;
-    } else {
-      _rollDiceButton.onClick.listen(handleRollDice);
-    }
+    _rollDiceButton.onClick.listen(handleRollDice);
     _buttons.add(_rollDiceButton);
 
     _buyPropertyButton = new ButtonElement();
@@ -273,8 +268,10 @@ class App {
     _mortgagePropertyButton.text = 'Mortgage Property';
     _mortgagePropertyButton.classes = _constructButtonClasses('is-info');
     _mortgagePropertyButton.disabled = true;
+    //_mortgagePropertyButton.onClick.listen(_handleMortgageProperty);
     if(_activePlayer.isComputer) {
       handleComputerMortgageProperty;
+      //_mortgagePropertyButton.disabled = true;
     } else {
       _mortgagePropertyButton.onClick.listen(_handleMortgageProperty);
     }
@@ -344,7 +341,13 @@ class App {
 
     //update roll button
     if(_activePlayer.isComputer){
+      computer.computerTurn(_board.tiles[_activePlayer.position]);
       _rollDiceButton.disabled = true;
+      if (!_shouldRollAgain) {
+        isRollDiceAvailable = false;
+      } else {
+        isRollDiceAvailable = true;
+      }
     } else {
       if (!_shouldRollAgain) {
         _rollDiceButton.disabled = true;
@@ -484,7 +487,7 @@ class App {
     _shouldRollAgain = true;
     _infoLabel.text = null;
     updateButtons();
-    _nextPlayer();
+    nextPlayer();
     print("end of turn");
   }
 

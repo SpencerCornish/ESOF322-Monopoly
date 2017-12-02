@@ -10,25 +10,61 @@ class ComputerPlayer extends Player {
   App _app;
   int rollValue;
   Random _random;
-  bool _shouldRollAgain;
+  bool _shouldRollAgain = false;
 
   ComputerPlayer(
       this._app, String name, int size, int number, String color, Board board)
-      : super(name, size, number, color, board) {}
+      : super(name, size, number, color, board) {
+    _random = new Random.secure();
+  }
 
   computerTurn(Tile tile) {
+    if(_app.isRollDiceAvailable){
+      rollDice();
+      _app.updateButtons();
+    }
 
-    rollDice();
-    print("you rolled");
-    super.move(_app.rollValue);
-    print("you moved");
+    if (_app.isBuyBuildingsAvailable) {
+      if (super.money > tile.buildPrice && tile.numBuildings < 1) {
+        //if num owned < 1 and have enough money
+        super.buyBuilding(tile);
+        print("computer building purchased");
+      }
+      _app.updateButtons();
+    }
+
+    if(_app.isBuyPropertyAvailable) {
+      landOnProperty(tile);
+      _app.updateButtons();
+    }
+
+    if(!_app.isEndTurnAvailable) {
+      computerTurn(tile);
+      _app.updateButtons();
+    } else {
+      _app.handleEndTurn;
+      //endCompTurn();
+      print("end of computer turn");
+    }
+
+
+
+    /*
+    if(_app.isRollDiceAvailable){
+      rollDice();
+      print("you rolled");
+    } else {
+      _app.handleEndTurn;
+      print("end of turn");
+    }
 
     if (_app.isBuyPropertyAvailable) {
       landOnProperty(tile);
       checkAvailableButtons(tile);
-    }
-    else
+    } else
       checkAvailableButtons(tile);
+   // _app.handleEndTurn;
+   */
   }
 
   landOnProperty(Tile tile) {
@@ -74,7 +110,17 @@ class ComputerPlayer extends Player {
     }
   }
 
+  /*
   checkAvailableButtons(Tile tile) {
+
+    if(_app.isRollDiceAvailable){
+      rollDice();
+      print("you rolled");
+    } else {
+      _app.handleEndTurn;
+      print("end of turn");
+    }
+
     if (_app.isBuyBuildingsAvailable) {
       if (super.money > tile.buildPrice && tile.numBuildings < 1) {
         //if num owned < 1 and have enough money
@@ -83,25 +129,52 @@ class ComputerPlayer extends Player {
       }
     }
 
+    if(_app.isBuyPropertyAvailable) {
+      landOnProperty(tile);
+    }
+
     if(!_app.isEndTurnAvailable) {
       computerTurn(tile);
       print("rolled ");
     }
 
-    if(!_app.isBuyBuildingsAvailable && _app.isEndTurnAvailable) {
+    if(_app.isEndTurnAvailable) {
       _app.handleEndTurn;
       print("end of computer turn");
     }
   }
+  */
 
   rollDice() {
     int rollDieOne = _random.nextInt(6) + 1;
     int rollDieTwo = _random.nextInt(6) + 1;
     rollValue = rollDieOne + rollDieTwo;
-    print("roll value");
+    print(" computer roll value");
+    if(rollDieOne == rollDieTwo) {
+      print("computer doubles");
+      _shouldRollAgain = true;
+      _app.isRollDiceAvailable = true;
+      _app.isEndTurnAvailable = false;
+    } else {
+      print("dont roll");
+      _shouldRollAgain = false;
+      _app.isRollDiceAvailable = false;
+      _app.isEndTurnAvailable = true;
+    }
+
     // Sets should roll again if the dice are the same value
-    _shouldRollAgain = rollDieOne == rollDieTwo;
-    _app.activePlayer.move(rollValue);
+    //_shouldRollAgain = rollDieOne == rollDieTwo;
+    this.move(rollValue);
+    print("computer you moved");
+    //_app.updateButtons();
   }
+
+  endCompTurn() {
+
+    _app.updateButtons();
+    _app.nextPlayer();
+
+  }
+
 
 }
