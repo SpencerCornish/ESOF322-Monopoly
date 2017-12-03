@@ -36,7 +36,7 @@ class App {
 
   Random _random;
   bool _isStarted;
-  bool _shouldRollAgain;
+  bool shouldRollAgain;
   int _turnNum;
   int _turnLimit;
   bool _gameOver;
@@ -98,22 +98,20 @@ class App {
     _turnNum = 1;
     _turnLimit = 10;
     _gameOver = false;
-    _shouldRollAgain = true;
+    shouldRollAgain = true;
 
     _playerList = new List<Player>();
 
-
-
     _playerList.add(new Player("Bryan", 10, 0, 'blue', _board));
-    _playerList.add(new Player("Nate", 10, 1, 'green', _board));
+    //_playerList.add(new Player("Nate", 10, 1, 'green', _board));
     //_playerList.add(new Player("Keely", 10, 2, 'orange', _board));
-    computer = new ComputerPlayer(this, "computer", 10, 2, 'orange', _board);
+    computer = new ComputerPlayer(this, "computer", 10, 1, 'orange', _board);
     _playerList.add(computer);
-    _playerList.add(new Player("Spencer", 10, 3, 'red', _board));
-    _playerList.add(new Player("Katy", 10, 4, 'pink', _board));
-    _playerList.add(new Player("Perry", 10, 5, 'brown', _board));
+    computer.isComputer = true;
+    // _playerList.add(new Player("Spencer", 10, 3, 'red', _board));
+    //_playerList.add(new Player("Katy", 10, 4, 'pink', _board));
+    _playerList.add(new Player("Perry", 10, 2, 'brown', _board));
 
-    _playerList[2].isComputer = true;
 
     // TODO: set the active player in a better way!
     _activePlayer = _playerList.first;
@@ -169,17 +167,14 @@ class App {
   }
 
   nextPlayer() {
+    print("getting next player");
+
     if (_activePlayer == null) {
       _activePlayer = _playerList.first;
       return;
     }
     int newIndex = _playerList.indexOf(_activePlayer) + 1;
 
-    if(_activePlayer.isComputer) {
-      //_playerList[2].computerTurn(_board.tiles[_activePlayer.position]);
-      //ComputerPlayer computr = _playerList[2];
-      computer.computerTurn(_board.tiles[_activePlayer.position]);
-    }
     // Check to see if we need to go back to the start of the playerlist
     if (newIndex == _playerList.length) {
       newIndex = 0;
@@ -195,6 +190,12 @@ class App {
     _activePlayer = _playerList[newIndex];
     _nameLabel.text = _activePlayer.name;
     _rollLabel2.text = 'none';
+    print(activePlayer.name);
+
+    if (_activePlayer.isComputer) {
+      _handelComputerPlayer();
+    }
+
   }
 
   _calcWinner() {
@@ -247,7 +248,11 @@ class App {
     _rollDiceButton = new ButtonElement();
     _rollDiceButton.text = 'Roll Dice';
     _rollDiceButton.classes = _constructButtonClasses('is-info');
-    _rollDiceButton.onClick.listen(handleRollDice);
+    if (activePlayer.isComputer) {
+      _handelComputerPlayer();
+    } else {
+      _rollDiceButton.onClick.listen(handleRollDice);
+    }
     _buttons.add(_rollDiceButton);
 
     _buyPropertyButton = new ButtonElement();
@@ -269,7 +274,7 @@ class App {
     _mortgagePropertyButton.classes = _constructButtonClasses('is-info');
     _mortgagePropertyButton.disabled = true;
     //_mortgagePropertyButton.onClick.listen(_handleMortgageProperty);
-    if(_activePlayer.isComputer) {
+    if (_activePlayer.isComputer) {
       handleComputerMortgageProperty;
       //_mortgagePropertyButton.disabled = true;
     } else {
@@ -295,7 +300,7 @@ class App {
     _endTurnButton.text = 'End Turn';
     _endTurnButton.disabled = true;
     _endTurnButton.classes = _constructButtonClasses('is-danger');
-    _endTurnButton.onClick.listen(handleEndTurn);
+    _endTurnButton.onClick.listen(_handleEndTurn);
     _buttons.add(_endTurnButton);
 
     _exampleButton = new ButtonElement();
@@ -327,6 +332,7 @@ class App {
   //
 
   updateButtons() {
+    print("updating buttons");
     //if game is over make all buttons disabled
     if (_gameOver) {
       _rollDiceButton.disabled = true;
@@ -340,16 +346,17 @@ class App {
     }
 
     //update roll button
-    if(_activePlayer.isComputer){
-      computer.computerTurn(_board.tiles[_activePlayer.position]);
+    if (_activePlayer.isComputer) {
       _rollDiceButton.disabled = true;
-      if (!_shouldRollAgain) {
+      _handelComputerPlayer();
+      if (!shouldRollAgain) {
         isRollDiceAvailable = false;
       } else {
         isRollDiceAvailable = true;
       }
-    } else {
-      if (!_shouldRollAgain) {
+    }
+    else {
+      if (!shouldRollAgain) {
         _rollDiceButton.disabled = true;
         isRollDiceAvailable = false;
       } else {
@@ -358,10 +365,26 @@ class App {
       }
     }
 
+
     //update buy property button & auction property button
-    if(_activePlayer.isComputer){
+    if(_activePlayer.isComputer) {
       _buyPropertyButton.disabled = true;
       _auctionPropertyButton.disabled = true;
+      Tile curTile = _board.tiles[_activePlayer.position];
+      if (curTile.owner == null &&
+          (curTile.type == 'Street' ||
+              curTile.type == 'Railroad' ||
+              curTile.type == 'Utility')) {
+        isBuyPropertyAvailable = true;
+        isAuctionPropertyAvailable = true;
+      } else {
+        isBuyPropertyAvailable = false;
+        isAuctionPropertyAvailable = false;
+      }
+      //if player doesn't have enough money
+      if (_activePlayer.money < curTile.price) {
+        isBuyPropertyAvailable = false;
+      }
     } else {
       Tile curTile = _board.tiles[_activePlayer.position];
       if (curTile.owner == null &&
@@ -388,6 +411,11 @@ class App {
     //update mortgage button
     if(_activePlayer.isComputer) {
       _mortgagePropertyButton.disabled = true;
+      if (_activePlayer.ownedTiles.length > 0) {
+        isMortgagePropertyAvailable = true;
+      } else {
+        isMortgagePropertyAvailable = false;
+      }
     } else {
       if (_activePlayer.ownedTiles.length > 0) {
         _mortgagePropertyButton.disabled = false;
@@ -399,10 +427,46 @@ class App {
     }
 
     //update buy building button
-    if(_activePlayer.isComputer) {
+    if (activePlayer.isComputer) {
       _buyBuildingButton.disabled = true;
       _sellBuildingButton.disabled = true;
+      _endTurnButton.disabled = true;
+      Tile curTile = _board.tiles[_activePlayer.position];
+      bool canBuild = false;
+      bool canSellBuildings = false;
+      for (Tile tile in _activePlayer.ownedTiles) {
+        if (tile.numBuildings > 0) {
+          canBuild = true;
+          canSellBuildings = true;
+          break;
+        }
+        if (tile.isInMonopoly) {
+          canBuild = true;
+          break;
+        }
+      }
+      if (canBuild) {
+        isBuyBuildingsAvailable = true;
+      } else {
+        isBuyBuildingsAvailable = false;
+      }
+      if (canSellBuildings) {
+        isSellBuildingsAvailable = true;
+      } else {
+        isSellBuildingsAvailable = false;
+      }
+      //update end turn button
+      if (shouldRollAgain ||
+          (curTile.owner == null &&
+              (curTile.type == 'Street' ||
+                  curTile.type == 'Railroad' ||
+                  curTile.type == 'Utility'))) {
+        isEndTurnAvailable = false;
+      } else {
+        isEndTurnAvailable = true;
+      }
     } else {
+      Tile curTile = _board.tiles[_activePlayer.position];
       bool canBuild = false;
       bool canSellBuildings = false;
       for (Tile tile in _activePlayer.ownedTiles) {
@@ -431,8 +495,7 @@ class App {
         isSellBuildingsAvailable = false;
       }
       //update end turn button
-      Tile curTile = _board.tiles[_activePlayer.position];
-      if (_shouldRollAgain ||
+      if (shouldRollAgain ||
           (curTile.owner == null &&
               (curTile.type == 'Street' ||
                   curTile.type == 'Railroad' ||
@@ -450,12 +513,14 @@ class App {
     int rollDieOne = _random.nextInt(6) + 1;
     int rollDieTwo = _random.nextInt(6) + 1;
     rollValue = rollDieOne + rollDieTwo;
-    print("roll value");
+    if (activePlayer.isComputer) {
+      _handelComputerPlayer();
+    }
     // Sets should roll again if the dice are the same value
-    _shouldRollAgain = rollDieOne == rollDieTwo;
+    shouldRollAgain = rollDieOne == rollDieTwo;
     _activePlayer.move(rollValue);
     _rollLabel2.text =
-        "${_shouldRollAgain ? 'Double ' + rollDieOne.toString() + '\'s' : rollDieOne.toString() + '&' + rollDieTwo.toString()}";
+        "${shouldRollAgain ? 'Double ' + rollDieOne.toString() + '\'s' : rollDieOne.toString() + '&' + rollDieTwo.toString()}";
 
     //pay rent if necessary
     Tile curTile = _board.tiles[_activePlayer.position];
@@ -477,18 +542,44 @@ class App {
     updateButtons();
   }
 
+  _handelComputerPlayer() {
+    print("handle comp player");
+    if (activePlayer.isComputer) {
+      print("deactivate buttons");
+      _rollDiceButton.disabled = true;
+      _buyPropertyButton.disabled = true;
+      _auctionPropertyButton.disabled = true;
+      _mortgagePropertyButton.disabled = true;
+      _buyBuildingButton.disabled = true;
+      _sellBuildingButton.disabled = true;
+      _endTurnButton.disabled = true;
+      computer.computerTurn();
+      print("comp turn");
+      if (!shouldRollAgain) {
+        print("comp turn end");
+        //activePlayer.isComputer = false;
+        shouldRollAgain = true;
+        nextPlayer();
+        updateButtons();
+      } else {
+        print("comp turn roll again");
+        computer.computerTurn();
+      }
+    }
+  }
+
   _handleBuyProperty(_) {
     _activePlayer.buyTile(_board.tiles[_activePlayer.position]);
     drawBackground();
     updateButtons();
   }
 
-  handleEndTurn(_) {
-    _shouldRollAgain = true;
+  _handleEndTurn(_) {
+    print("end of turn");
+    shouldRollAgain = true;
     _infoLabel.text = null;
     updateButtons();
     nextPlayer();
-    print("end of turn");
   }
 
   handleAuctionProperty(_) {

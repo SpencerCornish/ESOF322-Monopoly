@@ -10,7 +10,10 @@ class ComputerPlayer extends Player {
   App _app;
   int rollValue;
   Random _random;
-  bool _shouldRollAgain = false;
+  bool rollingDice,
+  shouldAuction;
+
+  //bool _shouldRollAgain = false;
 
   ComputerPlayer(
       this._app, String name, int size, int number, String color, Board board)
@@ -18,146 +21,112 @@ class ComputerPlayer extends Player {
     _random = new Random.secure();
   }
 
-  computerTurn(Tile tile) {
-    if(_app.isRollDiceAvailable){
-      rollDice();
-      _app.updateButtons();
-    }
-
-    if (_app.isBuyBuildingsAvailable) {
-      if (super.money > tile.buildPrice && tile.numBuildings < 1) {
-        //if num owned < 1 and have enough money
-        super.buyBuilding(tile);
-        print("computer building purchased");
-      }
-      _app.updateButtons();
-    }
-
-    if(_app.isBuyPropertyAvailable) {
-      landOnProperty(tile);
-      _app.updateButtons();
-    }
-
-    if(!_app.isEndTurnAvailable) {
-      computerTurn(tile);
-      _app.updateButtons();
-    } else {
-      _app.handleEndTurn;
-      //endCompTurn();
-      print("end of computer turn");
-    }
-
-
-
-    /*
-    if(_app.isRollDiceAvailable){
-      rollDice();
-      print("you rolled");
-    } else {
-      _app.handleEndTurn;
-      print("end of turn");
-    }
-
-    if (_app.isBuyPropertyAvailable) {
-      landOnProperty(tile);
-      checkAvailableButtons(tile);
-    } else
-      checkAvailableButtons(tile);
-   // _app.handleEndTurn;
-   */
+  computerTurn() {
+    rollingDice = true;
+    rollDice();
+    checkButtons();
   }
 
-  landOnProperty(Tile tile) {
+  landOnProperty() {
+    Tile tile = super.board.tiles[position];
     if (tile.isOwned) {
       //property is owned
+      _app.isBuyPropertyAvailable = false;
       if (super.money > tile.calcRent(_app.rollValue)) {
         //if money is greater than rent
         super.payRent(tile.owner, tile, _app.rollValue); //pay rent
-        print("you paid rent");
+        print("comp paid rent");
+      } else {
+        super.payRent(tile.owner, tile, _app.rollValue);
+        print("not enough money");
       }
+    }
+    if (tile.owner == null &&
+        (tile.type == 'Street' ||
+            tile.type == 'Railroad' ||
+            tile.type == 'Utility')) {
+      _app.isBuyPropertyAvailable = true;
+      if (super.money > tile.price) {
+        shouldAuction = false;
+        super.buyTile(tile); //if enough --> buy
+        _app.drawBackground();
+        print("comp tile purchased");
+      } else {
+        _app.handleAuctionProperty;
+        print("comp auction time");
+      }
+    }
+    }
 
+
+      /*
       if (super.money < tile.calcRent(_app.rollValue)) {
         //if money is less than rent
         do {
           if (_app.isMortgagePropertyAvailable) {
             //check if possible to mortgage
             _app.handleComputerMortgageProperty; // mortgage
-            print("you might have mortgaged a thing");
+            print("comp might have mortgaged a thing");
           } else {
             //if can not mortgage
             if (_app.isSellBuildingsAvailable) {
               //check if possible to sell building
-              super.sellBuilding(tile); //if yes sell building
-              print("you sold a building");
+              // super.sellBuilding(tile); //if yes sell building
+              print("comp sold a building");
             } else {
               super.payRent(
                   tile.owner, tile, _app.rollValue); //pay rent --> go negative
-                  print("you paid rent");
+              print("comp paid rent");
               break;
             }
           }
         } while (super.money < tile.calcRent(_app.rollValue));
       }
-    }
-    else {
+    } else {
       if (super.money > tile.price) {
         super.buyTile(tile); //if enough --> buy
-        print("tile purchased");
+        print("comp tile purchased");
+        _app.isBuyPropertyAvailable = false;
       } else {
         _app.handleAuctionProperty;
-        print("auction time");
+        print("comp auction time");
       }
     }
   }
+  */
 
-  /*
-  checkAvailableButtons(Tile tile) {
-
-    if(_app.isRollDiceAvailable){
-      rollDice();
-      print("you rolled");
-    } else {
-      _app.handleEndTurn;
-      print("end of turn");
+  checkButtons() {
+    Tile tile = super.board.tiles[position];
+    // if end turn is available and should roll again is true
+    if (_app.shouldRollAgain && _app.isRollDiceAvailable) {
+      computerTurn();
     }
 
+    landOnProperty();
+
+
+    //if build house is available
     if (_app.isBuyBuildingsAvailable) {
       if (super.money > tile.buildPrice && tile.numBuildings < 1) {
         //if num owned < 1 and have enough money
         super.buyBuilding(tile);
-        print("building purchased");
+        print("comp building purchased");
       }
     }
-
-    if(_app.isBuyPropertyAvailable) {
-      landOnProperty(tile);
-    }
-
-    if(!_app.isEndTurnAvailable) {
-      computerTurn(tile);
-      print("rolled ");
-    }
-
-    if(_app.isEndTurnAvailable) {
-      _app.handleEndTurn;
-      print("end of computer turn");
-    }
   }
-  */
 
   rollDice() {
     int rollDieOne = _random.nextInt(6) + 1;
     int rollDieTwo = _random.nextInt(6) + 1;
     rollValue = rollDieOne + rollDieTwo;
-    print(" computer roll value");
-    if(rollDieOne == rollDieTwo) {
-      print("computer doubles");
-      _shouldRollAgain = true;
+    if (rollDieOne == rollDieTwo) {
+      print("rolled doubles");
+      print(rollValue);
+      _app.shouldRollAgain = true;
       _app.isRollDiceAvailable = true;
       _app.isEndTurnAvailable = false;
     } else {
-      print("dont roll");
-      _shouldRollAgain = false;
+      _app.shouldRollAgain = false;
       _app.isRollDiceAvailable = false;
       _app.isEndTurnAvailable = true;
     }
@@ -165,16 +134,6 @@ class ComputerPlayer extends Player {
     // Sets should roll again if the dice are the same value
     //_shouldRollAgain = rollDieOne == rollDieTwo;
     this.move(rollValue);
-    print("computer you moved");
-    //_app.updateButtons();
+    rollingDice = false;
   }
-
-  endCompTurn() {
-
-    _app.updateButtons();
-    _app.nextPlayer();
-
-  }
-
-
 }
