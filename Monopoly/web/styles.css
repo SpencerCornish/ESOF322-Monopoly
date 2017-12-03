@@ -1,27 +1,27 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto);
-
 html, body {
   font-family: 'Roboto', sans-serif;
-  margin:0;
-  padding:0;
+  margin: 0;
+  padding: 0;
   width: 100%;
   height: 100%;
   overflow: hidden;
 }
 
-#canvas-foreground{
-  margin:0;
-  padding:0;
-  position: absolute;
-}
-#canvas-background{
-  margin:0;
-  padding:0;
+#canvas-foreground {
+  margin: 0;
+  padding: 0;
   position: absolute;
 }
 
-.buttons-top{
-  max-width:150px;
+#canvas-background {
+  margin: 0;
+  padding: 0;
+  position: absolute;
+}
+
+.buttons-top {
+  max-width: 150px;
   padding: 10px 0 0 10px;
   margin: 10px;
   position: absolute;
@@ -29,15 +29,21 @@ html, body {
 }
 
 .padded {
-  margin-top:5px;
-  margin-bottom:5px;
-  margin-right:5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-right: 5px;
 }
 
-label{
+label {
   display: block;
 }
 
-.nameLabel{
+.nameLabel {
   font-weight: bold;
 }
+
+.hoverfader {
+  transition: .5s;
+}
+
+.hoverfader:hover {}

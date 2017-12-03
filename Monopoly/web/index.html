@@ -20,28 +20,47 @@
 </head>
 
 <body>
-  <div class="box buttons-top">
+  <div class="box buttons-top is-hidden">
     <div class="top-button-container"></div>
   </div>
-  <canvas id="canvas-background" style="position: absolute; z-index: 0;"></canvas>
-  <canvas id="canvas-foreground" style="position: absolute; z-index:1;"></canvas>
+  <canvas id="canvas-background" style="position: absolute; z-index: -1;"></canvas>
+  <canvas id="canvas-foreground" style="position: absolute; z-index:0;"></canvas>
   <div id="output">
-    <section class="hero is-info is-fullheight is-bold">
-      <div class="hero-body">
-        <div class="container animated fadeInDown">
-          <h1 class="title">
-            <span class="icon is-medium">
-              <span class="fa-stack fa-md">
-                <i class="fa fa-life-ring fa-spin"></i>
-              </span>
-            </span>
-                        Loading...
-                    </h1>
-          <h2 class="subtitle">
-                        Monopoly Assignment for <strong>ESOF 322</strong> by Nate Tranel, Spencer Cornish, Keely Weisbeck, and Bryan Plant
-                    </h2>
+    <section class="hero is-light is-fullheight is-bold">
+      <div class="hero-header">
+        <div class="container">
+          <br>
+          <h1 class="title animated fadeInDownBig">
+            <i class="fa fa-money has-text-success" aria-hidden="true"></i>
+
+                        Monopoly
+          </h1>
         </div>
       </div>
+      <div class="hero-body">
+        <div class="container animated zoomIn">
+          <h1 class="title has-text-centered has-text-weight-light">
+                        Select a Board Theme
+          </h1>
+
+            <p class="control has-text-centered">
+              <span class="button is-large is-primary is-outlined has-text-centered bozeman-theme-selector hoverfader">
+                Bozeman
+              </span>
+              <span class="button is-large is-primary is-outlined classic-theme-selector hoverfader">
+                Classic
+              </span>
+            </p>
+
+        </div>
+      </div>
+      <div class="hero-body">
+        <div class="container">
+        <h2 class="subtitle is-italic has-text-centered	has-text-grey animated fadeInUpBig">
+              Monopoly Assignment for ESOF 322 by Nate Tranel, Spencer Cornish, Keely Weisbeck, and Bryan Plant
+        </h2>
+      </div>
+    </div>
     </section>
   </div>
   <div class="modal">

@@ -76,9 +76,25 @@ class App {
   ModalBuilder _modalComponent;
 
   App() {
-    // Instantiate a board, init variables
-    _gameFactory = new BozemanGameFactory();
-    _board = _gameFactory.createBoard();
+    SpanElement bozemanTheme = querySelector('.bozeman-theme-selector');
+    SpanElement classicTheme = querySelector('.classic-theme-selector');
+
+    bozemanTheme.onClick.listen((e) {
+      // Instantiate a board, init variables
+      _gameFactory = new BozemanGameFactory();
+      _board = _gameFactory.createBoard();
+      _completeAppSetup();
+      _startMainActivity();
+    });
+    classicTheme.onClick.listen((e) {
+      // Instantiate a board, init variables
+      _gameFactory = new StandardGameFactory();
+      _board = _gameFactory.createBoard();
+      _completeAppSetup();
+      _startMainActivity();
+    });
+  }
+  _completeAppSetup() {
     _random = new Random.secure();
     _turnNum = 1;
     _turnLimit = 10;
@@ -102,12 +118,10 @@ class App {
     // This builds up a list of controls to add to the sidebar
 
     _constructButtonControls();
-
-    // Show the splash screen, and invoke rendering
-    new Timer(new Duration(seconds: 3), _startMainActivity);
   }
 
   _startMainActivity() {
+    querySelector('.buttons-top').classes.remove("is-hidden");
     for (HtmlElement button in _buttons) querySelector('.top-button-container').children.add(button);
     _renderer.beginDraw();
   }
