@@ -69,31 +69,4 @@ class Board {
     List<String> t = file.split(",");
     return t;
   }
-
-  void draw(CanvasRenderingContext2D ctx) {
-    for (Tile tile in tiles) tile.draw(ctx);
-  }
-
-  void resize() {
-    //resize size of tile
-    tileWidth = (window.innerWidth - 50) ~/ 11;
-    tileWidth = tileWidth * 10 ~/ 11; //leave room on left side for buttons
-    tileHeight = (window.innerHeight - 50) ~/ 11;
-
-    //reset board x and y location
-    x = (window.innerWidth / 2 - tileWidth * 5).toInt();
-    y = (window.innerHeight / 2 - tileHeight * 5.5).toInt();
-
-    //reset location and size of each tile
-    for (int i = 0; i < 10; i++) {
-      tiles[i].setLocation(x + i * tileWidth, y);
-      tiles[i].setSize(tileWidth, tileHeight);
-      tiles[i + 10].setLocation(10 * tileWidth + x, y + i * tileHeight);
-      tiles[i + 10].setSize(tileWidth, tileHeight);
-      tiles[i + 20].setLocation((10 - i) * tileWidth + x, 10 * tileHeight + y);
-      tiles[i + 20].setSize(tileWidth, tileHeight);
-      tiles[i + 30].setLocation(x, (10 - i) * tileHeight + y);
-      tiles[i + 30].setSize(tileWidth, tileHeight);
-    }
-  }
 }
