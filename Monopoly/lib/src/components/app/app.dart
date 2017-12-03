@@ -193,7 +193,7 @@ class App {
     _rollDiceButton = new ButtonElement();
     _rollDiceButton.text = 'Roll Dice';
     _rollDiceButton.classes = _constructButtonClasses('is-info');
-      _rollDiceButton.onClick.listen(handleRollDice);
+    _rollDiceButton.onClick.listen(handleRollDice);
     _buttons.add(_rollDiceButton);
 
     _buyPropertyButton = new ButtonElement();
@@ -304,9 +304,7 @@ class App {
       _auctionPropertyButton.disabled = true;
       Tile curTile = _board.tiles[_activePlayer.position];
       if (curTile.owner == null &&
-          (curTile.type == 'Street' ||
-              curTile.type == 'Railroad' ||
-              curTile.type == 'Utility')) {
+          (curTile.type == 'Street' || curTile.type == 'Railroad' || curTile.type == 'Utility')) {
         isBuyPropertyAvailable = true;
         isAuctionPropertyAvailable = true;
       } else {
@@ -320,9 +318,7 @@ class App {
     } else {
       Tile curTile = _board.tiles[_activePlayer.position];
       if (curTile.owner == null &&
-          (curTile.type == 'Street' ||
-              curTile.type == 'Railroad' ||
-              curTile.type == 'Utility')) {
+          (curTile.type == 'Street' || curTile.type == 'Railroad' || curTile.type == 'Utility')) {
         _buyPropertyButton.disabled = false;
         isBuyPropertyAvailable = true;
         _auctionPropertyButton.disabled = false;
@@ -391,9 +387,7 @@ class App {
       //update end turn button
       if (shouldRollAgain ||
           (curTile.owner == null &&
-              (curTile.type == 'Street' ||
-                  curTile.type == 'Railroad' ||
-                  curTile.type == 'Utility'))) {
+              (curTile.type == 'Street' || curTile.type == 'Railroad' || curTile.type == 'Utility'))) {
         isEndTurnAvailable = false;
       } else {
         isEndTurnAvailable = true;
@@ -430,9 +424,7 @@ class App {
       //update end turn button
       if (shouldRollAgain ||
           (curTile.owner == null &&
-              (curTile.type == 'Street' ||
-                  curTile.type == 'Railroad' ||
-                  curTile.type == 'Utility'))) {
+              (curTile.type == 'Street' || curTile.type == 'Railroad' || curTile.type == 'Utility'))) {
         _endTurnButton.disabled = true;
         isEndTurnAvailable = false;
       } else {
@@ -481,7 +473,7 @@ class App {
       _sellBuildingButton.disabled = true;
       _endTurnButton.disabled = true;
       print("comp turn");
-      Completer complete = computer.computerTurn();
+      await computer.computerTurn();
 
       if (!shouldRollAgain) {
         print("comp turn end");
@@ -491,7 +483,7 @@ class App {
         updateButtons();
       } else {
         print("comp turn roll again");
-        _handleComputerPlayer();
+        await _handleComputerPlayer();
       }
     }
   }
@@ -512,8 +504,8 @@ class App {
 
   handleAuctionProperty(_) {
     print("handel auction prop");
-    new ModalBuilder.auctionModal("Auction",
-        _board.tiles[_activePlayer.position], _playerList, _activePlayer, this, renderer);
+    new ModalBuilder.auctionModal(
+        "Auction", _board.tiles[_activePlayer.position], _playerList, _activePlayer, this, renderer);
     updateButtons();
   }
 
