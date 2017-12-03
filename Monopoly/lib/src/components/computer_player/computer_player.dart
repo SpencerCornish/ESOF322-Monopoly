@@ -104,7 +104,6 @@ class ComputerPlayer extends Player {
     }
   }
 
-  _checkForContinuation() {}
   rollDice() {
     // int rollDieOne = 2;
     // int rollDieTwo = 2;
