@@ -182,6 +182,17 @@ class ModalBuilder {
     } else {
       _currentBidder = _playerList[nextIndex];
     }
+
+    if (_currentBidder.isComputer) {
+      if (_currentBidder.money > _bidAmount + 10) {
+        _submitBidButton.click();
+        print("bid");
+      } else {
+        _dropOutButton.click();
+        print("drop out");
+      }
+    }
+
     _updateAuctionData();
   }
 

@@ -55,44 +55,7 @@ class ComputerPlayer extends Player {
         print("comp auction time");
       }
     }
-    }
-
-
-      /*
-      if (super.money < tile.calcRent(_app.rollValue)) {
-        //if money is less than rent
-        do {
-          if (_app.isMortgagePropertyAvailable) {
-            //check if possible to mortgage
-            _app.handleComputerMortgageProperty; // mortgage
-            print("comp might have mortgaged a thing");
-          } else {
-            //if can not mortgage
-            if (_app.isSellBuildingsAvailable) {
-              //check if possible to sell building
-              // super.sellBuilding(tile); //if yes sell building
-              print("comp sold a building");
-            } else {
-              super.payRent(
-                  tile.owner, tile, _app.rollValue); //pay rent --> go negative
-              print("comp paid rent");
-              break;
-            }
-          }
-        } while (super.money < tile.calcRent(_app.rollValue));
-      }
-    } else {
-      if (super.money > tile.price) {
-        super.buyTile(tile); //if enough --> buy
-        print("comp tile purchased");
-        _app.isBuyPropertyAvailable = false;
-      } else {
-        _app.handleAuctionProperty;
-        print("comp auction time");
-      }
-    }
   }
-  */
 
   checkButtons() {
     Tile tile = super.board.tiles[position];
@@ -128,9 +91,6 @@ class ComputerPlayer extends Player {
       _app.isRollDiceAvailable = false;
       _app.isEndTurnAvailable = true;
     }
-
-    // Sets should roll again if the dice are the same value
-    //_shouldRollAgain = rollDieOne == rollDieTwo;
     this.move(rollValue);
     rollingDice = false;
   }

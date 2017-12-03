@@ -113,7 +113,6 @@ class App {
     //_playerList.add(new Player("Katy", 10, 4, 'pink', _board));
     _playerList.add(new Player("Perry", 10, 2, 'brown', _board));
 
-
     // TODO: set the active player in a better way!
     _activePlayer = _playerList.first;
 
@@ -196,7 +195,6 @@ class App {
     if (_activePlayer.isComputer) {
       _handelComputerPlayer();
     }
-
   }
 
   _calcWinner() {
@@ -355,8 +353,7 @@ class App {
       } else {
         isRollDiceAvailable = true;
       }
-    }
-    else {
+    } else {
       if (!shouldRollAgain) {
         _rollDiceButton.disabled = true;
         isRollDiceAvailable = false;
@@ -366,9 +363,8 @@ class App {
       }
     }
 
-
     //update buy property button & auction property button
-    if(_activePlayer.isComputer) {
+    if (_activePlayer.isComputer) {
       _buyPropertyButton.disabled = true;
       _auctionPropertyButton.disabled = true;
       Tile curTile = _board.tiles[_activePlayer.position];
@@ -410,7 +406,7 @@ class App {
     }
 
     //update mortgage button
-    if(_activePlayer.isComputer) {
+    if (_activePlayer.isComputer) {
       _mortgagePropertyButton.disabled = true;
       if (_activePlayer.ownedTiles.length > 0) {
         isMortgagePropertyAvailable = true;
@@ -566,9 +562,9 @@ class App {
       } else {
         print("comp turn roll again");
         computer.computerTurn();
-        }
       }
     }
+  }
 
   _handleBuyProperty(_) {
     _activePlayer.buyTile(_board.tiles[_activePlayer.position]);
