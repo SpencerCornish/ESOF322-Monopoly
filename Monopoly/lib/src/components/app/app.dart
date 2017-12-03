@@ -29,6 +29,7 @@ class App {
   Player get activePlayer => _activePlayer;
   //ComputerPlayer computer = new ComputerPlayer(this, "robit", 10, 2, 'orange', _board);
   ComputerPlayer computer;
+  bool shouldAuction;
 
   ////////////////////
   // Utility Variables
@@ -553,6 +554,7 @@ class App {
       _buyBuildingButton.disabled = true;
       _sellBuildingButton.disabled = true;
       _endTurnButton.disabled = true;
+
       computer.computerTurn();
       print("comp turn");
       if (!shouldRollAgain) {
@@ -564,9 +566,9 @@ class App {
       } else {
         print("comp turn roll again");
         computer.computerTurn();
+        }
       }
     }
-  }
 
   _handleBuyProperty(_) {
     _activePlayer.buyTile(_board.tiles[_activePlayer.position]);
@@ -583,6 +585,7 @@ class App {
   }
 
   handleAuctionProperty(_) {
+    print("handel auction prop");
     new ModalBuilder.auctionModal("Auction",
         _board.tiles[_activePlayer.position], _playerList, _activePlayer, this);
     updateButtons();

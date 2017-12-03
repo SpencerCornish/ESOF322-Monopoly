@@ -10,8 +10,7 @@ class ComputerPlayer extends Player {
   App _app;
   int rollValue;
   Random _random;
-  bool rollingDice,
-  shouldAuction;
+  bool rollingDice;
 
   //bool _shouldRollAgain = false;
 
@@ -47,12 +46,12 @@ class ComputerPlayer extends Player {
             tile.type == 'Utility')) {
       _app.isBuyPropertyAvailable = true;
       if (super.money > tile.price) {
-        shouldAuction = false;
+        _app.shouldAuction = false;
         super.buyTile(tile); //if enough --> buy
         _app.drawBackground();
         print("comp tile purchased");
       } else {
-        _app.handleAuctionProperty;
+        _app.handleAuctionProperty(null);
         print("comp auction time");
       }
     }
@@ -103,7 +102,6 @@ class ComputerPlayer extends Player {
     }
 
     landOnProperty();
-
 
     //if build house is available
     if (_app.isBuyBuildingsAvailable) {
