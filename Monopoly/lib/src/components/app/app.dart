@@ -7,13 +7,19 @@ import '../computer_player/computer_player.dart';
 import '../board/board.dart';
 import '../tiles/tile.dart';
 import '../modal_builder/modal_builder.dart';
+import '../renderer/renderer.dart';
 
 void main() {
   new App();
 }
 
 class App {
-  App _app;
+  ////////////////////
+  /// GUI Variables
+  ////////////////////
+
+  Renderer renderer;
+
   ////////////////////
   /// Board Variables
   ////////////////////
@@ -29,14 +35,12 @@ class App {
   Player get activePlayer => _activePlayer;
   //ComputerPlayer computer = new ComputerPlayer(this, "robit", 10, 2, 'orange', _board);
   ComputerPlayer computer;
-  bool shouldAuction;
 
   ////////////////////
   // Utility Variables
   ////////////////////
 
   Random _random;
-  bool _isStarted;
   bool shouldRollAgain;
   int _turnNum;
   int _turnLimit;
@@ -47,12 +51,6 @@ class App {
   ////////////////////
   // Canvas/Draw Variables
   ////////////////////
-
-  CanvasElement _canvasBackground;
-  CanvasRenderingContext2D _ctxBackground;
-
-  CanvasElement _canvasForeground;
-  CanvasRenderingContext2D _ctxForeground;
 
   List<HtmlElement> _buttons;
 
@@ -94,7 +92,6 @@ class App {
   App() {
     // Instantiate a board, init variables
     _board = new Board();
-    _isStarted = false;
     _random = new Random.secure();
     _turnNum = 1;
     _turnLimit = 10;
@@ -116,54 +113,19 @@ class App {
     // TODO: set the active player in a better way!
     _activePlayer = _playerList.first;
 
+    renderer = new Renderer(_board, _playerList);
+
     // This builds up a list of controls to add to the sidebar
+
     _constructButtonControls();
 
-    // This queryselects for the proper canvas DOM elements, and sets up rendering contexts
-    _constructRenderingContext();
-
-    window.onResize.listen((e) {
-      _canvasBackground.width = window.innerWidth;
-      _canvasBackground.height = window.innerHeight;
-      _canvasForeground.width = window.innerWidth;
-      _canvasForeground.height = window.innerHeight;
-
-      _board.resize();
-      drawBackground();
-    });
-
-    // Show the splash screen!
-    new Timer(new Duration(seconds: 3), _beginDraw);
-
-    // Start the timer for drawing the foreground canvas
-    new Timer.periodic(new Duration(milliseconds: 20), (Timer t) {
-      _drawForeground();
-    });
+    // Show the splash screen, and invoke rendering
+    new Timer(new Duration(seconds: 3), _startMainActivity);
   }
 
-  _beginDraw() {
-    _ctxBackground.clearRect(0, 0, window.innerWidth, window.innerHeight);
-    _ctxForeground.clearRect(0, 0, window.innerWidth, window.innerHeight);
-    querySelector('#output').text = '';
-    for (HtmlElement button in _buttons)
-      querySelector('.top-button-container').children.add(button);
-    _board.draw(_ctxBackground);
-    querySelector('#output').text = '';
-    _isStarted = true;
-  }
-
-  _drawForeground() {
-    if (_isStarted) {
-      _ctxForeground.clearRect(0, 0, window.innerWidth, window.innerHeight);
-      for (Player player in _playerList) {
-        player.draw(_ctxForeground);
-      }
-    }
-  }
-
-  drawBackground() {
-    _ctxBackground.clearRect(0, 0, window.innerWidth, window.innerHeight);
-    _board.draw(_ctxBackground);
+  _startMainActivity() {
+    for (HtmlElement button in _buttons) querySelector('.top-button-container').children.add(button);
+    renderer.beginDraw();
   }
 
   nextPlayer() {
@@ -193,7 +155,7 @@ class App {
     print(activePlayer.name);
 
     if (_activePlayer.isComputer) {
-      _handelComputerPlayer();
+      _handleComputerPlayer();
     }
   }
 
@@ -203,22 +165,6 @@ class App {
       if (player.money > winner.money) winner = player;
     }
     _infoLabel.text = "Winner: " + winner.name;
-  }
-
-  _constructRenderingContext() {
-    // Instantiate a board
-    _canvasBackground = querySelector("#canvas-background");
-    _ctxBackground = _canvasBackground.getContext('2d');
-
-    _canvasForeground = querySelector("#canvas-foreground");
-    _ctxForeground = _canvasForeground.getContext('2d');
-
-    // Background canvas setup
-    _canvasBackground.width = window.innerWidth ?? 1024;
-    _canvasBackground.height = window.innerHeight ?? 768;
-    // Foreground canvas setup
-    _canvasForeground.width = window.innerWidth ?? 1024;
-    _canvasForeground.height = window.innerHeight ?? 768;
   }
 
   _constructButtonControls() {
@@ -247,11 +193,7 @@ class App {
     _rollDiceButton = new ButtonElement();
     _rollDiceButton.text = 'Roll Dice';
     _rollDiceButton.classes = _constructButtonClasses('is-info');
-    if (activePlayer.isComputer) {
-      _handelComputerPlayer();
-    } else {
       _rollDiceButton.onClick.listen(handleRollDice);
-    }
     _buttons.add(_rollDiceButton);
 
     _buyPropertyButton = new ButtonElement();
@@ -272,13 +214,7 @@ class App {
     _mortgagePropertyButton.text = 'Mortgage Property';
     _mortgagePropertyButton.classes = _constructButtonClasses('is-info');
     _mortgagePropertyButton.disabled = true;
-    //_mortgagePropertyButton.onClick.listen(_handleMortgageProperty);
-    if (_activePlayer.isComputer) {
-      handleComputerMortgageProperty;
-      //_mortgagePropertyButton.disabled = true;
-    } else {
-      _mortgagePropertyButton.onClick.listen(_handleMortgageProperty);
-    }
+    _mortgagePropertyButton.onClick.listen(_handleMortgageProperty);
     _buttons.add(_mortgagePropertyButton);
 
     _buyBuildingButton = new ButtonElement();
@@ -315,8 +251,7 @@ class App {
     _buttons.add(_infoLabel);
   }
 
-  _constructButtonClasses(String extraClasses, [String extraClassTwo = "a"]) =>
-      [
+  _constructButtonClasses(String extraClasses, [String extraClassTwo = "a"]) => [
         'button',
         'is-success',
         'padded',
@@ -347,7 +282,6 @@ class App {
     //update roll button
     if (_activePlayer.isComputer) {
       _rollDiceButton.disabled = true;
-      _handelComputerPlayer();
       if (!shouldRollAgain) {
         isRollDiceAvailable = false;
       } else {
@@ -364,6 +298,7 @@ class App {
     }
 
     //update buy property button & auction property button
+
     if (_activePlayer.isComputer) {
       _buyPropertyButton.disabled = true;
       _auctionPropertyButton.disabled = true;
@@ -452,6 +387,7 @@ class App {
       } else {
         isSellBuildingsAvailable = false;
       }
+
       //update end turn button
       if (shouldRollAgain ||
           (curTile.owner == null &&
@@ -510,9 +446,6 @@ class App {
     int rollDieOne = _random.nextInt(6) + 1;
     int rollDieTwo = _random.nextInt(6) + 1;
     rollValue = rollDieOne + rollDieTwo;
-    if (activePlayer.isComputer) {
-      _handelComputerPlayer();
-    }
     // Sets should roll again if the dice are the same value
     shouldRollAgain = rollDieOne == rollDieTwo;
     _activePlayer.move(rollValue);
@@ -523,14 +456,11 @@ class App {
     Tile curTile = _board.tiles[_activePlayer.position];
     if (curTile.owner != null && curTile.owner != _activePlayer) {
       int amount = _activePlayer.payRent(curTile.owner, curTile, rollValue);
-      _infoLabel.text =
-          'Paid ' + curTile.owner.name + ' \$' + amount.toString() + '.';
+      _infoLabel.text = 'Paid ' + curTile.owner.name + ' \$' + amount.toString() + '.';
     }
     //display cost if unowned
     else if (curTile.owner == null &&
-        (curTile.type == 'Street' ||
-            curTile.type == 'Railroad' ||
-            curTile.type == 'Utility'))
+        (curTile.type == 'Street' || curTile.type == 'Railroad' || curTile.type == 'Utility'))
       _infoLabel.text = 'Cost: \$' + curTile.price.toString();
     //otherwise display nothing
     else {
@@ -539,7 +469,7 @@ class App {
     updateButtons();
   }
 
-  _handelComputerPlayer() {
+  _handleComputerPlayer() async {
     print("handle comp player");
     if (activePlayer.isComputer) {
       print("deactivate buttons");
@@ -550,9 +480,9 @@ class App {
       _buyBuildingButton.disabled = true;
       _sellBuildingButton.disabled = true;
       _endTurnButton.disabled = true;
-
-      computer.computerTurn();
       print("comp turn");
+      Completer complete = computer.computerTurn();
+
       if (!shouldRollAgain) {
         print("comp turn end");
         //activePlayer.isComputer = false;
@@ -561,14 +491,14 @@ class App {
         updateButtons();
       } else {
         print("comp turn roll again");
-        computer.computerTurn();
+        _handleComputerPlayer();
       }
     }
   }
 
   _handleBuyProperty(_) {
     _activePlayer.buyTile(_board.tiles[_activePlayer.position]);
-    drawBackground();
+    renderer.drawBackground();
     updateButtons();
   }
 
@@ -583,14 +513,14 @@ class App {
   handleAuctionProperty(_) {
     print("handel auction prop");
     new ModalBuilder.auctionModal("Auction",
-        _board.tiles[_activePlayer.position], _playerList, _activePlayer, this);
+        _board.tiles[_activePlayer.position], _playerList, _activePlayer, this, renderer);
     updateButtons();
   }
 
   _handleMortgageProperty(_) {
     //_displayListModal
-    _modalComponent = new ModalBuilder.listModal("Choose a tile - Mortgage",
-        _activePlayer.ownedTiles, _handleMortgage, this,
+    _modalComponent = new ModalBuilder.listModal(
+        "Choose a tile - Mortgage", _activePlayer.ownedTiles, _handleMortgage, this, renderer,
         mortgage: true);
     updateButtons();
   }
@@ -613,8 +543,8 @@ class App {
     for (Tile tile in _activePlayer.ownedTiles) {
       if (tile.isInMonopoly && tile.numBuildings < 5) filteredList.add(tile);
     }
-    _modalComponent = new ModalBuilder.listModal("Choose a tile - Buy Building",
-        filteredList, _handleBuildingPurchase, this,
+    _modalComponent = new ModalBuilder.listModal(
+        "Choose a tile - Buy Building", filteredList, _handleBuildingPurchase, this, renderer,
         showNumBuildings: true);
     updateButtons();
   }
@@ -625,10 +555,7 @@ class App {
       if (tile.numBuildings > 0) filteredList.add(tile);
     }
     _modalComponent = new ModalBuilder.listModal(
-        "Choose a tile - Sell Building",
-        filteredList,
-        _handleBuildingSell,
-        this,
+        "Choose a tile - Sell Building", filteredList, _handleBuildingSell, this, renderer,
         showNumBuildings: true);
 
     updateButtons();
@@ -675,7 +602,7 @@ class App {
     _playerList[0].buyTile(_board.tiles[3], 0);
     _board.tiles[1].addBuilding();
     _board.tiles[3].addBuilding();
-    drawBackground();
+    renderer.drawBackground();
     updateButtons();
   }
 }

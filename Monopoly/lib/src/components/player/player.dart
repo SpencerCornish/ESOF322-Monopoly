@@ -1,6 +1,4 @@
 import '../tiles/tile.dart';
-import 'dart:math';
-import 'dart:html';
 
 import 'package:monopoly/src/components/board/board.dart';
 
@@ -25,6 +23,7 @@ class Player {
   int get numUtilities => _numUtilities;
   int get size => _size;
   int get number => _number;
+  int get currentLocation => _currentLocation;
   String get color => _color;
   Board get board => _board;
 
@@ -34,7 +33,7 @@ class Player {
   set money(double totalMoney) => _money = totalMoney;
 
   Player(this._name, this._size, this._number, this._color, this._board) {
-    _money = 1500.0;
+    _money = 50.0;
     _ownedTiles = new List<Tile>();
   }
 
@@ -124,47 +123,5 @@ class Player {
     _money -= rent;
     owner._money += rent;
     return rent;
-  }
-
-  void draw(CanvasRenderingContext2D ctx) {
-    //draw player token on board
-    ctx.fillStyle = _color;
-    ctx.beginPath();
-    ctx.arc(
-        ((_number + 1) / 8) * _board.tileWidth +
-            _board.tiles[_currentLocation].x,
-        (2 / 5) * _board.tileHeight + _board.tiles[_currentLocation].y,
-        _size / 2,
-        0,
-        PI * 2);
-    ctx.closePath();
-    ctx.fill();
-
-    //draw player info inside of board area
-    int infoX =
-        (_board.x + _board.tileWidth * 1.75 + _number * _board.tileWidth * 1.25)
-            .toInt();
-    int infoY = (_board.y + _board.tileHeight * 2).toInt();
-    ctx.fillStyle = _color;
-    ctx.font = 'bold 14pt sans-serif';
-    ctx.fillText(_name, infoX, infoY); //display "player name"
-
-    ctx.fillStyle = 'black';
-    ctx.font = '10pt sans-serif';
-    ctx.fillText("Money: ", infoX, infoY + 20); //display "Money:"
-    ctx.font = 'bold 10pt sans-serif';
-    ctx.fillText('\$' + _money.toStringAsFixed(2), infoX,
-        infoY + 37); //display amount of money
-
-    ctx.font = '10pt sans-serif';
-    ctx.fillText(
-        "Properties Owned:", infoX, infoY + 55); //display "Properties Owned:"
-    ctx.font = '10pt sans-serif';
-
-    for (Tile tile in _ownedTiles) {
-      //display owned properties
-      ctx.fillText(
-          tile.name, infoX, infoY + 70 + _ownedTiles.indexOf(tile) * 15);
-    }
   }
 }

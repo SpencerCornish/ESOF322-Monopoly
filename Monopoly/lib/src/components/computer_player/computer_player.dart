@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 import 'dart:html';
 
@@ -20,12 +21,12 @@ class ComputerPlayer extends Player {
     _random = new Random.secure();
   }
 
-  computerTurn() {
-    rollingDice = true;
+  Future computerTurn() {
     rollDice();
     checkButtons();
   }
 
+  /*
   landOnProperty() {
     Tile tile = super.board.tiles[position];
     if (tile.isOwned) {
@@ -48,7 +49,7 @@ class ComputerPlayer extends Player {
       if (super.money > tile.price) {
         _app.shouldAuction = false;
         super.buyTile(tile); //if enough --> buy
-        _app.drawBackground();
+        _app.renderer.drawBackground();
         print("comp tile purchased");
       } else {
         _app.handleAuctionProperty(null);
@@ -56,15 +57,41 @@ class ComputerPlayer extends Player {
       }
     }
   }
+  */
 
   checkButtons() {
     Tile tile = super.board.tiles[position];
-    // if end turn is available and should roll again is true
-    if (_app.shouldRollAgain && _app.isRollDiceAvailable) {
-      computerTurn();
-    }
 
-    landOnProperty();
+    //landOnProperty();
+
+    //if land on property
+    if (tile.isOwned) {
+      //property is owned
+      _app.isBuyPropertyAvailable = false;
+      if (super.money > tile.calcRent(_app.rollValue)) {
+        //if money is greater than rent
+        super.payRent(tile.owner, tile, _app.rollValue); //pay rent
+        print("comp paid rent");
+      } else {
+        super.payRent(tile.owner, tile, _app.rollValue);
+        print("not enough money");
+      }
+    }
+    if (tile.owner == null &&
+        (tile.type == 'Street' ||
+            tile.type == 'Railroad' ||
+            tile.type == 'Utility')) {
+      //if tile is not owned
+      _app.isBuyPropertyAvailable = true;
+      if (super.money > tile.price) {
+        super.buyTile(tile); //if enough --> buy
+        _app.renderer.drawBackground();
+        print("comp tile purchased");
+      } else {
+        _app.handleAuctionProperty(null);
+        print("comp auction time");
+      }
+    }
 
     //if build house is available
     if (_app.isBuyBuildingsAvailable) {
@@ -77,8 +104,10 @@ class ComputerPlayer extends Player {
   }
 
   rollDice() {
-    int rollDieOne = _random.nextInt(6) + 1;
-    int rollDieTwo = _random.nextInt(6) + 1;
+    int rollDieOne = 2;
+    int rollDieTwo = 2;
+    //int rollDieOne = _random.nextInt(6) + 1;
+    //int rollDieTwo = _random.nextInt(6) + 1;
     rollValue = rollDieOne + rollDieTwo;
     if (rollDieOne == rollDieTwo) {
       print("rolled doubles");
