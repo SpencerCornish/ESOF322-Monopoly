@@ -98,8 +98,8 @@ void main() {
       expect(testPlayer.ownedTiles.elementAt(2), testRailroad);
       expect(testPlayer.money, 1090);
     });
-    test("mortgage() works correctly", () {
-      //tests the mortgage function
+    test("toggleMortgage() works correctly", () {
+      //tests the toggleMortgage function
       expect(testProperty.isMortgaged, false);
       testPlayer.toggleMortgage(testProperty);
       expect(testProperty.isMortgaged, true);

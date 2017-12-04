@@ -66,7 +66,7 @@ class Player {
 
   // Optional parameter is only used when a tile is won in an auction
   void buyTile(Tile tile, [int fromAuction]) {
-    tile.owner = this;
+    tile.setOwner(this);
     _ownedTiles.add(tile);
     _money -= fromAuction ?? tile.price;
 

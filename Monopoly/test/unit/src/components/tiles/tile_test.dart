@@ -67,6 +67,11 @@ void main() {
       testProperty.setOwner(john);
       expect(testProperty.owner, john);
     });
+    test("addBuilding() works correctly", () {
+      //test the tile's addBuilding() method
+      testProperty.addBuilding();
+      expect(testProperty.numBuildings, 1);
+    });
     group("calcRent()", () {
       test("works correctly for a property", () {
         //test the tile's calcRent() method on a property tile

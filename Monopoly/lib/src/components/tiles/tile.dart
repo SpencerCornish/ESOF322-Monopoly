@@ -87,7 +87,6 @@ class Tile {
   }
 
   // Setter for setting owner
-  set owner(Player newOwner) => _owner = newOwner;
   set isInMonopoly(bool value) => _isInMonopoly = value;
   set isMortgaged(bool value) => _isMortgaged = value;
   set numBuildings(int buildings) => _numBuildings = buildings;
