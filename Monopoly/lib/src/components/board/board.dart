@@ -1,6 +1,5 @@
 import 'dart:html';
 import '../tiles/tile.dart';
-import '../../data/constants.dart';
 
 class Board {
   int x;

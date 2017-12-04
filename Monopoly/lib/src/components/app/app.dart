@@ -1,6 +1,5 @@
 import 'dart:html';
 import 'dart:math';
-import 'dart:async';
 
 import '../player/player.dart';
 import '../board/board.dart';
