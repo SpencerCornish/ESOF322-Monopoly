@@ -142,8 +142,7 @@ class App {
 
   _startMainActivity() {
     querySelector('.buttons-top').classes.remove("is-hidden");
-    for (HtmlElement button in _buttons)
-      querySelector('.top-button-container').children.add(button);
+    for (HtmlElement button in _buttons) querySelector('.top-button-container').children.add(button);
     renderer.beginDraw();
   }
 
@@ -270,8 +269,7 @@ class App {
     _buttons.add(_infoLabel);
   }
 
-  _constructButtonClasses(String extraClasses, [String extraClassTwo = "a"]) =>
-      [
+  _constructButtonClasses(String extraClasses, [String extraClassTwo = "a"]) => [
         'button',
         'is-success',
         'padded',
@@ -324,9 +322,7 @@ class App {
       _auctionPropertyButton.disabled = true;
       Tile curTile = _board.tiles[_activePlayer.position];
       if (curTile.owner == null &&
-          (curTile.type == 'Street' ||
-              curTile.type == 'Railroad' ||
-              curTile.type == 'Utility')) {
+          (curTile.type == 'Street' || curTile.type == 'Railroad' || curTile.type == 'Utility')) {
         isBuyPropertyAvailable = true;
         isAuctionPropertyAvailable = true;
       } else {
@@ -340,9 +336,7 @@ class App {
     } else {
       Tile curTile = _board.tiles[_activePlayer.position];
       if (curTile.owner == null &&
-          (curTile.type == 'Street' ||
-              curTile.type == 'Railroad' ||
-              curTile.type == 'Utility')) {
+          (curTile.type == 'Street' || curTile.type == 'Railroad' || curTile.type == 'Utility')) {
         _buyPropertyButton.disabled = false;
         isBuyPropertyAvailable = true;
         _auctionPropertyButton.disabled = false;
@@ -411,9 +405,7 @@ class App {
       //update end turn button
       if (shouldRollAgain ||
           (curTile.owner == null &&
-              (curTile.type == 'Street' ||
-                  curTile.type == 'Railroad' ||
-                  curTile.type == 'Utility'))) {
+              (curTile.type == 'Street' || curTile.type == 'Railroad' || curTile.type == 'Utility'))) {
         isEndTurnAvailable = false;
       } else {
         isEndTurnAvailable = true;
@@ -450,9 +442,7 @@ class App {
       //update end turn button
       if (shouldRollAgain ||
           (curTile.owner == null &&
-              (curTile.type == 'Street' ||
-                  curTile.type == 'Railroad' ||
-                  curTile.type == 'Utility'))) {
+              (curTile.type == 'Street' || curTile.type == 'Railroad' || curTile.type == 'Utility'))) {
         _endTurnButton.disabled = true;
         isEndTurnAvailable = false;
       } else {
@@ -476,14 +466,11 @@ class App {
     Tile curTile = _board.tiles[_activePlayer.position];
     if (curTile.owner != null && curTile.owner != _activePlayer) {
       int amount = _activePlayer.payRent(curTile.owner, curTile, rollValue);
-      _infoLabel.text =
-          'Paid ' + curTile.owner.name + ' \$' + amount.toString() + '.';
+      _infoLabel.text = 'Paid ' + curTile.owner.name + ' \$' + amount.toString() + '.';
     }
     //display cost if unowned
     else if (curTile.owner == null &&
-        (curTile.type == 'Street' ||
-            curTile.type == 'Railroad' ||
-            curTile.type == 'Utility'))
+        (curTile.type == 'Street' || curTile.type == 'Railroad' || curTile.type == 'Utility'))
       _infoLabel.text = 'Cost: \$' + curTile.price.toString();
     //otherwise display nothing
     else {
@@ -536,19 +523,14 @@ class App {
   handleAuctionProperty(_) {
     print("handel auction prop");
     new ModalBuilder.auctionModal(
-        "Auction",
-        _board.tiles[_activePlayer.position],
-        _playerList,
-        _activePlayer,
-        this,
-        renderer);
+        "Auction", _board.tiles[_activePlayer.position], _playerList, _activePlayer, this, renderer);
     updateButtons();
   }
 
   _handleMortgageProperty(_) {
     //_displayListModal
-    _modalComponent = new ModalBuilder.listModal("Choose a tile - Mortgage",
-        _activePlayer.ownedTiles, _handleMortgage, this, renderer,
+    _modalComponent = new ModalBuilder.listModal(
+        "Choose a tile - Mortgage", _activePlayer.ownedTiles, _handleMortgage, this, renderer,
         mortgage: true);
     updateButtons();
   }
@@ -571,8 +553,8 @@ class App {
     for (Tile tile in _activePlayer.ownedTiles) {
       if (tile.isInMonopoly && tile.numBuildings < 5) filteredList.add(tile);
     }
-    _modalComponent = new ModalBuilder.listModal("Choose a tile - Buy Building",
-        filteredList, _handleBuildingPurchase, this, renderer,
+    _modalComponent = new ModalBuilder.listModal(
+        "Choose a tile - Buy Building", filteredList, _handleBuildingPurchase, this, renderer,
         showNumBuildings: true);
     updateButtons();
   }
@@ -583,11 +565,7 @@ class App {
       if (tile.numBuildings > 0) filteredList.add(tile);
     }
     _modalComponent = new ModalBuilder.listModal(
-        "Choose a tile - Sell Building",
-        filteredList,
-        _handleBuildingSell,
-        this,
-        renderer,
+        "Choose a tile - Sell Building", filteredList, _handleBuildingSell, this, renderer,
         showNumBuildings: true);
 
     updateButtons();

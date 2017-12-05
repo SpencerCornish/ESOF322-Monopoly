@@ -15,8 +15,7 @@ class ComputerPlayer extends Player {
 
   //bool _shouldRollAgain = false;
 
-  ComputerPlayer(
-      this._app, String name, int size, int number, String color, Board board)
+  ComputerPlayer(this._app, String name, int size, int number, String color, Board board)
       : super(name, size, number, color, board) {
     _random = new Random.secure();
   }
@@ -25,39 +24,6 @@ class ComputerPlayer extends Player {
     await rollDice();
     await checkButtons();
   }
-
-  /*
-  landOnProperty() {
-    Tile tile = super.board.tiles[position];
-    if (tile.isOwned) {
-      //property is owned
-      _app.isBuyPropertyAvailable = false;
-      if (super.money > tile.calcRent(_app.rollValue)) {
-        //if money is greater than rent
-        super.payRent(tile.owner, tile, _app.rollValue); //pay rent
-        print("comp paid rent");
-      } else {
-        super.payRent(tile.owner, tile, _app.rollValue);
-        print("not enough money");
-      }
-    }
-    if (tile.owner == null &&
-        (tile.type == 'Street' ||
-            tile.type == 'Railroad' ||
-            tile.type == 'Utility')) {
-      _app.isBuyPropertyAvailable = true;
-      if (super.money > tile.price) {
-        _app.shouldAuction = false;
-        super.buyTile(tile); //if enough --> buy
-        _app.renderer.drawBackground();
-        print("comp tile purchased");
-      } else {
-        _app.handleAuctionProperty(null);
-        print("comp auction time");
-      }
-    }
-  }
-  */
 
   checkButtons() async {
     Tile tile = super.board.tiles[position];
@@ -77,10 +43,7 @@ class ComputerPlayer extends Player {
         print("not enough money");
       }
     }
-    if (tile.owner == null &&
-        (tile.type == 'Street' ||
-            tile.type == 'Railroad' ||
-            tile.type == 'Utility')) {
+    if (tile.owner == null && (tile.type == 'Street' || tile.type == 'Railroad' || tile.type == 'Utility')) {
       //if tile is not owned
       _app.isBuyPropertyAvailable = true;
       if (super.money > tile.price) {

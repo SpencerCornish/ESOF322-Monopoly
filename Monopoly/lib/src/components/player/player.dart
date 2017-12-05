@@ -8,7 +8,6 @@ class Player {
   int _number;
   String _color;
   int _size;
-  // Token Type: Enum here?
   double _money;
   int _currentLocation = 0;
   List<Tile> _ownedTiles = new List<Tile>();
