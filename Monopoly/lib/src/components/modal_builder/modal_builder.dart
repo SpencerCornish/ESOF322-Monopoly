@@ -75,7 +75,7 @@ class ModalBuilder {
   }
 
   /// Builds a modal for auctioning, and handles all auction logic
-  ModalBuilder.auctionModal(this._title, this._tile, List<Player> playerList, Player activePlayer, this._app) {
+  ModalBuilder.auctionModal(this._title, this._tile, List<Player> playerList, Player activePlayer, this._app, this._renderer) {
     // Deep clone the list
     _playerList = playerList.sublist(0);
     // Set the current bidder to the current player
@@ -178,6 +178,17 @@ class ModalBuilder {
     } else {
       _currentBidder = _playerList[nextIndex];
     }
+
+    if (_currentBidder.isComputer) {
+      if (_currentBidder.money > _bidAmount + 10) {
+        _submitBidButton.click();
+        print("bid");
+      } else {
+        _dropOutButton.click();
+        print("drop out");
+      }
+    }
+
     _updateAuctionData();
   }
 

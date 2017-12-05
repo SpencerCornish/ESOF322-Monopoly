@@ -10,6 +10,8 @@ import './src/components/player/player_test.dart'
     as src_components_player_player_test;
 import './src/components/tiles/tile_test.dart'
     as src_components_tiles_tile_test;
+import './src/components/computer_player/computer_player_test.dart'
+    as src_components_computer_player_computer_player_test;
 import 'package:test/test.dart';
 
 void main() {
@@ -17,4 +19,5 @@ void main() {
   src_components_board_board_test.main();
   src_components_player_player_test.main();
   src_components_tiles_tile_test.main();
+  src_components_computer_player_computer_player_test.main();
 }
