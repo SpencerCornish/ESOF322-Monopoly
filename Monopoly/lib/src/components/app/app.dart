@@ -34,6 +34,7 @@ class App {
   ////////////////////
 
   List<Player> _playerList;
+  List<Player> get playerList => _playerList;
   Player _activePlayer;
   Player get activePlayer => _activePlayer;
   ComputerPlayer computer;
@@ -49,11 +50,17 @@ class App {
   int _turnLimit;
   int rollValue;
 
+  Random get random => _random;
+  int get turnNum => _turnNum;
+  int get turnLimit => _turnLimit;
+  bool get gameOver => _gameOver;
+
   ////////////////////
   // Canvas/Draw Variables
   ////////////////////
 
   List<HtmlElement> _buttons;
+  List<HtmlElement> get buttons => _buttons;
   LabelElement _turnLabel;
   LabelElement _nameLabel;
   LabelElement _rollLabel1;
