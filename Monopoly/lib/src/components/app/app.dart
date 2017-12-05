@@ -19,7 +19,7 @@ class App {
   ////////////////////
   /// GUI Variables
   ////////////////////
-
+  ///
   Renderer renderer;
 
   ////////////////////
@@ -34,9 +34,9 @@ class App {
   ////////////////////
 
   List<Player> _playerList;
+  List<Player> get playerList => _playerList;
   Player _activePlayer;
   Player get activePlayer => _activePlayer;
-  //ComputerPlayer computer = new ComputerPlayer(this, "robit", 10, 2, 'orange', _board);
   ComputerPlayer computer;
 
   ////////////////////
@@ -45,18 +45,22 @@ class App {
 
   Random _random;
   bool shouldRollAgain;
+  bool _gameOver;
   int _turnNum;
   int _turnLimit;
-  bool _gameOver;
-
   int rollValue;
+
+  Random get random => _random;
+  int get turnNum => _turnNum;
+  int get turnLimit => _turnLimit;
+  bool get gameOver => _gameOver;
 
   ////////////////////
   // Canvas/Draw Variables
   ////////////////////
 
   List<HtmlElement> _buttons;
-
+  List<HtmlElement> get buttons => _buttons;
   LabelElement _turnLabel;
   LabelElement _nameLabel;
   LabelElement _rollLabel1;
@@ -96,6 +100,7 @@ class App {
     SpanElement bozemanTheme = querySelector('.bozeman-theme-selector');
     SpanElement classicTheme = querySelector('.classic-theme-selector');
 
+    //creates a board based on the inputted choice, using abstract factory design pattern
     bozemanTheme.onClick.listen((e) {
       // Instantiate a board, init variables
       _gameFactory = new BozemanGameFactory();
@@ -111,6 +116,8 @@ class App {
       _startMainActivity();
     });
   }
+
+  //helper function to initialize app variables
   _completeAppSetup() {
     _random = new Random.secure();
     _turnNum = 1;
@@ -118,34 +125,33 @@ class App {
     _gameOver = false;
     shouldRollAgain = true;
 
+    //add all the players
     _playerList = new List<Player>();
-
     _playerList.add(new Player("Bryan", 10, 0, 'blue', _board));
-    //_playerList.add(new Player("Nate", 10, 1, 'green', _board));
-    //_playerList.add(new Player("Keely", 10, 2, 'orange', _board));
+    _playerList.add(new Player("Nate", 10, 1, 'green', _board));
+    _playerList.add(new Player("Keely", 10, 2, 'orange', _board));
+    _playerList.add(new Player("Spencer", 10, 3, 'red', _board));
     computer = new ComputerPlayer(this, "computer", 10, 1, 'orange', _board);
     _playerList.add(computer);
     computer.isComputer = true;
-    // _playerList.add(new Player("Spencer", 10, 3, 'red', _board));
-    //_playerList.add(new Player("Katy", 10, 4, 'pink', _board));
     _playerList.add(new Player("Perry", 10, 2, 'brown', _board));
 
-    // TODO: set the active player in a better way!
+    //setup first position, create the rendering ability
     _activePlayer = _playerList.first;
-
     renderer = new Renderer(_board, _playerList);
 
     // This builds up a list of controls to add to the sidebar
-
     _constructButtonControls();
   }
 
+  //actually starts gameplay
   _startMainActivity() {
     querySelector('.buttons-top').classes.remove("is-hidden");
     for (HtmlElement button in _buttons) querySelector('.top-button-container').children.add(button);
     renderer.beginDraw();
   }
 
+  //function to advance to next player's turn
   nextPlayer() {
     print("getting next player");
 
@@ -161,6 +167,7 @@ class App {
       _turnNum++;
       _turnLabel.text = "Turn: " + _turnNum.toString();
     }
+    //check for endgame
     if (_turnNum > _turnLimit) {
       _gameOver = true;
       _calcWinner();
@@ -177,6 +184,7 @@ class App {
     }
   }
 
+  //function to figure out the winner of the game
   _calcWinner() {
     Player winner = _playerList[0];
     for (Player player in _playerList) {
@@ -185,6 +193,7 @@ class App {
     _infoLabel.text = "Winner: " + winner.name;
   }
 
+  //initializes the buttons and maintains them
   _constructButtonControls() {
     _buttons = new List<HtmlElement>();
 
@@ -269,6 +278,7 @@ class App {
     _buttons.add(_infoLabel);
   }
 
+  //styling for buttons
   _constructButtonClasses(String extraClasses, [String extraClassTwo = "a"]) => [
         'button',
         'is-success',
@@ -279,10 +289,7 @@ class App {
         extraClassTwo,
       ];
 
-  //
-  // Button Handlers
-  //
-
+  //function to refresh the buttons
   updateButtons() {
     print("updating buttons");
     //if game is over make all buttons disabled
@@ -316,7 +323,6 @@ class App {
     }
 
     //update buy property button & auction property button
-
     if (_activePlayer.isComputer) {
       _buyPropertyButton.disabled = true;
       _auctionPropertyButton.disabled = true;
@@ -452,11 +458,12 @@ class App {
     }
   }
 
+  //logic for rolling dice
   handleRollDice(_) {
     int rollDieOne = _random.nextInt(6) + 1;
     int rollDieTwo = _random.nextInt(6) + 1;
     rollValue = rollDieOne + rollDieTwo;
-    // Sets should roll again if the dice are the same value
+    //Sets shouldRollAgain if the dice are the same value
     shouldRollAgain = rollDieOne == rollDieTwo;
     _activePlayer.move(rollValue);
     _rollLabel2.text =
@@ -479,6 +486,7 @@ class App {
     updateButtons();
   }
 
+  //logic for working with the computer's turn
   _handleComputerPlayer() async {
     print("handle comp player");
     if (activePlayer.isComputer) {
@@ -506,12 +514,14 @@ class App {
     }
   }
 
+  //function to update GUI with property purchase
   _handleBuyProperty(_) {
     _activePlayer.buyTile(_board.tiles[_activePlayer.position]);
     renderer.drawBackground();
     updateButtons();
   }
 
+  //advances a player's turn
   _handleEndTurn(_) {
     print("end of turn");
     shouldRollAgain = true;
@@ -520,6 +530,7 @@ class App {
     nextPlayer();
   }
 
+  //controls the flow of an auction
   handleAuctionProperty(_) {
     print("handel auction prop");
     new ModalBuilder.auctionModal(
@@ -527,6 +538,7 @@ class App {
     updateButtons();
   }
 
+  //handles the mortgage menu
   _handleMortgageProperty(_) {
     //_displayListModal
     _modalComponent = new ModalBuilder.listModal(
@@ -535,6 +547,7 @@ class App {
     updateButtons();
   }
 
+  //mortgage menu for computer - makes sure it waits appropriately
   handleComputerMortgageProperty(_) {
     for (int i; i < _activePlayer.ownedTiles.length;) {
       if (!_activePlayer.ownedTiles[i].isMortgaged) {
@@ -548,6 +561,7 @@ class App {
     updateButtons();
   }
 
+  //updates property with a building
   _handleBuyBuilding(_) {
     List<Tile> filteredList = new List<Tile>();
     for (Tile tile in _activePlayer.ownedTiles) {
@@ -559,6 +573,7 @@ class App {
     updateButtons();
   }
 
+  //updates property to reflect building sold
   _handleSellBuilding(_) {
     List<Tile> filteredList = new List<Tile>();
     for (Tile tile in _activePlayer.ownedTiles) {
@@ -567,7 +582,6 @@ class App {
     _modalComponent = new ModalBuilder.listModal(
         "Choose a tile - Sell Building", filteredList, _handleBuildingSell, this, renderer,
         showNumBuildings: true);
-
     updateButtons();
   }
 
@@ -576,7 +590,6 @@ class App {
   ////////////
 
   // Modal click handlers
-
   _handleMortgage(MouseEvent event) {
     Element target = event.target;
     for (Tile tile in _activePlayer.ownedTiles)

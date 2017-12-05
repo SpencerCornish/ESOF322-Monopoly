@@ -13,24 +13,23 @@ class ComputerPlayer extends Player {
   Random _random;
   bool rollingDice;
 
-  //bool _shouldRollAgain = false;
-
+  //creates computer player using super constructor
   ComputerPlayer(this._app, String name, int size, int number, String color, Board board)
       : super(name, size, number, color, board) {
     _random = new Random.secure();
   }
 
+  //times the computer turn
   Future computerTurn() async {
     await rollDice();
     await checkButtons();
   }
 
+  //allows the computer to assess turn options
   checkButtons() async {
     Tile tile = super.board.tiles[position];
 
-    //landOnProperty();
-
-    //if land on property
+    //if lands on property
     if (tile.isOwned) {
       //property is owned
       _app.isBuyPropertyAvailable = false;
@@ -43,6 +42,8 @@ class ComputerPlayer extends Player {
         print("not enough money");
       }
     }
+
+    //attempts to buy property if possible
     if (tile.owner == null && (tile.type == 'Street' || tile.type == 'Railroad' || tile.type == 'Utility')) {
       //if tile is not owned
       _app.isBuyPropertyAvailable = true;
@@ -71,9 +72,8 @@ class ComputerPlayer extends Player {
     }
   }
 
+  //separate roll dice method for computer
   rollDice() {
-    // int rollDieOne = 2;
-    // int rollDieTwo = 2;
     int rollDieOne = _random.nextInt(6) + 1;
     int rollDieTwo = _random.nextInt(6) + 1;
     rollValue = rollDieOne + rollDieTwo;

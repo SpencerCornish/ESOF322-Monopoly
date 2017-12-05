@@ -6,6 +6,7 @@ import '../board/board.dart';
 import '../player/player.dart';
 import 'dart:math';
 
+//App.dart controls the drawing flow, but renderer allows real drawing
 class Renderer {
   CanvasElement _canvasBackground;
   CanvasRenderingContext2D _ctxBackground;
@@ -33,6 +34,7 @@ class Renderer {
     _canvasForeground.height = window.innerHeight ?? 768;
   }
 
+  //initialize the board in GUI
   beginDraw() {
     _ctxBackground.clearRect(0, 0, window.innerWidth, window.innerHeight);
     _ctxForeground.clearRect(0, 0, window.innerWidth, window.innerHeight);
@@ -61,6 +63,7 @@ class Renderer {
     }
   }
 
+  //draw each tile
   void drawBoard() {
     drawTiles();
   }
@@ -70,6 +73,7 @@ class Renderer {
     drawBoard();
   }
 
+  //if screen size changes, resize the board to that resolution
   void resizeBoard() {
     //resize size of tile
     _boardRef.tileWidth = (window.innerWidth - 50) ~/ 11;
@@ -95,6 +99,7 @@ class Renderer {
     }
   }
 
+  //draw each individual tile
   drawTiles() {
     for (Tile tile in _boardRef.tiles) {
       _ctxBackground.fillStyle = tile.color == 'None' ? 'White' : tile.color;
@@ -135,6 +140,7 @@ class Renderer {
     }
   }
 
+  //draw player tokens
   void drawPlayer(Player player) {
     //draw player token on board
     _ctxForeground.fillStyle = player.color;
