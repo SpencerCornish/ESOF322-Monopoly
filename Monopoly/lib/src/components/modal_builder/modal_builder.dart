@@ -13,7 +13,6 @@ class ModalBuilder {
   Element _closeButton = querySelector('.delete');
   Element _modalBody = querySelector('.modal-card-body');
   Element _modalTitle = querySelector('.modal-card-title');
-
   String _title;
 
   // Auction variables
@@ -36,6 +35,7 @@ class ModalBuilder {
   ButtonElement _submitBidButton;
   ButtonElement _dropOutButton;
 
+  //initialize modal usage for property menu
   ModalBuilder.listModal(this._title, List<Tile> selectionList, Function onClickFunction, this._app, this._renderer,
       {bool showNumBuildings = false, bool mortgage = false}) {
     _modalBody.appendHtml(Constants.tileListTableModal, validator: _basicValidator);

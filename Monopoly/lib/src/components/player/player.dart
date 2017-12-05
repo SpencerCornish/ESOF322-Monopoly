@@ -15,6 +15,7 @@ class Player {
   int _numUtilities = 0;
   bool isComputer;
 
+  //getter methods
   double get money => _money;
   String get name => _name;
   int get position => _currentLocation;
@@ -25,12 +26,13 @@ class Player {
   int get currentLocation => _currentLocation;
   String get color => _color;
   Board get board => _board;
-
   List<Tile> get ownedTiles => _ownedTiles;
 
+  //setter methods
   set position(int currentPosition) => _currentLocation = currentPosition;
   set money(double totalMoney) => _money = totalMoney;
 
+  //create a new player
   Player(this._name, this._size, this._number, this._color, this._board) {
     _money = 1500.0;
     _ownedTiles = new List<Tile>();
@@ -39,7 +41,6 @@ class Player {
   //player rolls dice and moves position
   void move(int rollValue) {
     int nextLocation = _currentLocation + rollValue;
-
     if (nextLocation > 39) {
       //if the player has landed on or passed go
       nextLocation = nextLocation - 40;
@@ -48,12 +49,13 @@ class Player {
     _currentLocation = nextLocation;
   }
 
+  //checks players tiles to see if they own a monopoly, and therefore can build
   void updateMonopoly(Tile tile) {
     List<Tile> count = new List<Tile>();
     var tileColor = tile.color;
     for (Tile curTile in _ownedTiles) {
       if (curTile.color == tileColor) {
-        count.add(curTile);
+        count.add(curTile);             //add the tile if it the same color
       }
     }
     if (count.length == tile.totalNum) {
@@ -82,6 +84,7 @@ class Player {
     }
   }
 
+  //turn the tile's mortgage boolean on or off
   toggleMortgage(Tile tile) {
     // If mortgaged, unmortgage the tile
     if (tile.isMortgaged) {
@@ -93,6 +96,7 @@ class Player {
     }
   }
 
+  //build a building on the property
   void buyBuilding(Tile tile) {
     if (tile.isInMonopoly) {
       if (tile.numBuildings < 4) {
@@ -108,15 +112,18 @@ class Player {
     }
   }
 
+  //sell a building on the property
   void sellBuilding(Tile tile) {
     tile.numBuildings -= 1;
     _money += (tile.buildPrice / 2).round();
   }
 
+  //set name of player
   void set name(String n) {
     _name = n;
   }
 
+  //pay rent to another player
   int payRent(Player owner, Tile tile, int rollValue) {
     int rent = tile.calcRent(rollValue);
     _money -= rent;

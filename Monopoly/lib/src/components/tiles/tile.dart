@@ -7,7 +7,7 @@ class Tile {
       _price, //price to buy tile
       _buildPrice, //price to build on this tile
       _baseRent, //rent of tile without monopoly or building
-      _rent1,
+      _rent1, //rent with buildings
       _rent2,
       _rent3,
       _rent4,
