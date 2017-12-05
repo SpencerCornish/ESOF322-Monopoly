@@ -1,13 +1,15 @@
 import 'dart:html';
 import 'dart:math';
-import 'dart:async';
 
 import '../player/player.dart';
 import '../computer_player/computer_player.dart';
 import '../board/board.dart';
+import '../renderer/renderer.dart';
 import '../tiles/tile.dart';
 import '../modal_builder/modal_builder.dart';
-import '../renderer/renderer.dart';
+import '../game_factory/game_factory.dart';
+import '../game_factory/standard_game_factory.dart';
+import '../game_factory/bozeman_game_factory.dart';
 
 void main() {
   new App();
@@ -24,6 +26,7 @@ class App {
   /// Board Variables
   ////////////////////
 
+  GameFactory _gameFactory;
   Board _board;
 
   ////////////////////
@@ -90,8 +93,25 @@ class App {
       isEndTurnAvailable = true;
 
   App() {
-    // Instantiate a board, init variables
-    _board = new Board();
+    SpanElement bozemanTheme = querySelector('.bozeman-theme-selector');
+    SpanElement classicTheme = querySelector('.classic-theme-selector');
+
+    bozemanTheme.onClick.listen((e) {
+      // Instantiate a board, init variables
+      _gameFactory = new BozemanGameFactory();
+      _board = _gameFactory.createBoard();
+      _completeAppSetup();
+      _startMainActivity();
+    });
+    classicTheme.onClick.listen((e) {
+      // Instantiate a board, init variables
+      _gameFactory = new StandardGameFactory();
+      _board = _gameFactory.createBoard();
+      _completeAppSetup();
+      _startMainActivity();
+    });
+  }
+  _completeAppSetup() {
     _random = new Random.secure();
     _turnNum = 1;
     _turnLimit = 10;
@@ -118,12 +138,10 @@ class App {
     // This builds up a list of controls to add to the sidebar
 
     _constructButtonControls();
-
-    // Show the splash screen, and invoke rendering
-    new Timer(new Duration(seconds: 3), _startMainActivity);
   }
 
   _startMainActivity() {
+    querySelector('.buttons-top').classes.remove("is-hidden");
     for (HtmlElement button in _buttons) querySelector('.top-button-container').children.add(button);
     renderer.beginDraw();
   }

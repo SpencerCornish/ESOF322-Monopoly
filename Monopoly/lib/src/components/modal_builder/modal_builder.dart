@@ -75,7 +75,8 @@ class ModalBuilder {
   }
 
   /// Builds a modal for auctioning, and handles all auction logic
-  ModalBuilder.auctionModal(this._title, this._tile, List<Player> playerList, Player activePlayer, this._app, this._renderer) {
+  ModalBuilder.auctionModal(
+      this._title, this._tile, List<Player> playerList, Player activePlayer, this._app, this._renderer) {
     // Deep clone the list
     _playerList = playerList.sublist(0);
     // Set the current bidder to the current player

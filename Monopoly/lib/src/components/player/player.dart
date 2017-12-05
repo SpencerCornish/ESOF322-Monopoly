@@ -8,7 +8,6 @@ class Player {
   int _number;
   String _color;
   int _size;
-  // Token Type: Enum here?
   double _money;
   int _currentLocation = 0;
   List<Tile> _ownedTiles = new List<Tile>();
@@ -70,7 +69,7 @@ class Player {
 
   // Optional parameter is only used when a tile is won in an auction
   void buyTile(Tile tile, [int fromAuction]) {
-    tile.owner = this;
+    tile.setOwner(this);
     _ownedTiles.add(tile);
     _money -= fromAuction ?? tile.price;
 
