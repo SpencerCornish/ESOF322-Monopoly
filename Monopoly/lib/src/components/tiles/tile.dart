@@ -23,7 +23,8 @@ class Tile {
       _currentRent; //rent multiplier currently
 
   bool _isMortgaged, //if this tile is mortgaged
-      _isInMonopoly; //if the owner owns all tiles of this type
+      _isInMonopoly, //if the owner owns all tiles of this type
+      isOwned = false;
   Player _owner;
 
   // Tile constructor - adds a tile with name, type of tile, color, position on
@@ -84,6 +85,7 @@ class Tile {
   setOwner(Player newOwner) {
     _owner = newOwner;
     _numberOwned++; //update this counter for all the same color
+    isOwned = true;
   }
 
   // Setter for setting owner

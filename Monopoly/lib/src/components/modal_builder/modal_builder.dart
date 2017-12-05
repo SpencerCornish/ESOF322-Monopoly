@@ -36,9 +36,11 @@ class ModalBuilder {
   ButtonElement _submitBidButton;
   ButtonElement _dropOutButton;
 
-  ModalBuilder.listModal(this._title, List<Tile> selectionList, Function onClickFunction, this._app, this._renderer,
+  ModalBuilder.listModal(this._title, List<Tile> selectionList,
+      Function onClickFunction, this._app, this._renderer,
       {bool showNumBuildings = false, bool mortgage = false}) {
-    _modalBody.appendHtml(Constants.tileListTableModal, validator: _basicValidator);
+    _modalBody.appendHtml(Constants.tileListTableModal,
+        validator: _basicValidator);
 
     // User defined modal elements
     Element modalTable = querySelector('.modal-table-sel');
@@ -75,7 +77,8 @@ class ModalBuilder {
   }
 
   /// Builds a modal for auctioning, and handles all auction logic
-  ModalBuilder.auctionModal(this._title, this._tile, List<Player> playerList, Player activePlayer, this._app) {
+  ModalBuilder.auctionModal(this._title, this._tile, List<Player> playerList,
+      Player activePlayer, this._app, this._renderer) {
     // Deep clone the list
     _playerList = playerList.sublist(0);
     // Set the current bidder to the current player
@@ -141,15 +144,18 @@ class ModalBuilder {
   }
 
   _validateBidInput(_) {
-    if (_bidInputElement.valueAsNumber <= _bidAmount || _bidInputElement.valueAsNumber >= _currentBidder.money) {
+    if (_bidInputElement.valueAsNumber <= _bidAmount ||
+        _bidInputElement.valueAsNumber >= _currentBidder.money) {
       _bidInputElement.classes.remove('is-success');
       _bidInputElement.classes.add('is-danger');
-      _validationIcon.className = "fa fa-exclamation-triangle has-text-danger validation-icon";
+      _validationIcon.className =
+          "fa fa-exclamation-triangle has-text-danger validation-icon";
       _submitBidButton.disabled = true;
     } else {
       _bidInputElement.classes.remove('is-danger');
       _bidInputElement.classes.add('is-success');
-      _validationIcon.className = "fa fa-check has-text-success validation-icon";
+      _validationIcon.className =
+          "fa fa-check has-text-success validation-icon";
       _submitBidButton.disabled = false;
     }
   }
@@ -178,6 +184,17 @@ class ModalBuilder {
     } else {
       _currentBidder = _playerList[nextIndex];
     }
+
+    if (_currentBidder.isComputer) {
+      if (_currentBidder.money > _bidAmount + 10) {
+        _submitBidButton.click();
+        print("bid");
+      } else {
+        _dropOutButton.click();
+        print("drop out");
+      }
+    }
+
     _updateAuctionData();
   }
 
@@ -209,7 +226,8 @@ class ModalBuilder {
 
   // HTML Validator required for Modal construction
   NodeValidatorBuilder get _basicValidator {
-    NodeValidatorBuilder validator = new NodeValidatorBuilder.common()..allowInlineStyles();
+    NodeValidatorBuilder validator = new NodeValidatorBuilder.common()
+      ..allowInlineStyles();
     validator.allowInlineStyles();
     return validator;
   }
