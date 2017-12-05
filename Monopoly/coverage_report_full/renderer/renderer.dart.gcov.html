@@ -1,0 +1,256 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage.lcov - renderer/renderer.dart</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">renderer</a> - renderer.dart<span style="font-size: 80%;"> (source / <a href="renderer.dart.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage.lcov</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">92</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2017-12-05 14:43:22</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntryHi">-</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : import 'dart:html';</a>
+<span class="lineNum">       2 </span>            : import 'dart:async';
+<span class="lineNum">       3 </span>            : 
+<span class="lineNum">       4 </span>            : import '../tiles/tile.dart';
+<span class="lineNum">       5 </span>            : import '../board/board.dart';
+<span class="lineNum">       6 </span>            : import '../player/player.dart';
+<span class="lineNum">       7 </span>            : import 'dart:math';
+<span class="lineNum">       8 </span>            : 
+<span class="lineNum">       9 </span>            : //App.dart controls the drawing flow, but renderer allows real drawing
+<span class="lineNum">      10 </span>            : class Renderer {
+<span class="lineNum">      11 </span>            :   CanvasElement _canvasBackground;
+<span class="lineNum">      12 </span>            :   CanvasRenderingContext2D _ctxBackground;
+<span class="lineNum">      13 </span>            : 
+<span class="lineNum">      14 </span>            :   CanvasElement _canvasForeground;
+<span class="lineNum">      15 </span>            :   CanvasRenderingContext2D _ctxForeground;
+<span class="lineNum">      16 </span>            : 
+<span class="lineNum">      17 </span>            :   Board _boardRef;
+<span class="lineNum">      18 </span>            : 
+<span class="lineNum">      19 </span>            :   List&lt;Player&gt; _playerListRef;
+<span class="lineNum">      20 </span>            : 
+<span class="lineNum">      21 </span><span class="lineNoCov">          0 :   Renderer(this._boardRef, this._playerListRef) {</span>
+<span class="lineNum">      22 </span>            :     // Instantiate a board
+<span class="lineNum">      23 </span><span class="lineNoCov">          0 :     _canvasBackground = querySelector(&quot;#canvas-background&quot;);</span>
+<span class="lineNum">      24 </span><span class="lineNoCov">          0 :     _ctxBackground = _canvasBackground.getContext('2d');</span>
+<span class="lineNum">      25 </span>            : 
+<span class="lineNum">      26 </span><span class="lineNoCov">          0 :     _canvasForeground = querySelector(&quot;#canvas-foreground&quot;);</span>
+<span class="lineNum">      27 </span><span class="lineNoCov">          0 :     _ctxForeground = _canvasForeground.getContext('2d');</span>
+<span class="lineNum">      28 </span>            : 
+<span class="lineNum">      29 </span>            :     // Background canvas setup
+<span class="lineNum">      30 </span><span class="lineNoCov">          0 :     _canvasBackground.width = window.innerWidth ?? 1024;</span>
+<span class="lineNum">      31 </span><span class="lineNoCov">          0 :     _canvasBackground.height = window.innerHeight ?? 768;</span>
+<span class="lineNum">      32 </span>            :     // Foreground canvas setup
+<span class="lineNum">      33 </span><span class="lineNoCov">          0 :     _canvasForeground.width = window.innerWidth ?? 1024;</span>
+<span class="lineNum">      34 </span><span class="lineNoCov">          0 :     _canvasForeground.height = window.innerHeight ?? 768;</span>
+<span class="lineNum">      35 </span>            :   }
+<span class="lineNum">      36 </span>            : 
+<span class="lineNum">      37 </span>            :   //initialize the board in GUI
+<span class="lineNum">      38 </span>            :   beginDraw() {
+<span class="lineNum">      39 </span><span class="lineNoCov">          0 :     _ctxBackground.clearRect(0, 0, window.innerWidth, window.innerHeight);</span>
+<span class="lineNum">      40 </span><span class="lineNoCov">          0 :     _ctxForeground.clearRect(0, 0, window.innerWidth, window.innerHeight);</span>
+<span class="lineNum">      41 </span><span class="lineNoCov">          0 :     querySelector('#output').text = '';</span>
+<span class="lineNum">      42 </span><span class="lineNoCov">          0 :     drawBoard();</span>
+<span class="lineNum">      43 </span><span class="lineNoCov">          0 :     querySelector('#output').text = '';</span>
+<span class="lineNum">      44 </span>            : 
+<span class="lineNum">      45 </span><span class="lineNoCov">          0 :     new Timer.periodic(new Duration(milliseconds: 20), (Timer t) {</span>
+<span class="lineNum">      46 </span><span class="lineNoCov">          0 :       _drawForeground();</span>
+<span class="lineNum">      47 </span>            :     });
+<span class="lineNum">      48 </span>            : 
+<span class="lineNum">      49 </span><span class="lineNoCov">          0 :     window.onResize.listen((e) {</span>
+<span class="lineNum">      50 </span><span class="lineNoCov">          0 :       _canvasBackground.width = window.innerWidth;</span>
+<span class="lineNum">      51 </span><span class="lineNoCov">          0 :       _canvasBackground.height = window.innerHeight;</span>
+<span class="lineNum">      52 </span><span class="lineNoCov">          0 :       _canvasForeground.width = window.innerWidth;</span>
+<span class="lineNum">      53 </span><span class="lineNoCov">          0 :       _canvasForeground.height = window.innerHeight;</span>
+<span class="lineNum">      54 </span><span class="lineNoCov">          0 :       resizeBoard();</span>
+<span class="lineNum">      55 </span><span class="lineNoCov">          0 :       drawBackground();</span>
+<span class="lineNum">      56 </span>            :     });
+<span class="lineNum">      57 </span>            :   }
+<span class="lineNum">      58 </span>            : 
+<span class="lineNum">      59 </span>            :   _drawForeground() {
+<span class="lineNum">      60 </span><span class="lineNoCov">          0 :     _ctxForeground.clearRect(0, 0, window.innerWidth, window.innerHeight);</span>
+<span class="lineNum">      61 </span><span class="lineNoCov">          0 :     for (Player player in _playerListRef) {</span>
+<span class="lineNum">      62 </span><span class="lineNoCov">          0 :       drawPlayer(player);</span>
+<span class="lineNum">      63 </span>            :     }
+<span class="lineNum">      64 </span>            :   }
+<span class="lineNum">      65 </span>            : 
+<span class="lineNum">      66 </span>            :   //draw each tile
+<span class="lineNum">      67 </span>            :   void drawBoard() {
+<span class="lineNum">      68 </span><span class="lineNoCov">          0 :     drawTiles();</span>
+<span class="lineNum">      69 </span>            :   }
+<span class="lineNum">      70 </span>            : 
+<span class="lineNum">      71 </span>            :   drawBackground() {
+<span class="lineNum">      72 </span><span class="lineNoCov">          0 :     _ctxBackground.clearRect(0, 0, window.innerWidth, window.innerHeight);</span>
+<span class="lineNum">      73 </span><span class="lineNoCov">          0 :     drawBoard();</span>
+<span class="lineNum">      74 </span>            :   }
+<span class="lineNum">      75 </span>            : 
+<span class="lineNum">      76 </span>            :   //if screen size changes, resize the board to that resolution
+<span class="lineNum">      77 </span>            :   void resizeBoard() {
+<span class="lineNum">      78 </span>            :     //resize size of tile
+<span class="lineNum">      79 </span><span class="lineNoCov">          0 :     _boardRef.tileWidth = (window.innerWidth - 50) ~/ 11;</span>
+<span class="lineNum">      80 </span><span class="lineNoCov">          0 :     _boardRef.tileWidth = _boardRef.tileWidth * 10 ~/ 11; //leave room on left side for buttons</span>
+<span class="lineNum">      81 </span><span class="lineNoCov">          0 :     _boardRef.tileHeight = (window.innerHeight - 50) ~/ 11;</span>
+<span class="lineNum">      82 </span>            : 
+<span class="lineNum">      83 </span>            :     //reset _boardRef x and y location
+<span class="lineNum">      84 </span><span class="lineNoCov">          0 :     _boardRef.x = (window.innerWidth / 2 - _boardRef.tileWidth * 5).toInt();</span>
+<span class="lineNum">      85 </span><span class="lineNoCov">          0 :     _boardRef.y = (window.innerHeight / 2 - _boardRef.tileHeight * 5.5).toInt();</span>
+<span class="lineNum">      86 </span>            : 
+<span class="lineNum">      87 </span>            :     //reset location and size of each tile
+<span class="lineNum">      88 </span><span class="lineNoCov">          0 :     for (int i = 0; i &lt; 10; i++) {</span>
+<span class="lineNum">      89 </span><span class="lineNoCov">          0 :       _boardRef.tiles[i].setLocation(_boardRef.x + i * _boardRef.tileWidth, _boardRef.y);</span>
+<span class="lineNum">      90 </span><span class="lineNoCov">          0 :       _boardRef.tiles[i].setSize(_boardRef.tileWidth, _boardRef.tileHeight);</span>
+<span class="lineNum">      91 </span><span class="lineNoCov">          0 :       _boardRef.tiles[i + 10]</span>
+<span class="lineNum">      92 </span><span class="lineNoCov">          0 :           .setLocation(10 * _boardRef.tileWidth + _boardRef.x, _boardRef.y + i * _boardRef.tileHeight);</span>
+<span class="lineNum">      93 </span><span class="lineNoCov">          0 :       _boardRef.tiles[i + 10].setSize(_boardRef.tileWidth, _boardRef.tileHeight);</span>
+<span class="lineNum">      94 </span><span class="lineNoCov">          0 :       _boardRef.tiles[i + 20]</span>
+<span class="lineNum">      95 </span><span class="lineNoCov">          0 :           .setLocation((10 - i) * _boardRef.tileWidth + _boardRef.x, 10 * _boardRef.tileHeight + _boardRef.y);</span>
+<span class="lineNum">      96 </span><span class="lineNoCov">          0 :       _boardRef.tiles[i + 20].setSize(_boardRef.tileWidth, _boardRef.tileHeight);</span>
+<span class="lineNum">      97 </span><span class="lineNoCov">          0 :       _boardRef.tiles[i + 30].setLocation(_boardRef.x, (10 - i) * _boardRef.tileHeight + _boardRef.y);</span>
+<span class="lineNum">      98 </span><span class="lineNoCov">          0 :       _boardRef.tiles[i + 30].setSize(_boardRef.tileWidth, _boardRef.tileHeight);</span>
+<span class="lineNum">      99 </span>            :     }
+<span class="lineNum">     100 </span>            :   }
+<span class="lineNum">     101 </span>            : 
+<span class="lineNum">     102 </span>            :   //draw each individual tile
+<span class="lineNum">     103 </span>            :   drawTiles() {
+<span class="lineNum">     104 </span><span class="lineNoCov">          0 :     for (Tile tile in _boardRef.tiles) {</span>
+<span class="lineNum">     105 </span><span class="lineNoCov">          0 :       _ctxBackground.fillStyle = tile.color == 'None' ? 'White' : tile.color;</span>
+<span class="lineNum">     106 </span><span class="lineNoCov">          0 :       _ctxBackground.strokeStyle = 'black';</span>
+<span class="lineNum">     107 </span><span class="lineNoCov">          0 :       _ctxBackground.textAlign = 'center';</span>
+<span class="lineNum">     108 </span>            : 
+<span class="lineNum">     109 </span><span class="lineNoCov">          0 :       _ctxBackground.strokeRect(tile.x, tile.y, tile.width, tile.height); //draw tile boarder</span>
+<span class="lineNum">     110 </span><span class="lineNoCov">          0 :       _ctxBackground.fillRect(tile.x, tile.y, tile.width, tile.height); //draw tile color</span>
+<span class="lineNum">     111 </span>            : 
+<span class="lineNum">     112 </span>            :       //draw indicator if tile is mortgaged
+<span class="lineNum">     113 </span><span class="lineNoCov">          0 :       if (tile.isMortgaged) {</span>
+<span class="lineNum">     114 </span><span class="lineNoCov">          0 :         _ctxBackground.fillStyle = 'black';</span>
+<span class="lineNum">     115 </span><span class="lineNoCov">          0 :         _ctxBackground.font = '14pt sans-serif';</span>
+<span class="lineNum">     116 </span><span class="lineNoCov">          0 :         _ctxBackground.fillText('M', tile.x + 9 * tile.width / 10, tile.y + tile.height / 5);</span>
+<span class="lineNum">     117 </span>            :       }
+<span class="lineNum">     118 </span>            : 
+<span class="lineNum">     119 </span>            :       //draw owner's name
+<span class="lineNum">     120 </span><span class="lineNoCov">          0 :       _ctxBackground.fillStyle = 'black';</span>
+<span class="lineNum">     121 </span><span class="lineNoCov">          0 :       _ctxBackground.font = '8pt sans-serif';</span>
+<span class="lineNum">     122 </span><span class="lineNoCov">          0 :       if (tile.owner != null)</span>
+<span class="lineNum">     123 </span><span class="lineNoCov">          0 :         _ctxBackground.fillText(</span>
+<span class="lineNum">     124 </span><span class="lineNoCov">          0 :             'Owner: ' + tile.owner.name, tile.x + tile.width / 2, tile.y + 7 * tile.height / 10); //draw owner's name</span>
+<span class="lineNum">     125 </span>            : 
+<span class="lineNum">     126 </span>            :       //write name of tile
+<span class="lineNum">     127 </span><span class="lineNoCov">          0 :       _ctxBackground.font = 'bold 8pt sans-serif';</span>
+<span class="lineNum">     128 </span><span class="lineNoCov">          0 :       _ctxBackground.fillText(tile.name, tile.x + tile.width / 2, tile.y + 9 * tile.height / 10);</span>
+<span class="lineNum">     129 </span>            : 
+<span class="lineNum">     130 </span>            :       //draw buildings
+<span class="lineNum">     131 </span><span class="lineNoCov">          0 :       if (tile.numBuildings == 5) {</span>
+<span class="lineNum">     132 </span><span class="lineNoCov">          0 :         _ctxBackground.fillStyle = 'red';</span>
+<span class="lineNum">     133 </span><span class="lineNoCov">          0 :         _ctxBackground.fillRect(tile.x + tile.width / 2 - 10, tile.y + tile.height / 10, 20, 10);</span>
+<span class="lineNum">     134 </span>            :       } else {
+<span class="lineNum">     135 </span><span class="lineNoCov">          0 :         for (int i = 0; i &lt; tile.numBuildings; i++) {</span>
+<span class="lineNum">     136 </span><span class="lineNoCov">          0 :           _ctxBackground.fillStyle = 'green';</span>
+<span class="lineNum">     137 </span><span class="lineNoCov">          0 :           _ctxBackground.fillRect(tile.x + ((i + 1) / 5) * tile.width - 5, tile.y + tile.height / 10, 10, 10);</span>
+<span class="lineNum">     138 </span>            :         }
+<span class="lineNum">     139 </span>            :       }
+<span class="lineNum">     140 </span>            :     }
+<span class="lineNum">     141 </span>            :   }
+<span class="lineNum">     142 </span>            : 
+<span class="lineNum">     143 </span>            :   //draw player tokens
+<span class="lineNum">     144 </span>            :   void drawPlayer(Player player) {
+<span class="lineNum">     145 </span>            :     //draw player token on board
+<span class="lineNum">     146 </span><span class="lineNoCov">          0 :     _ctxForeground.fillStyle = player.color;</span>
+<span class="lineNum">     147 </span><span class="lineNoCov">          0 :     _ctxForeground.beginPath();</span>
+<span class="lineNum">     148 </span><span class="lineNoCov">          0 :     _ctxForeground.arc(</span>
+<span class="lineNum">     149 </span><span class="lineNoCov">          0 :         ((player.number + 1) / 8) * player.board.tileWidth + player.board.tiles[player.currentLocation].x,</span>
+<span class="lineNum">     150 </span><span class="lineNoCov">          0 :         (2 / 5) * player.board.tileHeight + player.board.tiles[player.currentLocation].y,</span>
+<span class="lineNum">     151 </span><span class="lineNoCov">          0 :         player.size / 2,</span>
+<span class="lineNum">     152 </span>            :         0,
+<span class="lineNum">     153 </span><span class="lineNoCov">          0 :         PI * 2);</span>
+<span class="lineNum">     154 </span><span class="lineNoCov">          0 :     _ctxForeground.closePath();</span>
+<span class="lineNum">     155 </span><span class="lineNoCov">          0 :     _ctxForeground.fill();</span>
+<span class="lineNum">     156 </span>            : 
+<span class="lineNum">     157 </span>            :     //draw player info inside of board area
+<span class="lineNum">     158 </span>            :     int infoX =
+<span class="lineNum">     159 </span><span class="lineNoCov">          0 :         (player.board.x + player.board.tileWidth * 1.75 + player.number * player.board.tileWidth * 1.25).toInt();</span>
+<span class="lineNum">     160 </span><span class="lineNoCov">          0 :     int infoY = (player.board.y + player.board.tileHeight * 2).toInt();</span>
+<span class="lineNum">     161 </span><span class="lineNoCov">          0 :     _ctxForeground.fillStyle = player.color;</span>
+<span class="lineNum">     162 </span><span class="lineNoCov">          0 :     _ctxForeground.font = 'bold 14pt sans-serif';</span>
+<span class="lineNum">     163 </span><span class="lineNoCov">          0 :     _ctxForeground.fillText(player.name, infoX, infoY); //display &quot;player name&quot;</span>
+<span class="lineNum">     164 </span>            : 
+<span class="lineNum">     165 </span><span class="lineNoCov">          0 :     _ctxForeground.fillStyle = 'black';</span>
+<span class="lineNum">     166 </span><span class="lineNoCov">          0 :     _ctxForeground.font = '10pt sans-serif';</span>
+<span class="lineNum">     167 </span><span class="lineNoCov">          0 :     _ctxForeground.fillText(&quot;Money: &quot;, infoX, infoY + 20); //display &quot;Money:&quot;</span>
+<span class="lineNum">     168 </span><span class="lineNoCov">          0 :     _ctxForeground.font = 'bold 10pt sans-serif';</span>
+<span class="lineNum">     169 </span><span class="lineNoCov">          0 :     _ctxForeground.fillText('\$' + player.money.toStringAsFixed(2), infoX, infoY + 37); //display amount of money</span>
+<span class="lineNum">     170 </span>            : 
+<span class="lineNum">     171 </span><span class="lineNoCov">          0 :     _ctxForeground.font = '10pt sans-serif';</span>
+<span class="lineNum">     172 </span><span class="lineNoCov">          0 :     _ctxForeground.fillText(&quot;Properties Owned:&quot;, infoX, infoY + 55); //display &quot;Properties Owned:&quot;</span>
+<span class="lineNum">     173 </span><span class="lineNoCov">          0 :     _ctxForeground.font = '10pt sans-serif';</span>
+<span class="lineNum">     174 </span>            : 
+<span class="lineNum">     175 </span><span class="lineNoCov">          0 :     for (Tile tile in player.ownedTiles) {</span>
+<span class="lineNum">     176 </span>            :       //display owned properties
+<span class="lineNum">     177 </span><span class="lineNoCov">          0 :       _ctxForeground.fillText(tile.name, infoX, infoY + 70 + player.ownedTiles.indexOf(tile) * 15);</span>
+<span class="lineNum">     178 </span>            :     }
+<span class="lineNum">     179 </span>            :   }
+<span class="lineNum">     180 </span>            : }
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

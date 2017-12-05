@@ -92,7 +92,7 @@ class Tile {
   set isInMonopoly(bool value) => _isInMonopoly = value;
   set isMortgaged(bool value) => _isMortgaged = value;
   set numBuildings(int buildings) => _numBuildings = buildings;
-
+  set numberOwned(int numOwned) => _numberOwned = numOwned;
   setLocation(int x, int y) {
     _x = x;
     _y = y;
@@ -130,9 +130,6 @@ class Tile {
             _currentRent = rent4;
           } else if (_numBuildings == 5) {
             _currentRent = rent5;
-          } else {
-            String error = 'error';
-            print(error);
           }
           break;
         }
@@ -146,9 +143,6 @@ class Tile {
             _currentRent = 100;
           } else if (_numberOwned == 4) {
             _currentRent = 200;
-          } else {
-            String error = 'error';
-            print(error);
           }
           break;
         }
@@ -163,7 +157,6 @@ class Tile {
         }
       default:
         {
-          _currentRent = 0;
           break;
         }
     }

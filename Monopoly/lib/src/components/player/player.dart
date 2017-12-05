@@ -55,7 +55,7 @@ class Player {
     var tileColor = tile.color;
     for (Tile curTile in _ownedTiles) {
       if (curTile.color == tileColor) {
-        count.add(curTile);             //add the tile if it the same color
+        count.add(curTile); //add the tile if it the same color
       }
     }
     if (count.length == tile.totalNum) {
