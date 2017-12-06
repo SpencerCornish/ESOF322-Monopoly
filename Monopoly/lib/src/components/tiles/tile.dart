@@ -92,6 +92,7 @@ class Tile {
   set isInMonopoly(bool value) => _isInMonopoly = value;
   set isMortgaged(bool value) => _isMortgaged = value;
   set numBuildings(int buildings) => _numBuildings = buildings;
+  set numberOwned(int owned) => _numberOwned = owned;
 
   setLocation(int x, int y) {
     _x = x;
