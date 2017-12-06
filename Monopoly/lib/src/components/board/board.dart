@@ -54,6 +54,7 @@ class Board {
     }
   }
 
+  //read in the csv file for creating tiles
   List<String> readInfo(String file) {
     List<String> t = file.split(",");
     return t;

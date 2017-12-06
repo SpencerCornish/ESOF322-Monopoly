@@ -7,7 +7,7 @@ class Tile {
       _price, //price to buy tile
       _buildPrice, //price to build on this tile
       _baseRent, //rent of tile without monopoly or building
-      _rent1,
+      _rent1, //rent with buildings
       _rent2,
       _rent3,
       _rent4,
@@ -131,9 +131,6 @@ class Tile {
             _currentRent = rent4;
           } else if (_numBuildings == 5) {
             _currentRent = rent5;
-          } else {
-            String error = 'error';
-            print(error);
           }
           break;
         }
@@ -147,9 +144,6 @@ class Tile {
             _currentRent = 100;
           } else if (_numberOwned == 4) {
             _currentRent = 200;
-          } else {
-            String error = 'error';
-            print(error);
           }
           break;
         }
@@ -164,7 +158,6 @@ class Tile {
         }
       default:
         {
-          _currentRent = 0;
           break;
         }
     }
