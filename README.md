@@ -14,6 +14,7 @@ file in our GitHub repository for Monopoly.
 
 2) To run our program, the user must have the Dart VM and the Dartium browser installed.  From here the
 project will run intuitively. However, we plan to demo the project as was asked initially.
+```
  ___________________________________________________________________________________________________________
 |                                                                                                           |
 |      Detailed list of steps to run this:                                                                  |
@@ -35,6 +36,7 @@ project will run intuitively. However, we plan to demo the project as was asked 
 |        Dartium                                                                                            |
 |    * If Dartium is not found, manually install from this link: https://webdev.dartlang.org/tools/dartium  |
 |___________________________________________________________________________________________________________|
+```
 
 3) Strong points of our implementation: the application could easily be web hosted and dart
 allowed us to use features that are very visually appealing with minimal overhead. There is
