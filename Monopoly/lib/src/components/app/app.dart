@@ -128,13 +128,12 @@ class App {
     //add all the players
     _playerList = new List<Player>();
     _playerList.add(new Player("Bryan", 10, 0, 'blue', _board));
-    _playerList.add(new Player("Nate", 10, 1, 'green', _board));
-    _playerList.add(new Player("Keely", 10, 2, 'orange', _board));
-    _playerList.add(new Player("Spencer", 10, 3, 'red', _board));
+
     computer = new ComputerPlayer(this, "computer", 10, 1, 'orange', _board);
     _playerList.add(computer);
     computer.isComputer = true;
     _playerList.add(new Player("Perry", 10, 2, 'brown', _board));
+    _playerList.add(new Player("Spencer", 10, 3, 'red', _board));
 
     //setup first position, create the rendering ability
     _activePlayer = _playerList.first;
